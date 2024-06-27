@@ -2,6 +2,22 @@
   import { onMount } from "svelte";
   import { writable } from "svelte/store";
 
+  let width = 0; // Default width
+
+  // Function to update width
+  function updateWidth() {
+    width = window.innerWidth;
+  }
+
+  onMount(() => {
+    updateWidth(); // Set initial width
+    window.addEventListener('resize', updateWidth); // Update on resize
+
+    return () => {
+      window.removeEventListener('resize', updateWidth); // Cleanup on component destroy
+    };
+  });
+
   class Movie {
     constructor(data) {
       this.id = data.id;
@@ -93,61 +109,36 @@
 </script>
 
 <main>
-  <h1>Movie List</h1>
   <div class="container">
-    <div class="list">
-      <div class="timeline">
-        <!-- timeline goes here  -->
+  <h1>Movie List</h1>
+  <div class="container-row">
+      <div class="movie-list">
         {#if movies.length > 0}
-          <svg width="100px" height="{movies.length * 40}">
+          <svg width="90%" height="{movies.length * 100}">
             {#each movies as movie, index}
-              {#if movies[index - 1]?.getReleaseYear() !== movie.getReleaseYear()} 
-                <g transform="translate(0, {(index) * 100})">
-                  <rect
-                    x="0"
-                    y="10"
-                    width="100%" 
-                    height="20"
-                    fill="red"
-                    cursor="pointer"
-                  />
-                  <text x="5" y="25" fill="black">{movie.getReleaseYear()}</text>
-                </g>
-              {/if}
-            {/each}
-          </svg>
-        {:else}
-          <p>Loading...</p>
-        {/if}
-
-      </div>
-      <div class="timeline">
-        <!-- timeline goes here  -->
-        {#if movies.length > 0}
-          <svg width="80px" height="{movies.length * 100}">
-            {#each movies as movie, index}
-              <g transform="translate(0, {(index) * 100})">
+              <g transform="translate(0, {(index) * 100})" on:click={() => handleBarClick(movie)}>
+                <!-- full length of screen -->
+                <foreignObject x="40" y="0" height="100" width="{width * (movie.voteAverage / 10) * 0.75}" >
+                  <div style="display: flex; height: 100%" >
+                    <div style="background-color: {getColor(movie.popularity)};" xmlns="http://www.w3.org/1999/xhtml" class="bar-div">
+                      <p>{movie.title}</p>
+                      {#if movie.originalLanguage !== 'en'}
+                        <p><span style="font-weight: bold; font-size: 25px; padding-right: 10px">{movie.originalLanguage}</span>{movie.originalTitle}</p>
+                      {/if}
+                    </div>
+                  </div>
+                </foreignObject>
                 <!-- 20px width for every hour of runtime -->
-                <rect
-                  x="0"
-                  y="10"
-                  width="{movie.runtime / 60 * 20}"
-                  height="20"
-                  fill="red"
-                  cursor="pointer"
-                />
-                <text x="5" y="25" fill="black">{Math.floor(movie.runtime / 60)}:{movie.runtime - Math.floor(movie.runtime / 60) * 60} </text>
-                <!-- circle with the area representing the budget no fill red ooutline-->
                 <circle
                   cx="0"
-                  cy="20"
+                  cy="50"
                   r="{Math.sqrt(movie.budget / 1000000) * 2}"
                   fill="none"
                   stroke="red"
                 />
                 <circle
                   cx="0"
-                  cy="20"
+                  cy="50"
                   r="{Math.sqrt(movie.revenue / 1000000) * 2}"
                   fill="none"
                   stroke="green"
@@ -158,33 +149,6 @@
         {:else}
           <p>Loading...</p>
         {/if}
-
-      </div>
-      <div class="movie-list">
-        {#if movies.length > 0}
-          <svg width="100%" height="{movies.length * 100}">
-            {#each movies as movie, index}
-              <g transform="translate(0, {(index) * 100})" on:click={() => handleBarClick(movie)}>
-                <rect
-                  x="0"
-                  y="10"
-                  width="{(movie.voteAverage / getMaxVoteAverage()) * 100}%" 
-                  height="80"
-                  fill="{getColor(movie.popularity)}"
-                  cursor="pointer"
-                />
-                <text x="30" y="25" fill="white" font-size="16" >{movie.title}"</text>
-                {#if movie.originalLanguage !== "en"}
-                  <text x="5" y="50" fill="white" font-size="32" font-weight="bold">{movie.originalLanguage} </text>
-                  <text x="30" y="50" fill="white" font-size="16" >{movie.originalTitle}</text>
-                {/if}
-              </g>
-            {/each}
-          </svg>
-        {:else}
-          <p>Loading...</p>
-        {/if}
-      </div>
     </div>
     <div class="movie-details">
       {#if $selectedMovie}
@@ -199,32 +163,28 @@
       {/if}
     </div>
   </div>
+  </div>
 </main>
 
 <style>
   .container {
     display: flex;
     height: 100vh;
+    flex-direction: column;
   }
 
-  .list {
-    flex: 4;
+  .container-row {
     display: flex;
-    padding-right: 20px;
-    overflow-y: auto;
-  }
-
-  .timeline {
-    padding-right: 20px;
+    height: 100vh;
+    flex-direction: row;
   }
 
   .movie-list {
-    flex: 1;
     padding-right: 20px;
+    width: 75%;
   }
 
   .movie-details {
-    flex: 1;
     padding: 20px;
     background: #f4f4f4;
     border-left: 1px solid #ddd;
@@ -232,14 +192,12 @@
     top: 0;
     right: 0;
     height: 100%;
+    position: fixed;
+    width: 25%;
   }
 
   svg {
     font-family: Arial, sans-serif;
-  }
-
-  text {
-    font-size: 14px;
   }
 
   img {
@@ -251,4 +209,14 @@
   .movie-details h2 {
     margin-top: 10px;
   }
+
+  .bar-div {
+        width: 100%;
+        height: 100%;
+        display: block;
+        justify-content: left;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #333;
+    }
 </style>
