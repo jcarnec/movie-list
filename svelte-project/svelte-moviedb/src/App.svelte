@@ -1,17 +1,22 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import { writable } from "svelte/store";
 
-  let width = 0; // Default width
+  let width = 100; // Default width
   let scrollY = writable(0); // Scroll position
   let containerHeight = 0; // Height of the scroll container
 
   const itemHeight = 100; // Height of each movie item
   const viewportHeight = 1000; // Adjust based on your viewport
 
+  let movieColumn;
+
   // Function to update width
   function updateWidth() {
-    width = window.innerWidth;
+    // width = window.innerWidth;
+    // get width of movie-column div
+    width = document.querySelector(".movie-column").clientWidth;
+    console.log(width)
   }
 
   function generateHourString(time) {
@@ -36,20 +41,6 @@
     startY = event.touches[0].clientY;
   }
 
-  onMount(() => {
-    updateWidth(); // Set initial width
-    window.addEventListener("resize", updateWidth); // Update on resize
-    document.addEventListener("wheel", handleScroll); // Mouse wheel scroll
-    document.addEventListener("touchmove", handleScroll); // Touch scroll
-    document.addEventListener("touchstart", handleTouchStart); // Touch start
-
-    return () => {
-      window.removeEventListener("resize", updateWidth); // Cleanup on component destroy
-      document.removeEventListener("wheel", handleScroll);
-      document.removeEventListener("touchmove", handleScroll);
-      document.removeEventListener("touchstart", handleTouchStart);
-    };
-  });
 
   class Movie {
     constructor(data) {
@@ -138,39 +129,25 @@
     const res = await fetch("http://localhost:3000/movies");
     let movie_response = await res.json();
     movies = movie_response.map((movie) => new Movie(movie));
-    // get full list of genres
-
-    // movies.forEach(movie => {
-    //   movie.genres.forEach(genre => {
-    //     genres[genre] = true;
-    //   })
-    // })
-
-    // console.log(genres);
-
-    // {
-    //   "Documentary": true,
-    //   "Adventure": true,
-    //   "Science Fiction": true,
-    //   "Comedy": true,
-    //   "Fantasy": true,
-    //   "Horror": true,
-    //   "Drama": true,
-    //   "History": true,
-    //   "War": true,
-    //   "Romance": true,
-    //   "Thriller": true,
-    //   "Crime": true,
-    //   "Action": true,
-    //   "Mystery": true,
-    //   "Music": true,
-    //   "Family": true,
-    //   "Animation": true,
-    //   "Western": true,
-    //   "TV Movie": true
-    // }
-
     containerHeight = movies.length * itemHeight; // Set container height based on the number of movies
+
+    await tick(); // Wait for the DOM to update
+
+    if (movieColumn) {
+      updateWidth(); // Update the width after the DOM update
+    }
+
+    window.addEventListener("resize", updateWidth); // Update on resize
+    document.addEventListener("wheel", handleScroll); // Mouse wheel scroll
+    document.addEventListener("touchmove", handleScroll); // Touch scroll
+    document.addEventListener("touchstart", handleTouchStart); // Touch start
+
+    return () => {
+      window.removeEventListener("resize", updateWidth); // Cleanup on component destroy
+      document.removeEventListener("wheel", handleScroll);
+      document.removeEventListener("touchmove", handleScroll);
+      document.removeEventListener("touchstart", handleTouchStart);
+    };
   });
 
   function getMaxVoteAverage() {
@@ -257,7 +234,7 @@
       <div class="body">
         <div class="movie-list">
           {#if movies.length > 0}
-            <div class="movie-bar">
+            <div class="movie-column" bind:this={movieColumn}>
               <div style="flex: 1">
                 <svg width="100%" height={containerHeight}>
                   {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
@@ -301,7 +278,7 @@
                     >
                       <!-- full length of screen -->
                       <foreignObject
-                        x="40"
+                        x="0"
                         y="0"
                         height="100"
                         width={(10 * movie.runtime) / 60}
@@ -320,7 +297,7 @@
                   {/each}
                 </svg>
               </div>
-              <div style="flex: 10">
+              <div class="movie-bar">
                 <svg width="100%" height={containerHeight}>
                   {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
                     <g
@@ -332,7 +309,7 @@
                         x="0"
                         y="0"
                         height="100"
-                        width={width * (movie.voteAverage / 10) * 0.4}
+                        width={width * (movie.voteAverage / 10)}
                       >
                         <div style="display: flex; height: 100%">
                           <div
@@ -359,7 +336,7 @@
                   {/each}
                 </svg>
               </div>
-              <div style="flex: 4">
+              <div class="genre-column">
                 <svg width="100%" height={containerHeight}>
                   {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
                     <g
@@ -447,9 +424,17 @@
     flex-direction: row;
   }
 
-  .movie-bar {
+  .movie-column {
     display: flex;
     flex-direction: row;
+  }
+
+  .movie-bar {
+    flex: 10
+  }
+
+  .genre-column {
+    flex: 5
   }
 
   .movie-list {
