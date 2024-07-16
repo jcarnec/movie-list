@@ -258,7 +258,7 @@
         <div class="movie-list">
           {#if movies.length > 0}
             <div class="movie-bar">
-              <div style="flex: 2">
+              <div style="flex: 1">
                 <svg width="100%" height={containerHeight}>
                   {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
                     <g
@@ -266,49 +266,6 @@
                         ($scrollY % itemHeight)})"
                       on:click={() => handleBarClick(movie)}
                     >
-                      <!-- full length of screen -->
-                      <foreignObject
-                        x="40"
-                        y="0"
-                        height="100"
-                        width={(10 * movie.runtime) / 60}
-                      >
-                        <div style="display: flex; height: 100%">
-                          <div
-                            style="background-color: {getColorCountry(
-                              movie.originalLanguage
-                            )};"
-                            xmlns="http://www.w3.org/1999/xhtml"
-                            class="bar-div"
-                          ></div>
-                        </div>
-                      </foreignObject>
-                      <foreignObject
-                        x="80"
-                        y="0"
-                        height="100"
-                        width={width * (movie.voteAverage / 10) * 0.4}
-                      >
-                        <div style="display: flex; height: 100%">
-                          <div
-                            style="background-color: {getColor(
-                              movie.popularity
-                            )};"
-                            xmlns="http://www.w3.org/1999/xhtml"
-                            class="bar-div"
-                          >
-                            <p>{movie.title}</p>
-                            {#if movie.originalLanguage !== "en"}
-                              <p>
-                                <span
-                                  style="font-weight: bold; font-size: 25px; padding-right: 10px"
-                                  >{movie.originalLanguage}</span
-                                >{movie.originalTitle}
-                              </p>
-                            {/if}
-                          </div>
-                        </div>
-                      </foreignObject>
                       <!-- 20px width for every hour of runtime -->
                       <circle
                         cx="0"
@@ -335,6 +292,74 @@
                 </svg>
               </div>
               <div style="flex: 1">
+                <svg width="100%" height={containerHeight}>
+                  {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
+                    <g
+                      transform="translate(0, {index * itemHeight -
+                        ($scrollY % itemHeight)})"
+                      on:click={() => handleBarClick(movie)}
+                    >
+                      <!-- full length of screen -->
+                      <foreignObject
+                        x="40"
+                        y="0"
+                        height="100"
+                        width={(10 * movie.runtime) / 60}
+                      >
+                        <div style="display: flex; height: 100%">
+                          <div
+                            style="background-color: {getColorCountry(
+                              movie.originalLanguage
+                            )};"
+                            xmlns="http://www.w3.org/1999/xhtml"
+                            class="bar-div"
+                          ></div>
+                        </div>
+                      </foreignObject>
+                    </g>
+                  {/each}
+                </svg>
+              </div>
+              <div style="flex: 10">
+                <svg width="100%" height={containerHeight}>
+                  {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
+                    <g
+                      transform="translate(0, {index * itemHeight -
+                        ($scrollY % itemHeight)})"
+                      on:click={() => handleBarClick(movie)}
+                    >
+                      <foreignObject
+                        x="0"
+                        y="0"
+                        height="100"
+                        width={width * (movie.voteAverage / 10) * 0.4}
+                      >
+                        <div style="display: flex; height: 100%">
+                          <div
+                            style="background-color: {getColor(
+                              movie.popularity
+                            )};"
+                            xmlns="http://www.w3.org/1999/xhtml"
+                            class="bar-div"
+                          >
+                            <p>{movie.title}</p>
+                            {#if movie.originalLanguage !== "en"}
+                              <p>
+                                <span
+                                  style="font-weight: bold; font-size: 25px; padding-right: 10px"
+                                  >{movie.originalLanguage}</span
+                                >{movie.originalTitle}
+                              </p>
+                            {/if}
+                          </div>
+                        </div>
+                      </foreignObject>
+                      <!-- 20px width for every hour of runtime -->
+                    </g>
+                  {/each}
+                </svg>
+              </div>
+              <div style="flex: 4">
                 <svg width="100%" height={containerHeight}>
                   {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
                     <g
@@ -407,7 +432,7 @@
 <style>
   .header-body {
     display: flex;
-    height: 100vh;
+    height: 99vh;
     flex-direction: column;
   }
 
@@ -429,7 +454,7 @@
 
   .movie-list {
     padding-right: 20px;
-    width: 75%;
+    flex: 3;
   }
 
   .movie-details {
@@ -437,7 +462,7 @@
     background: #f4f4f4;
     border-left: 1px solid #ddd;
     overflow-y: auto;
-    width: 25%;
+    flex: 1;
   }
 
   svg {
