@@ -22,6 +22,7 @@
 
   // Function to handle scroll event
   function handleScroll(event) {
+    // todo check if mouse if over the movie-list div
     const delta = event.deltaY || event.touches[0].clientY - startY;
     scrollY.update((n) =>
       Math.max(0, Math.min(containerHeight - viewportHeight, n + delta))
@@ -241,8 +242,8 @@
 
 <main>
   <div class="parent-div">
-    <div class="container">
-      <div class="container-row">
+    <div class="header-body">
+      <div class="header">
         <h1>Movie List</h1>
         <!-- have a text box that shows the year of the first visible movie -->
         {#if movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length && movies[getFirstVisibleIndex($scrollY)]}
@@ -253,10 +254,10 @@
           >
         {/if}
       </div>
-      <div class="container-row">
+      <div class="body">
         <div class="movie-list">
           {#if movies.length > 0}
-            <div class="container-row">
+            <div class="movie-bar">
               <div style="flex: 2">
                 <svg width="100%" height={containerHeight}>
                   {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
@@ -404,15 +405,25 @@
 </main>
 
 <style>
-  .container {
+  .header-body {
     display: flex;
     height: 100vh;
     flex-direction: column;
   }
 
-  .container-row {
+  .header {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .body {
     display: flex;
     height: 100vh;
+    flex-direction: row;
+  }
+
+  .movie-bar {
+    display: flex;
     flex-direction: row;
   }
 
@@ -421,24 +432,12 @@
     width: 75%;
   }
 
-  .svg-container {
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-    flex-direction: row;
-  }
-
   .movie-details {
-    padding: 20px;
+    padding: 100px;
     background: #f4f4f4;
     border-left: 1px solid #ddd;
     overflow-y: auto;
-    top: 0;
-    right: 0;
-    height: fit-content;
-    position: fixed;
     width: 25%;
-    overflow-y: auto;
   }
 
   svg {
