@@ -47,7 +47,17 @@ const Movie = mongoose.model('Movie', movieSchema);
 
 app.get('/movies', async (req, res) => {
   try {
-    const movies = await Movie.find().sort({ release_date: 1 });
+    const filter = {};
+
+    // Build the filter object based on query parameters
+    if (req.query.adult) filter.adult = req.query.adult;
+    if (req.query.budget) filter.budget = { $gte: Number(req.query.budget) };
+    if (req.query.original_language) filter.original_language = req.query.original_language;
+    if (req.query.popularity) filter.popularity = { $gte: Number(req.query.popularity) };
+    if (req.query.release_date) filter.release_date = { $gte: new Date(req.query.release_date) };
+    if (req.query.vote_average) filter.vote_average = { $gte: Number(req.query.vote_average) };
+
+    const movies = await Movie.find(filter).sort({ release_date: 1 });
     res.json(movies);
   } catch (err) {
     res.status(500).json({ message: err.message });

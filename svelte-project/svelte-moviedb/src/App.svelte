@@ -11,12 +11,21 @@
 
   let movieColumn;
 
+  let selectedLanguage = writable('all')
+
+  let year = writable("");
+
+  $: $year =
+    movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length
+      ? movies[getFirstVisibleIndex($scrollY)].getReleaseYear().toString()
+      : "";
+
   // Function to update width
   function updateWidth() {
     // width = window.innerWidth;
     // get width of movie-column div
-    width = document.querySelector(".movie-column").clientWidth;
-    console.log(width)
+    width = document.querySelector(".movie-bar").clientWidth;
+    console.log(width);
   }
 
   function generateHourString(time) {
@@ -32,7 +41,14 @@
     scrollY.update((n) =>
       Math.max(0, Math.min(containerHeight - viewportHeight, n + delta))
     );
+
     startY = event.touches ? event.touches[0].clientY : startY;
+
+    $year =
+      movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length
+        ? movies[getFirstVisibleIndex($scrollY)].getReleaseYear().toString()
+        : "";
+
     event.preventDefault();
   }
 
@@ -40,7 +56,6 @@
   function handleTouchStart(event) {
     startY = event.touches[0].clientY;
   }
-
 
   class Movie {
     constructor(data) {
@@ -134,7 +149,7 @@
     await tick(); // Wait for the DOM to update
 
     if (movieColumn) {
-      updateWidth(); // Update the width after the DOM update
+      updateWidth();
     }
 
     window.addEventListener("resize", updateWidth); // Update on resize
@@ -206,6 +221,7 @@
   }
 
   function scrollToYear(e) {
+    console.log("hello");
     console.log(e.target.value);
     const year = e.target.value;
     const index = movies.findIndex(
@@ -215,21 +231,40 @@
       scrollY.update(() => index * itemHeight);
     }
   }
+
 </script>
 
 <main>
   <div class="parent-div">
     <div class="header-body">
       <div class="header">
-        <h1>Movie List</h1>
-        <!-- have a text box that shows the year of the first visible movie -->
-        {#if movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length && movies[getFirstVisibleIndex($scrollY)]}
-          <!-- {console.log(movies[getFirstVisibleIndex($scrollY)])} -->
+        <div class="title">
+          <h1>Movie List</h1>
+        </div>
+        <div class="form">
+          <div class="year-input">
+            <!-- have a text box that shows the year of the first visible movie -->
+            {#if movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length && movies[getFirstVisibleIndex($scrollY)]}
+              <!-- {console.log(movies[getFirstVisibleIndex($scrollY)])} -->
 
-          <textarea rows="1" cols="10" on:change={(e) => scrollToYear(e)}
-            >{movies[getFirstVisibleIndex($scrollY)].getReleaseYear()}</textarea
-          >
-        {/if}
+              <textarea bind:value={$year} on:change={(e) => scrollToYear(e)}
+              ></textarea>
+            {/if}
+          </div>
+          <div class="language-input">
+            <!-- select which of the available languages to filter by (e.g. English, French, Spanish, German, Japanese, Italian) using a drop down -->
+            <select bind:value={$selectedLanguage}>
+              <option value="en">English</option>
+              <option value="fr">French</option>
+              <option value="es">Spanish</option>
+              <option value="de">German</option>
+              <option value="ja">Japanese</option>
+              <option value="it">Italian</option>
+              <option value="all">All</option>
+            </select>
+
+          </div>
+        </div>
       </div>
       <div class="body">
         <div class="movie-list">
@@ -418,6 +453,15 @@
     flex-direction: row;
   }
 
+  .title {
+    flex: 5;
+  }
+
+  .form {
+    flex: 1;
+    background-color: #333;
+  }
+
   .body {
     display: flex;
     height: 100vh;
@@ -430,11 +474,11 @@
   }
 
   .movie-bar {
-    flex: 10
+    flex: 10;
   }
 
   .genre-column {
-    flex: 5
+    flex: 5;
   }
 
   .movie-list {
