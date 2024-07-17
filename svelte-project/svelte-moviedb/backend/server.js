@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 mongoose.connect('mongodb://admin:mypass@localhost/moviedb?authSource=admin', {
   useNewUrlParser: true,
@@ -45,17 +46,20 @@ const movieSchema = new mongoose.Schema({
 
 const Movie = mongoose.model('Movie', movieSchema);
 
-app.get('/movies', async (req, res) => {
+app.post('/movies', async (req, res) => {
   try {
     const filter = {};
 
-    // Build the filter object based on query parameters
-    if (req.query.adult) filter.adult = req.query.adult;
-    if (req.query.budget) filter.budget = { $gte: Number(req.query.budget) };
-    if (req.query.original_language) filter.original_language = req.query.original_language;
-    if (req.query.popularity) filter.popularity = { $gte: Number(req.query.popularity) };
-    if (req.query.release_date) filter.release_date = { $gte: new Date(req.query.release_date) };
-    if (req.query.vote_average) filter.vote_average = { $gte: Number(req.query.vote_average) };
+    // access body of the request
+    
+    // a
+    // Build the filter object based on body parameters
+    if (req.body.adult) filter.adult = req.body.adult;
+    if (req.body.budget) filter.budget = { $gte: Number(req.body.budget) };
+    if (req.body.original_language) filter.original_language = req.body.original_language;
+    if (req.body.popularity) filter.popularity = { $gte: Number(req.body.popularity) };
+    if (req.body.release_date) filter.release_date = { $gte: new Date(req.body.release_date) };
+    if (req.body.vote_average) filter.vote_average = { $gte: Number(req.body.vote_average) };
 
     const movies = await Movie.find(filter).sort({ release_date: 1 });
     res.json(movies);

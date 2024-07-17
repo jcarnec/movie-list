@@ -1,6 +1,7 @@
 <script>
   import { onMount, tick } from "svelte";
   import { writable } from "svelte/store";
+  import axios from "axios";
 
   let width = 100; // Default width
   let scrollY = writable(0); // Scroll position
@@ -11,7 +12,7 @@
 
   let movieColumn;
 
-  let selectedLanguage = writable('all')
+  let selectedLanguage = writable("all");
 
   let year = writable("");
 
@@ -20,12 +21,52 @@
       ? movies[getFirstVisibleIndex($scrollY)].getReleaseYear().toString()
       : "";
 
+  $: queryDatabase($selectedLanguage);
+
+  async function queryDatabase() {
+    // re-query the database based on the selected language
+    let url = "http://localhost:3000/movies";
+    // selected language in the body of the request
+    let body = { original_language: $selectedLanguage };
+
+    let res = await axios({
+      method: "post",
+      url: url,
+      data: body, // Non-standard, ensure the server supports it
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    let movie_response = res.data;
+
+    movies = movie_response.map((movie) => new Movie(movie));
+    getPopularityIndex(movies);
+    containerHeight = movies.length * itemHeight; // Set container height based on the number of movies
+  }
+
+  function openYoutubeSearchUrl(title, year) {
+    console.log('opening_window')
+    window.open(`https://www.youtube.com/results?search_query=${title} (${year}) trailer`);
+  }
+
+  function getPopularityIndex(movies) {
+    // create a new field in the movie object called popularity_index which is the rank of the movie based on popularity
+
+    movies.sort((a, b) => b.popularity - a.popularity);
+
+    movies.forEach((movie, index) => {
+      movie.popularity_index = index + 1;
+    });
+
+    movies.sort((a, b) => a.releaseDate - b.releaseDate);
+  }
+
   // Function to update width
   function updateWidth() {
     // width = window.innerWidth;
     // get width of movie-column div
     width = document.querySelector(".movie-bar").clientWidth;
-    console.log(width);
   }
 
   function generateHourString(time) {
@@ -36,7 +77,21 @@
 
   // Function to handle scroll event
   function handleScroll(event) {
-    // todo check if mouse if over the movie-list div
+    // check that movie list div is not at cursor position
+
+    let movie_list_div = document.querySelector(".movie-list");
+    let cursor_position_x = event.clientX;
+    let cursor_position_y = event.clientY;
+    let rect = movie_list_div.getBoundingClientRect();
+
+    if (!(cursor_position_y > rect.top && cursor_position_y < rect.bottom)) {
+      return;
+    } else if (
+      !(cursor_position_x > rect.left && cursor_position_x < rect.right)
+    ) {
+      return;
+    }
+
     const delta = event.deltaY || event.touches[0].clientY - startY;
     scrollY.update((n) =>
       Math.max(0, Math.min(containerHeight - viewportHeight, n + delta))
@@ -141,9 +196,12 @@
   let selectedMovie = writable(null);
 
   onMount(async () => {
-    const res = await fetch("http://localhost:3000/movies");
-    let movie_response = await res.json();
+    // axios
+    let res = await axios.post("http://localhost:3000/movies");
+    let movie_response = res.data;
     movies = movie_response.map((movie) => new Movie(movie));
+    getPopularityIndex(movies);
+    console.log(movies);
     containerHeight = movies.length * itemHeight; // Set container height based on the number of movies
 
     await tick(); // Wait for the DOM to update
@@ -173,9 +231,8 @@
     return Math.max(...movies.map((movie) => movie.popularity));
   }
 
-  function getColor(popularity) {
-    const maxPopularity = getMaxPopularity();
-    const ratio = popularity / maxPopularity;
+  function getColor(popularity_index) {
+    const ratio = popularity_index / movies.length;
 
     const red = Math.floor(255 * ratio);
     const green = 0;
@@ -203,7 +260,6 @@
   }
 
   function handleBarClick(movie) {
-    console.log(movie);
     selectedMovie.set(movie);
   }
 
@@ -221,8 +277,6 @@
   }
 
   function scrollToYear(e) {
-    console.log("hello");
-    console.log(e.target.value);
     const year = e.target.value;
     const index = movies.findIndex(
       (movie) => movie.getReleaseYear() === parseInt(year)
@@ -231,7 +285,6 @@
       scrollY.update(() => index * itemHeight);
     }
   }
-
 </script>
 
 <main>
@@ -247,12 +300,14 @@
             {#if movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length && movies[getFirstVisibleIndex($scrollY)]}
               <!-- {console.log(movies[getFirstVisibleIndex($scrollY)])} -->
 
+              <label for="year">Year:</label>
               <textarea bind:value={$year} on:change={(e) => scrollToYear(e)}
               ></textarea>
             {/if}
           </div>
           <div class="language-input">
             <!-- select which of the available languages to filter by (e.g. English, French, Spanish, German, Japanese, Italian) using a drop down -->
+            <label for="language">Language:</label>
             <select bind:value={$selectedLanguage}>
               <option value="en">English</option>
               <option value="fr">French</option>
@@ -262,7 +317,19 @@
               <option value="it">Italian</option>
               <option value="all">All</option>
             </select>
-
+          </div>
+          <div class="genre-selectnio">
+            <!-- checkbox for each genre -->
+            {#each Object.keys(genre_emoji_dict) as genre, index}
+              <input
+                type="checkbox"
+                id={genre}
+                name={genre}
+                value={genre}
+                on:change={() => queryDatabase()}
+              />
+              <label for={genre}>{genre}</label>
+            {/each}
           </div>
         </div>
       </div>
@@ -349,7 +416,7 @@
                         <div style="display: flex; height: 100%">
                           <div
                             style="background-color: {getColor(
-                              movie.popularity
+                              movie.popularity_index
                             )};"
                             xmlns="http://www.w3.org/1999/xhtml"
                             class="bar-div"
@@ -399,6 +466,23 @@
                   {/each}
                 </svg>
               </div>
+              <div class="year-column">
+                <svg width="100%" height={containerHeight}>
+                  {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
+                    <g
+                      transform="translate(0, {index * itemHeight -
+                        ($scrollY % itemHeight)})"
+                      on:click={() => handleBarClick(movie)}
+                    >
+                    <!-- display the release year of the movie -->
+
+                    {#if getVisibleMovies($scrollY, viewportHeight)[index - 1] && getVisibleMovies($scrollY, viewportHeight)[index - 1].getReleaseYear() !== movie.getReleaseYear()}
+                    <text x="0" y="50" font-size="12">{movie.getReleaseYear()}</text>
+                    {/if}
+                    </g>
+                  {/each}
+                </svg>
+              </div>
             </div>
           {:else}
             <p>Loading...</p>
@@ -411,7 +495,8 @@
                 src={$selectedMovie.getPosterUrl()}
                 alt={$selectedMovie.title}
               />
-              <h2>{$selectedMovie.title}</h2>
+              <h2 class="link" on:click={e => openYoutubeSearchUrl($selectedMovie.title, $selectedMovie.getReleaseYear())}>{$selectedMovie.title}</h2>
+
               <p><strong>Description:</strong> {$selectedMovie.overview}</p>
               <p><strong>Genre:</strong> {$selectedMovie.genres.join(", ")}</p>
               <p>
@@ -459,7 +544,6 @@
 
   .form {
     flex: 1;
-    background-color: #333;
   }
 
   .body {
@@ -479,6 +563,10 @@
 
   .genre-column {
     flex: 5;
+  }
+
+  .year-column {
+    flex: 1;
   }
 
   .movie-list {
@@ -521,5 +609,12 @@
   .parent-div {
     /* no scroll  */
     overflow: hidden;
+  }
+
+  .link {
+    cursor: pointer;
+    color: blue;
+    /* underline on hover */
+    text-decoration: underline;
   }
 </style>
