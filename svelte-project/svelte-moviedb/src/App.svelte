@@ -14,20 +14,29 @@
 
   let selectedLanguage = writable("all");
 
+  let selectedGenres = writable([]);
+
   let year = writable("");
+
+  let minReviewCount = writable(10);
+  let maxReviewCount = writable(100);
+
+  let minYear = writable(10);
+  let maxYear = writable(100);
 
   $: $year =
     movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length
       ? movies[getFirstVisibleIndex($scrollY)].getReleaseYear().toString()
       : "";
 
-  $: queryDatabase($selectedLanguage);
+  $: queryDatabase($selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear);
 
   async function queryDatabase() {
     // re-query the database based on the selected language
     let url = "http://localhost:3000/movies";
     // selected language in the body of the request
-    let body = { original_language: $selectedLanguage };
+
+    let body = { original_language: $selectedLanguage, genres: $selectedGenres, minReviewCount: parseInt($minReviewCount), maxReviewCount: parseInt($maxReviewCount), minYear: parseInt($minYear), maxYear: parseInt($maxYear)};
 
     let res = await axios({
       method: "post",
@@ -46,8 +55,10 @@
   }
 
   function openYoutubeSearchUrl(title, year) {
-    console.log('opening_window')
-    window.open(`https://www.youtube.com/results?search_query=${title} (${year}) trailer`);
+    console.log("opening_window");
+    window.open(
+      `https://www.youtube.com/results?search_query=${title} (${year}) trailer`
+    );
   }
 
   function getPopularityIndex(movies) {
@@ -195,14 +206,11 @@
 
   let selectedMovie = writable(null);
 
+  $: console.log($selectedMovie)
+
   onMount(async () => {
     // axios
-    let res = await axios.post("http://localhost:3000/movies");
-    let movie_response = res.data;
-    movies = movie_response.map((movie) => new Movie(movie));
-    getPopularityIndex(movies);
-    console.log(movies);
-    containerHeight = movies.length * itemHeight; // Set container height based on the number of movies
+    await queryDatabase();
 
     await tick(); // Wait for the DOM to update
 
@@ -291,9 +299,9 @@
   <div class="parent-div">
     <div class="header-body">
       <div class="header">
-        <div class="title">
+        <!-- <div class="title">
           <h1>Movie List</h1>
-        </div>
+        </div> -->
         <div class="form">
           <div class="year-input">
             <!-- have a text box that shows the year of the first visible movie -->
@@ -304,6 +312,26 @@
               <textarea bind:value={$year} on:change={(e) => scrollToYear(e)}
               ></textarea>
             {/if}
+          </div>
+          <div class="min-max">
+            <div class="minReviewCount-input">
+                <label for="minReviewCount">Min number of reviews:</label>
+                <textarea bind:value={$minReviewCount}></textarea>
+            </div>
+            <div class="maxReviewCount-input">
+                <label for="maxReviewCount">Max number of reviews:</label>
+                <textarea bind:value={$maxReviewCount}></textarea>
+            </div>
+          </div>
+          <div class="min-max">
+            <div class="minYear-input">
+                <label for="minYear">Min release year:</label>
+                <textarea bind:value={$minYear}></textarea>
+            </div>
+            <div class="maxYear-input">
+                <label for="maxYear">Max release year:</label>
+                <textarea bind:value={$maxYear}></textarea>
+            </div>
           </div>
           <div class="language-input">
             <!-- select which of the available languages to filter by (e.g. English, French, Spanish, German, Japanese, Italian) using a drop down -->
@@ -318,19 +346,39 @@
               <option value="all">All</option>
             </select>
           </div>
-          <div class="genre-selectnio">
-            <!-- checkbox for each genre -->
-            {#each Object.keys(genre_emoji_dict) as genre, index}
-              <input
-                type="checkbox"
-                id={genre}
-                name={genre}
-                value={genre}
-                on:change={() => queryDatabase()}
-              />
-              <label for={genre}>{genre}</label>
-            {/each}
           </div>
+
+          <div class="genre-menu">
+            <!-- checkbox for each genre -->
+            <label for="genre">Genre:</label>
+            <div class="genre-selection">
+              {#each Object.keys(genre_emoji_dict) as genre, index}
+              <div style="display: flex;">
+                <div style="padding-right: 10px" >
+                <input
+                  type="checkbox"
+                  id={genre}
+                  name={genre}
+                  value={genre}
+                  on:change={(e) => 
+                    {
+                      if (e.target.checked) {
+                        selectedGenres.update((genres) => [...genres, genre]);
+                      } else {
+                        selectedGenres.update((genres) =>
+                          genres.filter((g) => g !== genre)
+                        );
+                      }
+                  }
+                }
+                />
+                </div>
+                <label style="display:inline" for={genre}
+                  >{genre_emoji_dict[genre] + ' ' + genre}</label >
+              </div>
+              {/each}
+            </div>
+
         </div>
       </div>
       <div class="body">
@@ -474,11 +522,13 @@
                         ($scrollY % itemHeight)})"
                       on:click={() => handleBarClick(movie)}
                     >
-                    <!-- display the release year of the movie -->
+                      <!-- display the release year of the movie -->
 
-                    {#if getVisibleMovies($scrollY, viewportHeight)[index - 1] && getVisibleMovies($scrollY, viewportHeight)[index - 1].getReleaseYear() !== movie.getReleaseYear()}
-                    <text x="0" y="50" font-size="12">{movie.getReleaseYear()}</text>
-                    {/if}
+                      {#if getVisibleMovies($scrollY, viewportHeight)[index - 1] && getVisibleMovies($scrollY, viewportHeight)[index - 1].getReleaseYear() !== movie.getReleaseYear()}
+                        <text x="10" y="50" font-size="12"
+                          >{movie.getReleaseYear()}</text
+                        >
+                      {/if}
                     </g>
                   {/each}
                 </svg>
@@ -495,7 +545,16 @@
                 src={$selectedMovie.getPosterUrl()}
                 alt={$selectedMovie.title}
               />
-              <h2 class="link" on:click={e => openYoutubeSearchUrl($selectedMovie.title, $selectedMovie.getReleaseYear())}>{$selectedMovie.title}</h2>
+              <h2
+                class="link"
+                on:click={(e) =>
+                  openYoutubeSearchUrl(
+                    $selectedMovie.title,
+                    $selectedMovie.getReleaseYear()
+                  )}
+              >
+                {$selectedMovie.title}
+              </h2>
 
               <p><strong>Description:</strong> {$selectedMovie.overview}</p>
               <p><strong>Genre:</strong> {$selectedMovie.genres.join(", ")}</p>
@@ -535,15 +594,13 @@
 
   .header {
     display: flex;
-    flex-direction: row;
   }
 
   .title {
-    flex: 5;
+    flex: 1;
   }
 
   .form {
-    flex: 1;
   }
 
   .body {
@@ -582,6 +639,16 @@
     flex: 1;
   }
 
+  .genre-selection {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 30px 10px;
+  }
+
+  .genre-menu {
+  }
+
   svg {
     font-family: Arial, sans-serif;
   }
@@ -616,5 +683,16 @@
     color: blue;
     /* underline on hover */
     text-decoration: underline;
+  }
+
+  .year-input {
+  }
+
+  .language-input {
+  }
+
+  .min-max {
+    display: flex;
+    flex-direction: row;
   }
 </style>
