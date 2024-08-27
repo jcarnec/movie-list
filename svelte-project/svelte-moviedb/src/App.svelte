@@ -21,8 +21,10 @@
   let minReviewCount = writable(10);
   let maxReviewCount = writable(100);
 
-  let minYear = writable(10);
-  let maxYear = writable(100);
+  let minYear = writable(1922);
+  let maxYear = writable(2025);
+
+  let queryCount = writable(0);
 
   $: $year =
     movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length
@@ -52,6 +54,8 @@
     movies = movie_response.map((movie) => new Movie(movie));
     getPopularityIndex(movies);
     containerHeight = movies.length * itemHeight; // Set container height based on the number of movies
+    // increment query count
+    queryCount.update((n) => n + 1);
   }
 
   function openYoutubeSearchUrl(title, year) {
@@ -180,7 +184,6 @@
   }
 
   let movies = [];
-  let genres = {};
 
   let genre_emoji_dict = {
     Documentary: "📚",
@@ -231,14 +234,6 @@
     };
   });
 
-  function getMaxVoteAverage() {
-    return Math.max(...movies.map((movie) => movie.voteAverage));
-  }
-
-  function getMaxPopularity() {
-    return Math.max(...movies.map((movie) => movie.popularity));
-  }
-
   function getColor(popularity_index) {
     const ratio = popularity_index / movies.length;
 
@@ -271,7 +266,8 @@
     selectedMovie.set(movie);
   }
 
-  function getVisibleMovies(scrollY, viewportHeight) {
+  function getVisibleMovies(queryCount, scrollY, viewportHeight) {
+    console.log(queryCount);
     const startIndex = Math.floor(scrollY / itemHeight);
     const endIndex = Math.min(
       movies.length,
@@ -387,7 +383,7 @@
             <div class="movie-column" bind:this={movieColumn}>
               <div style="flex: 1">
                 <svg width="100%" height={containerHeight}>
-                  {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
+                  {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
                     <g
                       transform="translate(0, {index * itemHeight -
                         ($scrollY % itemHeight)})"
@@ -420,7 +416,7 @@
               </div>
               <div style="flex: 1">
                 <svg width="100%" height={containerHeight}>
-                  {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
+                  {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
                     <g
                       transform="translate(0, {index * itemHeight -
                         ($scrollY % itemHeight)})"
@@ -449,7 +445,7 @@
               </div>
               <div class="movie-bar">
                 <svg width="100%" height={containerHeight}>
-                  {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
+                  {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
                     <g
                       transform="translate(0, {index * itemHeight -
                         ($scrollY % itemHeight)})"
@@ -488,7 +484,7 @@
               </div>
               <div class="genre-column">
                 <svg width="100%" height={containerHeight}>
-                  {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
+                  {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
                     <g
                       transform="translate(0, {index * itemHeight -
                         ($scrollY % itemHeight)})"
@@ -516,7 +512,7 @@
               </div>
               <div class="year-column">
                 <svg width="100%" height={containerHeight}>
-                  {#each getVisibleMovies($scrollY, viewportHeight) as movie, index}
+                  {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
                     <g
                       transform="translate(0, {index * itemHeight -
                         ($scrollY % itemHeight)})"
@@ -524,7 +520,7 @@
                     >
                       <!-- display the release year of the movie -->
 
-                      {#if getVisibleMovies($scrollY, viewportHeight)[index - 1] && getVisibleMovies($scrollY, viewportHeight)[index - 1].getReleaseYear() !== movie.getReleaseYear()}
+                      {#if getVisibleMovies($queryCount, $scrollY, viewportHeight)[index - 1] && getVisibleMovies($queryCount, $scrollY, viewportHeight)[index - 1].getReleaseYear() !== movie.getReleaseYear()}
                         <text x="10" y="50" font-size="12"
                           >{movie.getReleaseYear()}</text
                         >

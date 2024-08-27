@@ -53,7 +53,6 @@ app.post("/movies", async (req, res) => {
   try {
     const filter = {};
 
-    const release_date_filter = [];
 
     // access body of the request
 
@@ -65,8 +64,6 @@ app.post("/movies", async (req, res) => {
       filter.original_language = req.body.original_language;
     if (req.body.popularity)
       filter.popularity = { $gte: Number(req.body.popularity) };
-    if (req.body.release_date)
-      filter.release_date = { $gte: new Date(req.body.release_date) };
     if (req.body.vote_average)
       filter.vote_average = { $gte: Number(req.body.vote_average) };
     // minReviewCount
@@ -75,11 +72,11 @@ app.post("/movies", async (req, res) => {
     if (req.body.maxReviewCount)
       filter.vote_count = { $lte: Number(req.body.maxReviewCount) };
     if (req.body.minYear)
-      release_date_filter.push({ $gte: new Date("1/1/" + req.body.minYear) });
+      filter.release_date === undefined ? (filter.release_date = {}) : null;
+      filter.release_date["$gte"] = new Date("01/01/" + req.body.minYear);
     if (req.body.maxYear)
-      release_date_filter.push({ $lte: new Date("1/1/" + req.body.maxYear) });
-    if (release_date_filter.length > 0) 
-      filter.release_date = { $ai: release_date_filter }
+      filter.release_date === undefined ? (filter.release_date = {}) : null;
+      filter.release_date["$lte"] = new Date("12/31/" + req.body.maxYear);
     // filter by list of genres
     if (req.body.genres && req.body.genres.length > 0) {
 
