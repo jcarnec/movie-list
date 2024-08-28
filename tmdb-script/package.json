@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/D-Andreev/tmdb-script#readme",
   "dependencies": {
+    "axios": "^1.7.5",
     "commander": "^2.9.0",
     "mongoose": "^4.10.8",
     "pino": "^4.6.0",

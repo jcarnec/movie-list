@@ -1,238 +1,215 @@
-'use strict';
+"use strict";
 
-const request = require('request');
+const axios = require('axios');
 const Logger = require('./Logger');
 
 const ERR_STATUS = 34;
 
 let instance = null;
 
+
+function _getUrl(path) {
+    let apiKey = "e316601ca43413563469752bc6096a5b";
+    let baseUrl = 'http://api.themoviedb.org/3/';
+    return `${baseUrl}${path.join('/')}?api_key=${apiKey}&language=en-US` 
+}
+
 class TmdbApi {
-    _getUrl(path) {
-        return `${this.baseUrl}${path.join('/')}?api_key=${this.apiKey}&language=en-US`;
-    }
 
-    constructor(apiKey) {
-        if (!instance) instance = this;
-
-        this.baseUrl = 'http://api.themoviedb.org/3/';
-        this.apiKey = apiKey;
-
-        return instance;
-    }
-
-    getLatestId(done) {
-        let path = ['movie', 'latest'];
-        request(this._getUrl(path), (err, response) => {
-            if (err) return done(err);
-            let body;
-            try {
-                body = JSON.parse(response.body);
-            } catch (e) {
-                return done(err);
-            }
+    async getLatestId() {
+        const path = ['movie', 'latest'];
+        try {
+            const response = await axios.get(_getUrl(path));
+            const body = response.data;
 
             if (!body.hasOwnProperty('id') || !body.id) {
-                return done(new Error('Invalid latest id'), body);
+                throw new Error('Invalid latest id');
             }
 
             body.id = parseInt(body.id, 10);
-            if (!body.id) return done(new Error('Could not parse int id'), body.id);
+            if (!body.id) throw new Error('Could not parse int id');
 
-            done(null, body.id);
-        });
+            return body.id;
+        } catch (err) {
+            Logger.error('Error fetching latest movie ID:', err);
+            throw err;
+        }
     }
 
-    getMovieDetails(id, done) {
-        if (!id) return done(new Error('Invalid movie id'));
-        let path = ['movie', id];
-        request(this._getUrl(path), (err, response) => {
-            if (err) return done(err);
-            let body;
-            try {
-                body = JSON.parse(response.body);
-            } catch (e) {
-                return done(err);
-            }
+    async getMovieDetails(id) {
+        if (!id) throw new Error('Invalid movie id');
+        const path = ['movie', id];
+        try {
+            const response = await axios.get(_getUrl(path));
+            const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
-                return done(null);
+                return null;
             }
 
             if (!body.hasOwnProperty('id') || !body.id) {
-                return done(new Error('Invalid response for movie'), body);
+                throw new Error('Invalid response for movie');
             }
 
-            done(null, body);
-        });
+            return body;
+        } catch (err) {
+            Logger.error(`Error fetching details for movie ID ${id}:`, err);
+            throw err;
+        }
     }
 
-    getMovieImages(id, done) {
-        if (!id) return done(new Error('Invalid movie id'));
-        let path = ['movie', id, 'images'];
-        request(this._getUrl(path), (err, response) => {
-            if (err) return done(err);
-            let body;
-            try {
-                body = JSON.parse(response.body);
-            } catch (e) {
-                return done(err);
-            }
+    async getMovieImages(id) {
+        if (!id) throw new Error('Invalid movie id');
+        const path = ['movie', id, 'images'];
+        try {
+            const response = await axios.get(_getUrl(path));
+            const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
-                return done(null);
+                return null;
             }
 
             if (!body.hasOwnProperty('id') || !body.id) {
-                return done(new Error('Invalid response for movie images'), body);
+                throw new Error('Invalid response for movie images');
             }
 
-            done(null, body);
-        });
+            return body;
+        } catch (err) {
+            Logger.error(`Error fetching images for movie ID ${id}:`, err);
+            throw err;
+        }
     }
 
-    getMovieVideos(id, done) {
-        if (!id) return done(new Error('Invalid movie id'));
-        let path = ['movie', id, 'videos'];
-        request(this._getUrl(path), (err, response) => {
-            if (err) return done(err);
-            let body;
-            try {
-                body = JSON.parse(response.body);
-            } catch (e) {
-                return done(err);
-            }
+    async getMovieVideos(id) {
+        if (!id) throw new Error('Invalid movie id');
+        const path = ['movie', id, 'videos'];
+        try {
+            const response = await axios.get(_getUrl(path));
+            const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
-                return done(null);
+                return null;
             }
 
             if (!body.hasOwnProperty('id') || !body.id) {
-                return done(new Error('Invalid response for movie videos'), body);
+                throw new Error('Invalid response for movie videos');
             }
 
-            done(null, body);
-        });
+            return body;
+        } catch (err) {
+            Logger.error(`Error fetching videos for movie ID ${id}:`, err);
+            throw err;
+        }
     }
 
-    getMovieKeywords(id, done) {
-        if (!id) return done(new Error('Invalid movie id'));
-        let path = ['movie', id, 'keywords'];
-        request(this._getUrl(path), (err, response) => {
-            if (err) return done(err);
-            let body;
-            try {
-                body = JSON.parse(response.body);
-            } catch (e) {
-                return done(err);
-            }
+    async getMovieKeywords(id) {
+        if (!id) throw new Error('Invalid movie id');
+        const path = ['movie', id, 'keywords'];
+        try {
+            const response = await axios.get(_getUrl(path));
+            const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
-                return done(null);
+                return null;
             }
 
             if (!body.hasOwnProperty('id') || !body.id) {
-                return done(new Error('Invalid response for movie keywords'), body);
+                throw new Error('Invalid response for movie keywords');
             }
 
-            done(null, body);
-        });
+            return body;
+        } catch (err) {
+            Logger.error(`Error fetching keywords for movie ID ${id}:`, err);
+            throw err;
+        }
     }
 
-    getMovieSimilar(id, done) {
-        if (!id) return done(new Error('Invalid movie id'));
-        let path = ['movie', id, 'similar'];
-        request(this._getUrl(path), (err, response) => {
-            if (err) return done(err);
-            let body;
-            try {
-                body = JSON.parse(response.body);
-            } catch (e) {
-                return done(err);
-            }
+    async getMovieSimilar(id) {
+        if (!id) throw new Error('Invalid movie id');
+        const path = ['movie', id, 'similar'];
+        try {
+            const response = await axios.get(_getUrl(path));
+            const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
-                return done(null);
+                return null;
             }
 
             if (!body.hasOwnProperty('results') || !body.results) {
-                return done(new Error('Invalid response for movie similar'), body);
+                throw new Error('Invalid response for movie similar');
             }
 
-            done(null, body);
-        });
+            return body;
+        } catch (err) {
+            Logger.error(`Error fetching similar movies for movie ID ${id}:`, err);
+            throw err;
+        }
     }
 
-    getMovieRecommendations(id, done) {
-        if (!id) return done(new Error('Invalid movie id'));
-        let path = ['movie', id, 'recommendations'];
-        request(this._getUrl(path), (err, response) => {
-            if (err) return done(err);
-            let body;
-            try {
-                body = JSON.parse(response.body);
-            } catch (e) {
-                return done(err);
-            }
+    async getMovieRecommendations(id) {
+        if (!id) throw new Error('Invalid movie id');
+        const path = ['movie', id, 'recommendations'];
+        try {
+            const response = await axios.get(_getUrl(path));
+            const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
-                return done(null);
+                return null;
             }
 
             if (!body.hasOwnProperty('id') || !body.id) {
-                return done(new Error('Invalid response for movie recommendations'), body);
+                throw new Error('Invalid response for movie recommendations');
             }
 
-            done(null, body);
-        });
+            return body;
+        } catch (err) {
+            Logger.error(`Error fetching recommendations for movie ID ${id}:`, err);
+            throw err;
+        }
     }
 
-    getMovieCredits(id, done) {
-        if (!id) return done(new Error('Invalid movie id'));
-        let path = ['movie', id, 'credits'];
-        request(this._getUrl(path), (err, response) => {
-            if (err) return done(err);
-            let body;
-            try {
-                body = JSON.parse(response.body);
-            } catch (e) {
-                return done(err);
-            }
+    async getMovieCredits(id) {
+        if (!id) throw new Error('Invalid movie id');
+        const path = ['movie', id, 'credits'];
+        try {
+            const response = await axios.get(_getUrl(path));
+            const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
-                return done(null);
+                return null;
             }
 
             if (!body.hasOwnProperty('id') || !body.id) {
-                return done(new Error('Invalid response for movie credits'), body);
+                throw new Error('Invalid response for movie credits');
             }
 
-            done(null, body);
-        });
+            return body;
+        } catch (err) {
+            Logger.error(`Error fetching credits for movie ID ${id}:`, err);
+            throw err;
+        }
     }
 
-    getPersonDetails(id, done) {
-        if (!id) return done(new Error('Invalid person id'));
-        let path = ['person', id];
-        request(this._getUrl(path), (err, response) => {
-            if (err) return done(err);
-            let body;
-            try {
-                body = JSON.parse(response.body);
-            } catch (e) {
-                return done(err);
-            }
+    async getPersonDetails(id) {
+        if (!id) throw new Error('Invalid person id');
+        const path = ['person', id];
+        try {
+            const response = await axios.get(_getUrl(path));
+            const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
-                return done(null);
+                return null;
             }
 
             if (!body.hasOwnProperty('id') || !body.id) {
-                return done(new Error('Invalid response for person'), body);
+                throw new Error('Invalid response for person');
             }
 
-            done(null, body);
-        });
+            return body;
+        } catch (err) {
+            Logger.error(`Error fetching details for person ID ${id}:`, err);
+            throw err;
+        }
     }
 }
 

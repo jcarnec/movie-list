@@ -91,12 +91,8 @@ app.post("/movies", async (req, res) => {
     }
     // log filter entirelly using stringify
 
-    console.log(JSON.stringify(filter));
 
     const movies = await Movie.find(filter).sort({ release_date: 1 });
-
-    console.log(movies.length);
-
     // console.log(movies)
     res.json(movies);
   } catch (err) {
