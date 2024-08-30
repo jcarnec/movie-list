@@ -170,7 +170,15 @@
 
       this.crew = data.credits.crew
       // by popularity
-      this.topNcrew = data.credits.crew.sort((a, b) => b.popularity - a.popularity).slice(0, 10)
+      this.topNcrew = data.credits.crew.sort((a, b) => {
+        // have director always at the top
+        if (a.job === "Director") {
+          return -1
+        } else if (b.job === "Director") {
+          return 1
+        }
+        return b.popularity - a.popularity
+      }).slice(0, 10)
     }
 
     getFormattedReleaseDate() {
@@ -581,7 +589,15 @@
               </p>
               <p>
                 <strong>Cast:</strong >
-                  {}
+                {#each $selectedMovie.topNcast as cast}
+                  <p>{cast.name} as {cast.character}</p>
+                {/each}
+              </p>
+              <p>
+                <strong>Crew:</strong >
+                {#each $selectedMovie.topNcrew as crew}
+                  <p>{crew.name}: {crew.job}</p>
+                {/each}
               </p>
             </div>
           {/if}
