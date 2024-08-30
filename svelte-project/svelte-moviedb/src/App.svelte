@@ -163,7 +163,14 @@
       this.videos = data.videos;
       this.similar = data.similar;
       this.images = data.images;
-      this.keywords = data.keywords.map((keyword) => keyword.name);
+      this.keywords = data.keywords[0].keywords.map((keyword) => keyword.name);
+      this.cast = data.credits.cast
+      // by popularity
+      this.topNcast = data.credits.cast.sort((a, b) => b.popularity - a.popularity).slice(0, 10)
+
+      this.crew = data.credits.crew
+      // by popularity
+      this.topNcrew = data.credits.crew.sort((a, b) => b.popularity - a.popularity).slice(0, 10)
     }
 
     getFormattedReleaseDate() {
@@ -267,7 +274,6 @@
   }
 
   function getVisibleMovies(queryCount, scrollY, viewportHeight) {
-    console.log(queryCount);
     const startIndex = Math.floor(scrollY / itemHeight);
     const endIndex = Math.min(
       movies.length,
@@ -573,6 +579,10 @@
                 <strong>Runtime:</strong
                 >{` ${generateHourString($selectedMovie.runtime)}`}
               </p>
+              <p>
+                <strong>Cast:</strong >
+                  {}
+              </p>
             </div>
           {/if}
         </div>
@@ -584,7 +594,7 @@
 <style>
   .header-body {
     display: flex;
-    height: 99vh;
+    height: 100vh; /* Ensure it takes the full viewport height */
     flex-direction: column;
   }
 
@@ -601,8 +611,9 @@
 
   .body {
     display: flex;
-    height: 100vh;
+    flex: 1; /* Allow the body to grow and fill available space */
     flex-direction: row;
+    overflow: hidden; /* Prevent overflow from disrupting layout */
   }
 
   .movie-column {
@@ -625,14 +636,17 @@
   .movie-list {
     padding-right: 20px;
     flex: 3;
+    overflow-y: auto; /* Allow scrolling in case of overflow */
   }
 
   .movie-details {
-    padding: 100px;
+    padding: 20px;
     background: #f4f4f4;
     border-left: 1px solid #ddd;
-    overflow-y: auto;
+    overflow-y: auto; /* Allow scrolling for movie details */
     flex: 1;
+    max-height: 100%; /* Ensure it respects parent height */
+    box-sizing: border-box; /* Include padding and borders in height calculations */
   }
 
   .genre-selection {
@@ -670,14 +684,13 @@
   }
 
   .parent-div {
-    /* no scroll  */
     overflow: hidden;
+    height: 100vh; /* Ensure parent div takes full height */
   }
 
   .link {
     cursor: pointer;
     color: blue;
-    /* underline on hover */
     text-decoration: underline;
   }
 

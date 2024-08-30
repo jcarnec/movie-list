@@ -34,6 +34,7 @@ const movieSchema = new mongoose.Schema(
     video: Boolean,
     vote_average: Number,
     vote_count: Number,
+    credits: mongoose.Schema.Types.Mixed,
     reviews: [mongoose.Schema.Types.Mixed],
     videos: [mongoose.Schema.Types.Mixed],
     similar: [mongoose.Schema.Types.Mixed],
