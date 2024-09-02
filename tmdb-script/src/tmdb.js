@@ -84,7 +84,14 @@ async function downloadPeopleFromCredits(credits) {
   }
 
   for (const personId of peopleIds) {
-    await downloadPersonData(personId);
+    // check if person already exists in the database
+    const person = await Person.findOne({
+      id: personId,
+    }).exec();
+
+    if (!person) {
+      await downloadPersonData(personId);
+    }
   }
 }
 
@@ -120,7 +127,7 @@ async function downloadMovieData(movieId) {
 
             // If we fetched credits, also download people details
             if (key === "credits") {
-            await downloadPeopleFromCredits(data);
+            // await downloadPeopleFromCredits(data);
             }
         }
       } catch (error) {
