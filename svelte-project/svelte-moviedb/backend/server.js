@@ -90,9 +90,19 @@ app.post("/movies", async (req, res) => {
       };
 
     }
+
+    if (req.body.crewId) {
+      filter["credits.crew.id"] = Number(req.body.crewId);
+    }
+
+
+    if (req.body.castId) {
+      filter["credits.cast.id"] = Number(req.body.castId);
+    }
     // log filter entirelly using stringify
 
 
+    console.log(JSON.stringify(filter, null, 2));
     const movies = await Movie.find(filter).sort({ release_date: 1 });
     // console.log(movies)
     res.json(movies);

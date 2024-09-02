@@ -19,26 +19,48 @@
   let year = writable("");
 
   let minReviewCount = writable(10);
-  let maxReviewCount = writable(100);
+  let maxReviewCount = writable();
 
   let minYear = writable(1922);
   let maxYear = writable(2025);
 
   let queryCount = writable(0);
 
+  let crewId = writable(0);
+  let castId = writable(0);
+
+  let selectedPerson = writable(null);
+  let selectedPersonName = writable(null);
+
+  $: $selectedPersonName = $selectedPerson?.name;
+
   $: $year =
     movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length
       ? movies[getFirstVisibleIndex($scrollY)].getReleaseYear().toString()
       : "";
 
-  $: queryDatabase($selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear);
+  $: queryDatabase($selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId);
+
+  function setCrew(p) {
+    castId.set(0);
+    crewId.set(p.id);
+    console.log(p.id)
+    selectedPerson.set(p);
+  }
+
+  function setCast(p) {
+    crewId.set(0);
+    castId.set(p.id);
+    console.log(p.id)
+    selectedPerson.set(p);
+  }
 
   async function queryDatabase() {
     // re-query the database based on the selected language
     let url = "http://localhost:3000/movies";
     // selected language in the body of the request
 
-    let body = { original_language: $selectedLanguage, genres: $selectedGenres, minReviewCount: parseInt($minReviewCount), maxReviewCount: parseInt($maxReviewCount), minYear: parseInt($minYear), maxYear: parseInt($maxYear)};
+    let body = { original_language: $selectedLanguage, genres: $selectedGenres, minReviewCount: parseInt($minReviewCount), maxReviewCount: parseInt($maxReviewCount), minYear: parseInt($minYear), maxYear: parseInt($maxYear), crewId: parseInt($crewId), castId: parseInt($castId) };
 
     let res = await axios({
       method: "post",
@@ -52,10 +74,11 @@
     let movie_response = res.data;
 
     movies = movie_response.map((movie) => new Movie(movie));
-    getPopularityIndex(movies);
+    getPopularityIndexAndColor(movies);
     containerHeight = movies.length * itemHeight; // Set container height based on the number of movies
     // increment query count
     queryCount.update((n) => n + 1);
+    scrollY.update((n) => 0);
   }
 
   function openYoutubeSearchUrl(title, year) {
@@ -65,7 +88,7 @@
     );
   }
 
-  function getPopularityIndex(movies) {
+  function getPopularityIndexAndColor(movies) {
     // create a new field in the movie object called popularity_index which is the rank of the movie based on popularity
 
     movies.sort((a, b) => b.popularity - a.popularity);
@@ -75,6 +98,10 @@
     });
 
     movies.sort((a, b) => a.releaseDate - b.releaseDate);
+    
+    movies.forEach((movie, index) => {
+      movie.color = getColor(movie.popularity_index);
+    });
   }
 
   // Function to update width
@@ -163,14 +190,14 @@
       this.videos = data.videos;
       this.similar = data.similar;
       this.images = data.images;
-      this.keywords = data.keywords[0].keywords.map((keyword) => keyword.name);
-      this.cast = data.credits.cast
+      this.keywords = data?.keywords[0]?.keywords.map((keyword) => keyword.name);
+      this.cast = data?.credits?.cast
       // by popularity
-      this.topNcast = data.credits.cast.sort((a, b) => b.popularity - a.popularity).slice(0, 10)
+      this.topNcast = data?.credits?.cast.sort((a, b) => b.popularity - a.popularity).slice(0, 10)
 
-      this.crew = data.credits.crew
+      this.crew = data?.credits?.crew
       // by popularity
-      this.topNcrew = data.credits.crew.sort((a, b) => {
+      this.topNcrew = data?.credits?.crew.sort((a, b) => {
         // have director always at the top
         if (a.job === "Director") {
           return -1
@@ -252,11 +279,18 @@
   function getColor(popularity_index) {
     const ratio = popularity_index / movies.length;
 
-    const red = Math.floor(255 * ratio);
-    const green = 0;
-    const blue = Math.floor(255 * (1 - ratio));
+    // get color between blue and gold
 
-    return `rgb(${red}, ${green}, ${blue})`;
+    let c1 = [0, 0, 255];
+    let c2 = [255, 215, 0];
+
+    let color = [
+      Math.floor(c2[0] + ratio * (c1[0] - c2[0])),
+      Math.floor(c2[1] + ratio * (c1[1] - c2[1])),
+      Math.floor(c2[2] + ratio * (c1[2] - c2[2])),
+    ];
+
+    return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
   }
 
   function getColorCountry(language) {
@@ -282,6 +316,7 @@
   }
 
   function getVisibleMovies(queryCount, scrollY, viewportHeight) {
+    console.log("queryCount", queryCount);
     const startIndex = Math.floor(scrollY / itemHeight);
     const endIndex = Math.min(
       movies.length,
@@ -315,6 +350,7 @@
         <div class="form">
           <div class="year-input">
             <!-- have a text box that shows the year of the first visible movie -->
+            {console.log(getFirstVisibleIndex($scrollY))}
             {#if movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length && movies[getFirstVisibleIndex($scrollY)]}
               <!-- {console.log(movies[getFirstVisibleIndex($scrollY)])} -->
 
@@ -342,6 +378,10 @@
                 <label for="maxYear">Max release year:</label>
                 <textarea bind:value={$maxYear}></textarea>
             </div>
+          </div>
+          <div>
+            <label for="Person">Person:</label>
+            <textarea bind:value={$selectedPersonName}></textarea>
           </div>
           <div class="language-input">
             <!-- select which of the available languages to filter by (e.g. English, French, Spanish, German, Japanese, Italian) using a drop down -->
@@ -473,9 +513,7 @@
                       >
                         <div style="display: flex; height: 100%">
                           <div
-                            style="background-color: {getColor(
-                              movie.popularity_index
-                            )};"
+                            style="background-color: {movie.color};"
                             xmlns="http://www.w3.org/1999/xhtml"
                             class="bar-div"
                           >
@@ -590,13 +628,13 @@
               <p>
                 <strong>Cast:</strong >
                 {#each $selectedMovie.topNcast as cast}
-                  <p>{cast.name} as {cast.character}</p>
+                  <p class="blue-text" on:click={setCast(cast)}>{cast.name} as {cast.character}</p>
                 {/each}
               </p>
               <p>
                 <strong>Crew:</strong >
                 {#each $selectedMovie.topNcrew as crew}
-                  <p>{crew.name}: {crew.job}</p>
+                  <p class="blue-text" on:click={setCrew(crew)}>{crew.name}: {crew.job}</p>
                 {/each}
               </p>
             </div>
@@ -652,7 +690,6 @@
   .movie-list {
     padding-right: 20px;
     flex: 3;
-    overflow-y: auto; /* Allow scrolling in case of overflow */
   }
 
   .movie-details {
@@ -719,5 +756,11 @@
   .min-max {
     display: flex;
     flex-direction: row;
+  }
+
+  .blue-text {
+    color: blue;
+    /* underline */
+    text-decoration: underline; 
   }
 </style>
