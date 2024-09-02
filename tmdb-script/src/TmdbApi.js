@@ -19,7 +19,7 @@ class TmdbApi {
     async getLatestId() {
         const path = ['movie', 'latest'];
         try {
-            const response = await axios.get(_getUrl(path));
+            const response = await axios.get(_getUrl(path), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
             const body = response.data;
 
             if (!body.hasOwnProperty('id') || !body.id) {
@@ -40,7 +40,8 @@ class TmdbApi {
         if (!id) throw new Error('Invalid movie id');
         const path = ['movie', id];
         try {
-            const response = await axios.get(_getUrl(path));
+            // utf-8
+            const response = await axios.get(_getUrl(path), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
             const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
@@ -62,7 +63,7 @@ class TmdbApi {
         if (!id) throw new Error('Invalid movie id');
         const path = ['movie', id, 'images'];
         try {
-            const response = await axios.get(_getUrl(path));
+            const response = await axios.get(_getUrl(path), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
             const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
@@ -84,7 +85,7 @@ class TmdbApi {
         if (!id) throw new Error('Invalid movie id');
         const path = ['movie', id, 'videos'];
         try {
-            const response = await axios.get(_getUrl(path));
+            const response = await axios.get(_getUrl(path), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
             const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
@@ -106,7 +107,7 @@ class TmdbApi {
         if (!id) throw new Error('Invalid movie id');
         const path = ['movie', id, 'keywords'];
         try {
-            const response = await axios.get(_getUrl(path));
+            const response = await axios.get(_getUrl(path), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
             const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
@@ -128,7 +129,7 @@ class TmdbApi {
         if (!id) throw new Error('Invalid movie id');
         const path = ['movie', id, 'similar'];
         try {
-            const response = await axios.get(_getUrl(path));
+            const response = await axios.get(_getUrl(path), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
             const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
@@ -150,7 +151,7 @@ class TmdbApi {
         if (!id) throw new Error('Invalid movie id');
         const path = ['movie', id, 'recommendations'];
         try {
-            const response = await axios.get(_getUrl(path));
+            const response = await axios.get(_getUrl(path), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
             const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
@@ -172,7 +173,7 @@ class TmdbApi {
         if (!id) throw new Error('Invalid movie id');
         const path = ['movie', id, 'credits'];
         try {
-            const response = await axios.get(_getUrl(path));
+            const response = await axios.get(_getUrl(path), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
             const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {
@@ -194,7 +195,7 @@ class TmdbApi {
         if (!id) throw new Error('Invalid person id');
         const path = ['person', id];
         try {
-            const response = await axios.get(_getUrl(path));
+            const response = await axios.get(_getUrl(path), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
             const body = response.data;
 
             if (body.hasOwnProperty('status_code') && body.status_code === ERR_STATUS) {

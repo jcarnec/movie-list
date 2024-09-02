@@ -763,4 +763,9 @@
     /* underline */
     text-decoration: underline; 
   }
+
+  body {
+    font-family: 'Arial', 'Helvetica', sans-serif;
+  }
+
 </style>

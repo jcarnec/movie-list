@@ -4,7 +4,8 @@
   "description": "A nodejs script to collect data from TMDB API and store it in local mongo database.",
   "main": "./bin/tmdb-script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/tmdb.js"
   },
   "repository": {
     "type": "git",

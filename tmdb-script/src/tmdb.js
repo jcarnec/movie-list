@@ -26,6 +26,10 @@ const opts = {
       connectTimeoutMS: QUERY_TIMEOUT,
     },
     poolSize: POOL_SIZE,
+    // utf-8 support
+    autoIndex: false,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   },
 };
 mongoose.connect(config.dbServer, opts);
@@ -165,7 +169,7 @@ async function start() {
   const difference = tmdbLatestId - localLatestId;
   Logger.info(`There are ${difference} new movies available.`);
 
-  const answer = await promptUser(`Do you want to download them now? [Y/n]${EOL}`);
+  const answer = AFFIRMATIVE_ANSWER
   if (answer.toLowerCase() !== AFFIRMATIVE_ANSWER) {
     Logger.info("Exiting script.");
     process.exit();

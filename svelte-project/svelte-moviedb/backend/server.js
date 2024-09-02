@@ -105,6 +105,7 @@ app.post("/movies", async (req, res) => {
     console.log(JSON.stringify(filter, null, 2));
     const movies = await Movie.find(filter).sort({ release_date: 1 });
     // console.log(movies)
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.json(movies);
   } catch (err) {
     res.status(500).json({ message: err.message });
