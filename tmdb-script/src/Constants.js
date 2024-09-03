@@ -1,9 +1,9 @@
 'use strict';
 
 module.exports = {
-    QUERY_TIMEOUT: 1147483647,
-    POOL_SIZE: 5,
-    REQUESTS_PER_TICK: 39,
+    query_timeout: 1147483647,
+    pool_size: 5,
+    requests_per_tick: 39,
     TICK_TIMEOUT: 10000,
     AFFIRMATIVE_ANSWER: 'y',
     SEPARATOR_SYMBOL: '=',

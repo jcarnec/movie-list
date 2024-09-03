@@ -189,9 +189,16 @@ async function start() {
 }
 
 // Run the script
-mongoose.connection.on("open", () => {
+mongoose.connection.on("open", async () => {
   Logger.info("Connected to database...");
   start();
+  // let movie_from_api = await tmdbApi.getMovieDetails(776);
+  // let movie = await Movie.find({ id: 776 });
+  // // parse as utf-8
+  // console.log(JSON.stringify(movie_from_api, null, 2));
+  // console.log(JSON.stringify(movie, null, 2));
+
+    
 });
 
 mongoose.connection.on("error", (error) => {

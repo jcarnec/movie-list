@@ -32,6 +32,12 @@
   let selectedPerson = writable(null);
   let selectedPersonName = writable(null);
 
+  let firstDate = writable(new Date("1/1/1900"));
+
+  let firstVisibleIndex = writable(0);
+
+  let runningQuery = writable(false);
+
   $: $selectedPersonName = $selectedPerson?.name;
 
   $: $year =
@@ -39,7 +45,15 @@
       ? movies[getFirstVisibleIndex($scrollY)].getReleaseYear().toString()
       : "";
 
-  $: queryDatabase($selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId);
+  $: queryDatabase(false, $selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId, $firstDate);
+
+  $: if(movies.length > 0 && movies.length - $firstVisibleIndex < 15 && !$runningQuery) {
+    firstDate.set(movies[movies.length - 1].releaseDate);
+    queryDatabase(true, $selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId, $firstDate);
+    // here there is a problem where we do not want to execute this code block again if the queryDatabase function is still running the request
+  }
+
+  $: console.log(movies.length - $firstVisibleIndex)
 
   function setCrew(p) {
     castId.set(0);
@@ -55,12 +69,13 @@
     selectedPerson.set(p);
   }
 
-  async function queryDatabase() {
+  async function queryDatabase(append=false) {
+    runningQuery.set(true);
     // re-query the database based on the selected language
     let url = "http://localhost:3000/movies";
     // selected language in the body of the request
 
-    let body = { original_language: $selectedLanguage, genres: $selectedGenres, minReviewCount: parseInt($minReviewCount), maxReviewCount: parseInt($maxReviewCount), minYear: parseInt($minYear), maxYear: parseInt($maxYear), crewId: parseInt($crewId), castId: parseInt($castId) };
+    let body = { original_language: $selectedLanguage, genres: $selectedGenres, minReviewCount: parseInt($minReviewCount), maxReviewCount: parseInt($maxReviewCount), minYear: parseInt($minYear), maxYear: parseInt($maxYear), crewId: parseInt($crewId), castId: parseInt($castId), firstDate: $firstDate };
 
     let res = await axios({
       method: "post",
@@ -73,12 +88,18 @@
 
     let movie_response = res.data;
 
-    movies = movie_response.map((movie) => new Movie(movie));
+    let new_movies = movie_response.map((movie) => new Movie(movie));
+    if (append) {
+      movies = [...movies, ...new_movies];
+    } else {
+      movies = new_movies;
+    }
     getPopularityIndexAndColor(movies);
     containerHeight = movies.length * itemHeight; // Set container height based on the number of movies
     // increment query count
     queryCount.update((n) => n + 1);
     scrollY.update((n) => 0);
+    runningQuery.set(false);
   }
 
   function openYoutubeSearchUrl(title, year) {
@@ -316,7 +337,6 @@
   }
 
   function getVisibleMovies(queryCount, scrollY, viewportHeight) {
-    console.log("queryCount", queryCount);
     const startIndex = Math.floor(scrollY / itemHeight);
     const endIndex = Math.min(
       movies.length,
@@ -326,7 +346,9 @@
   }
 
   function getFirstVisibleIndex(scrollY) {
-    return Math.floor(scrollY / itemHeight);
+    let fvi = Math.floor(scrollY / itemHeight);
+    firstVisibleIndex.set(fvi);
+    return Math.floor(fvi);
   }
 
   function scrollToYear(e) {
@@ -350,7 +372,6 @@
         <div class="form">
           <div class="year-input">
             <!-- have a text box that shows the year of the first visible movie -->
-            {console.log(getFirstVisibleIndex($scrollY))}
             {#if movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length && movies[getFirstVisibleIndex($scrollY)]}
               <!-- {console.log(movies[getFirstVisibleIndex($scrollY)])} -->
 
