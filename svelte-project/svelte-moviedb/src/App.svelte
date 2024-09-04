@@ -21,7 +21,7 @@
   let minReviewCount = writable(10);
   let maxReviewCount = writable();
 
-  let minYear = writable(1922);
+  let minYear = writable(1900);
   let maxYear = writable(2025);
 
   let queryCount = writable(0);
@@ -32,7 +32,6 @@
   let selectedPerson = writable(null);
   let selectedPersonName = writable(null);
 
-  let firstDate = writable(new Date("1/1/1900"));
 
   let firstVisibleIndex = writable(0);
 
@@ -45,15 +44,26 @@
       ? movies[getFirstVisibleIndex($scrollY)].getReleaseYear().toString()
       : "";
 
-  $: queryDatabase(false, $selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId, $firstDate);
+  $: queryDatabase("new", null, $selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId);
 
   $: if(movies.length > 0 && movies.length - $firstVisibleIndex < 15 && !$runningQuery) {
-    firstDate.set(movies[movies.length - 1].releaseDate);
-    queryDatabase(true, $selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId, $firstDate);
-    // here there is a problem where we do not want to execute this code block again if the queryDatabase function is still running the request
+    queryDatabase("append", movies[movies.length - 1].releaseDate, $selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId);
   }
 
-  $: console.log(movies.length - $firstVisibleIndex)
+  $: {
+    // debug if statement
+    if(movies.length > 0) {
+      console.log(new Date(movies[0].releaseDate))
+      console.log(new Date("12/31/1902"))
+    }
+    if(movies.length > 0 && $firstVisibleIndex == 0 && !$runningQuery && new Date(movies[0].releaseDate) > new Date("12/31/1902")) {
+      console.log('hello')
+      queryDatabase("prepend", movies[0].releaseDate, $selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId);
+    }
+  } 
+
+  // $: console.log(movies.length - $firstVisibleIndex)
+  $: console.log($firstVisibleIndex)
 
   function setCrew(p) {
     castId.set(0);
@@ -69,13 +79,14 @@
     selectedPerson.set(p);
   }
 
-  async function queryDatabase(append=false) {
+  async function queryDatabase(append=false, date=null) {
+    console.log(append)
     runningQuery.set(true);
     // re-query the database based on the selected language
     let url = "http://localhost:3000/movies";
     // selected language in the body of the request
 
-    let body = { original_language: $selectedLanguage, genres: $selectedGenres, minReviewCount: parseInt($minReviewCount), maxReviewCount: parseInt($maxReviewCount), minYear: parseInt($minYear), maxYear: parseInt($maxYear), crewId: parseInt($crewId), castId: parseInt($castId), firstDate: $firstDate };
+    let body = { original_language: $selectedLanguage, genres: $selectedGenres, minReviewCount: parseInt($minReviewCount), maxReviewCount: parseInt($maxReviewCount), minYear: parseInt($minYear), maxYear: parseInt($maxYear), crewId: parseInt($crewId), castId: parseInt($castId), type: append, date: date };
 
     let res = await axios({
       method: "post",
@@ -89,16 +100,20 @@
     let movie_response = res.data;
 
     let new_movies = movie_response.map((movie) => new Movie(movie));
-    if (append) {
+    if (append == "append") {
       movies = [...movies, ...new_movies];
-    } else {
+    } else if (append == "prepend") {
+      movies = [...new_movies, ...movies];
+      // increase scrollY by the height of the new movies so that the scroll position remains the same and 
+      scrollY.update((n) => n + new_movies.length * itemHeight);
+    } else if (append == "new") {
       movies = new_movies;
+      scrollY.update((n) => 0);
     }
     getPopularityIndexAndColor(movies);
     containerHeight = movies.length * itemHeight; // Set container height based on the number of movies
     // increment query count
     queryCount.update((n) => n + 1);
-    scrollY.update((n) => 0);
     runningQuery.set(false);
   }
 

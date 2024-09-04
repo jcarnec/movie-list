@@ -70,10 +70,15 @@ app.post("/movies", async (req, res) => {
 
     const filter = {};
 
-    let firstDate = new Date('01/01/1900');
+    // check if minYear and maxYear are valid between 1900 and 2025
+    if (req.body.minYear && (req.body.minYear < 1900 || req.body.minYear > 2025)) {
+      res.status(400).json({ message: "minYear must be between 1900 and 2025" });
+      return;
+    }
 
-    if (req.body.firstDate) {
-      firstDate = new Date(req.body.firstDate);
+    if (req.body.maxYear && (req.body.maxYear < 1900 || req.body.maxYear > 2025)) {
+      res.status(400).json({ message: "maxYear must be between 1900 and 2025" });
+      return;
     }
 
     if (req.body.adult) filter.adult = req.body.adult;
@@ -89,16 +94,27 @@ app.post("/movies", async (req, res) => {
     if (req.body.maxReviewCount)
       filter.vote_count = { $lte: Number(req.body.maxReviewCount) };
 
-    filter.release_date === undefined ? (filter.release_date = {}) : null;
-    if (!req.body.minYear || new Date("01/01/" + req.body.minYear) < firstDate) {
-      filter.release_date = { $gte: firstDate };
-    } else {
-      filter.release_date["$gte"] = new Date("01/01/" + req.body.minYear);
-    } 
+    if (req.body.type === "new") {
+      if (req.body.minYear) {
+        filter.release_date === undefined ? (filter.release_date = {}) : null;
+        filter.release_date["$gte"] = new Date("01/01/" + req.body.minYear);
+      }
 
-    if (req.body.maxYear)
-      filter.release_date === undefined ? (filter.release_date = {}) : null;
-      filter.release_date["$lte"] = new Date("12/31/" + req.body.maxYear);
+      if (req.body.maxYear) {
+        filter.release_date === undefined ? (filter.release_date = {}) : null;
+        filter.release_date["$lte"] = new Date("12/31/" + req.body.maxYear);
+      }
+    } else if (req.body.type === "append") {
+      // if append then get next movies released after req.body.date
+      if (req.body.date) {
+        filter.release_date = { $gt: new Date(req.body.date) };
+      }
+    } else if (req.body.type === "prepend") {
+      if (req.body.date) {
+        filter.release_date = { $lt: new Date(req.body.date) };
+      }
+    }
+
     if (req.body.genres && req.body.genres.length > 0) {
       let elemMatch = req.body.genres.map((genre) => {
         return { $elemMatch: { name: genre } };
@@ -117,8 +133,12 @@ app.post("/movies", async (req, res) => {
     }
 
 
+    let sorting = { release_date: 1 };
+    if (req.body.type == 'prepend') {
+      sorting = { release_date: -1 };
+    }
 
-    const movies = await Movie.find(filter).limit(75).sort({ release_date: 1 });
+    const movies = await Movie.find(filter).limit(75).sort(sorting);
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
     res.json(movies);
   } catch (err) {
