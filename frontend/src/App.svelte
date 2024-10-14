@@ -48,7 +48,6 @@
     $castId
   );
 
-  // $: console.log(movies.length - $firstVisibleIndex)
   $: console.log($firstVisibleIndex);
 
   function setCrew(p) {
@@ -68,12 +67,10 @@
   async function queryDatabase(append = false, date = null) {
     console.log(append);
     runningQuery.set(true);
-    // re-query the database based on the selected language
     let url = "http://localhost:3000/movies";
-    // selected language in the body of the request
 
     let body = {
-      original_language: $selectedLanguage,
+      originalLanguage: $selectedLanguage,
       genres: $selectedGenres,
       minReviewCount: parseInt($minReviewCount),
       maxReviewCount: parseInt($maxReviewCount),
@@ -87,30 +84,28 @@
     let res = await axios({
       method: "post",
       url: url,
-      data: body, // Non-standard, ensure the server supports it
+      data: body,
       headers: {
         "Content-Type": "application/json",
       },
     });
 
-    let movie_response = res.data;
+    let movieResponse = res.data;
 
-    let new_movies = movie_response.map((movie) => new Movie(movie));
+    let newMovies = movieResponse.map((movie) => new Movie(movie));
     if (append == "append") {
-      movies = [...movies, ...new_movies];
+      movies = [...movies, ...newMovies];
     } else if (append == "prepend") {
-      movies = [...new_movies, ...movies];
-      // increase scrollY by the height of the new movies so that the scroll position remains the same and
-      scrollY.update((n) => n + new_movies.length * itemHeight);
+      movies = [...newMovies, ...movies];
+      scrollY.update((n) => n + newMovies.length * itemHeight);
     } else if (append == "new") {
-      movies = new_movies;
+      movies = newMovies;
       scrollY.update((n) => 0);
       $year = movies.length > 0 ? movies[0].getReleaseYear().toString() : "";
       await checkAppendPrepend();
     }
     getPopularityIndexAndColor(movies);
-    containerHeight = movies.length * itemHeight; // Set container height based on the number of movies
-    // increment query count
+    containerHeight = movies.length * itemHeight;
     queryCount.update((n) => n + 1);
     runningQuery.set(false);
   }
@@ -123,25 +118,20 @@
   }
 
   function getPopularityIndexAndColor(movies) {
-    // create a new field in the movie object called popularity_index which is the rank of the movie based on popularity
-
     movies.sort((a, b) => b.popularity - a.popularity);
 
     movies.forEach((movie, index) => {
-      movie.popularity_index = index + 1;
+      movie.popularityIndex = index + 1;
     });
 
     movies.sort((a, b) => a.releaseDate - b.releaseDate);
 
     movies.forEach((movie, index) => {
-      movie.color = getColor(movie.popularity_index);
+      movie.color = getColor(movie.popularityIndex);
     });
   }
 
-  // Function to update width
   function updateWidth() {
-    // width = window.innerWidth;
-    // get width of movie-column div
     width = document.querySelector(".movie-bar").clientWidth;
   }
 
@@ -191,20 +181,15 @@
     }
   }
 
-  // Function to handle scroll event
   async function handleScroll(event) {
-    // check that movie list div is not at cursor position
+    let movieListDiv = document.querySelector(".movie-list");
+    let cursorPositionX = event.clientX;
+    let cursorPositionY = event.clientY;
+    let rect = movieListDiv.getBoundingClientRect();
 
-    let movie_list_div = document.querySelector(".movie-list");
-    let cursor_position_x = event.clientX;
-    let cursor_position_y = event.clientY;
-    let rect = movie_list_div.getBoundingClientRect();
-
-    if (!(cursor_position_y > rect.top && cursor_position_y < rect.bottom)) {
+    if (!(cursorPositionY > rect.top && cursorPositionY < rect.bottom)) {
       return;
-    } else if (
-      !(cursor_position_x > rect.left && cursor_position_x < rect.right)
-    ) {
+    } else if (!(cursorPositionX > rect.left && cursorPositionX < rect.right)) {
       return;
     }
 
@@ -270,16 +255,13 @@
         (keyword) => keyword.name
       );
       this.cast = data?.credits?.cast;
-      // by popularity
       this.topNcast = data?.credits?.cast
         .sort((a, b) => b.popularity - a.popularity)
         .slice(0, 10);
 
       this.crew = data?.credits?.crew;
-      // by popularity
       this.topNcrew = data?.credits?.crew
         .sort((a, b) => {
-          // have director always at the top
           if (a.job === "Director") {
             return -1;
           } else if (b.job === "Director") {
@@ -316,7 +298,7 @@
 
   let movies = [];
 
-  let genre_emoji_dict = {
+  let genreEmojiDict = {
     Documentary: "📚",
     Adventure: "🧗",
     "Science Fiction": "👽",
@@ -365,8 +347,8 @@
     };
   });
 
-  function getColor(popularity_index) {
-    const ratio = popularity_index / movies.length;
+  function getColor(popularityIndex) {
+    const ratio = popularityIndex / movies.length;
 
     // get color between blue and gold
 
@@ -435,8 +417,8 @@
     <div class="header-body">
       <div class="header">
         <!-- <div class="title">
-          <h1>Movie List</h1>
-        </div> -->
+            <h1>Movie List</h1>
+          </div> -->
         <div class="form">
           <div class="year-input">
             <!-- have a text box that shows the year of the first visible movie -->
@@ -486,7 +468,7 @@
           <!-- checkbox for each genre -->
           <label for="genre">Genre:</label>
           <div class="genre-selection">
-            {#each Object.keys(genre_emoji_dict) as genre, index}
+            {#each Object.keys(genreEmojiDict) as genre, index}
               <div style="display: flex;">
                 <div style="padding-right: 10px">
                   <input
@@ -506,7 +488,7 @@
                   />
                 </div>
                 <label style="display:inline" for={genre}
-                  >{genre_emoji_dict[genre] + " " + genre}</label
+                  >{genreEmojiDict[genre] + " " + genre}</label
                 >
               </div>
             {/each}
@@ -540,12 +522,6 @@
                         fill="none"
                         stroke="green"
                       />
-
-                      <!-- map movie.genre to row of emojis -->
-
-                      <!-- {#each movie.genres as genre, index}
-                    <text x={((width * (movie.voteAverage / 10) * 0.75) - ((movie.genres.length * 25) - 10)) + (35 * index)} y="{50}" font-size="20">{genre_emoji_dict[genre]}</text>
-                  {/each} -->
                     </g>
                   {/each}
                 </svg>
@@ -611,7 +587,6 @@
                           </div>
                         </div>
                       </foreignObject>
-                      <!-- 20px width for every hour of runtime -->
                     </g>
                   {/each}
                 </svg>
@@ -624,10 +599,10 @@
                         ($scrollY % itemHeight)})"
                       on:click={() => handleBarClick(movie)}
                     >
-                      {#each Object.keys(genre_emoji_dict) as genre, index}
+                      {#each Object.keys(genreEmojiDict) as genre, index}
                         {#if movie.genres.includes(genre)}
                           <text x={16 * (index + 1)} y={50} font-size="13"
-                            >{genre_emoji_dict[genre]}</text
+                            >{genreEmojiDict[genre]}</text
                           >
                         {:else}
                           <!-- faint emoji with alpha-->
@@ -636,7 +611,7 @@
                             y={50}
                             font-size="13"
                             fill="gray"
-                            opacity="0.2">{genre_emoji_dict[genre]}</text
+                            opacity="0.2">{genreEmojiDict[genre]}</text
                           >
                         {/if}
                       {/each}
@@ -658,7 +633,6 @@
                         <text x="10" y="50" font-size="18" font-style="bold"
                           >{movie.getFormattedMonthYear()}</text
                         >
-                        <!-- else -->
                       {:else}
                         <text x="10" y="50" font-size="10"
                           >{movie.getFormattedMonthYear()}</text
@@ -690,7 +664,6 @@
               >
                 {$selectedMovie.title}
               </h2>
-              <!-- if not english -->
               {#if $selectedMovie.originalLanguage !== "en"}
                 <h4
                   class="link"
@@ -727,7 +700,7 @@
               <p>
                 <strong>Cast:</strong>
                 {#each $selectedMovie.topNcast as cast}
-                  <p class="blue-text" on:click={setCast(cast)}>
+                  <p class="blue-text" on:click={() => setCast(cast)}>
                     {cast.name} as {cast.character}
                   </p>
                 {/each}
@@ -735,7 +708,7 @@
               <p>
                 <strong>Crew:</strong>
                 {#each $selectedMovie.topNcrew as crew}
-                  <p class="blue-text" on:click={setCrew(crew)}>
+                  <p class="blue-text" on:click={() => setCrew(crew)}>
                     {crew.name}: {crew.job}
                   </p>
                 {/each}
@@ -863,7 +836,6 @@
 
   .blue-text {
     color: blue;
-    /* underline */
     text-decoration: underline;
   }
 

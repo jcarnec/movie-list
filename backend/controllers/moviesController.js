@@ -42,7 +42,7 @@ const buildFilter = (params) => {
 
 const buildReleaseDateFilter = (filter, params) => {
   if (params.type === 'new' && params.minYear) {
-    filter.release_date = { $gte: new Date(`01/01/\${params.minYear}`) };
+    filter.release_date = { $gte: new Date(`01/01/${params.minYear}`) };
   } else if (params.type === 'append' && params.date) {
     filter.release_date = { $gt: new Date(params.date) };
   } else if (params.type === 'prepend' && params.date) {
