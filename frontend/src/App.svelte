@@ -16,13 +16,11 @@
 
   let selectedGenres = writable([]);
 
+  let minYear = writable("");
   let year = writable("");
 
   let minReviewCount = writable(10);
   let maxReviewCount = writable();
-
-  let minYear = writable(1900);
-  let maxYear = writable(2025);
 
   let queryCount = writable(0);
 
@@ -32,61 +30,59 @@
   let selectedPerson = writable(null);
   let selectedPersonName = writable(null);
 
-
   let firstVisibleIndex = writable(0);
 
   let runningQuery = writable(false);
 
   $: $selectedPersonName = $selectedPerson?.name;
 
-  $: $year =
-    movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length
-      ? movies[getFirstVisibleIndex($scrollY)].getReleaseYear().toString()
-      : "";
-
-  $: queryDatabase("new", null, $selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId);
-
-  $: if(movies.length > 0 && movies.length - $firstVisibleIndex < 15 && !$runningQuery) {
-    queryDatabase("append", movies[movies.length - 1].releaseDate, $selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId);
-  }
-
-  $: {
-    // debug if statement
-    if(movies.length > 0) {
-      console.log(new Date(movies[0].releaseDate))
-      console.log(new Date("12/31/1902"))
-    }
-    if(movies.length > 0 && $firstVisibleIndex == 0 && !$runningQuery && new Date(movies[0].releaseDate) > new Date("12/31/1902")) {
-      console.log('hello')
-      queryDatabase("prepend", movies[0].releaseDate, $selectedLanguage, $selectedGenres, $minReviewCount, $maxReviewCount, $minYear, $maxYear, $crewId, $castId);
-    }
-  } 
+  $: queryDatabase(
+    "new",
+    null,
+    $selectedLanguage,
+    $selectedGenres,
+    $minReviewCount,
+    $maxReviewCount,
+    $minYear,
+    $crewId,
+    $castId
+  );
 
   // $: console.log(movies.length - $firstVisibleIndex)
-  $: console.log($firstVisibleIndex)
+  $: console.log($firstVisibleIndex);
 
   function setCrew(p) {
     castId.set(0);
     crewId.set(p.id);
-    console.log(p.id)
+    console.log(p.id);
     selectedPerson.set(p);
   }
 
   function setCast(p) {
     crewId.set(0);
     castId.set(p.id);
-    console.log(p.id)
+    console.log(p.id);
     selectedPerson.set(p);
   }
 
-  async function queryDatabase(append=false, date=null) {
-    console.log(append)
+  async function queryDatabase(append = false, date = null) {
+    console.log(append);
     runningQuery.set(true);
     // re-query the database based on the selected language
     let url = "http://localhost:3000/movies";
     // selected language in the body of the request
 
-    let body = { original_language: $selectedLanguage, genres: $selectedGenres, minReviewCount: parseInt($minReviewCount), maxReviewCount: parseInt($maxReviewCount), minYear: parseInt($minYear), maxYear: parseInt($maxYear), crewId: parseInt($crewId), castId: parseInt($castId), type: append, date: date };
+    let body = {
+      original_language: $selectedLanguage,
+      genres: $selectedGenres,
+      minReviewCount: parseInt($minReviewCount),
+      maxReviewCount: parseInt($maxReviewCount),
+      minYear: parseInt($minYear),
+      crewId: parseInt($crewId),
+      castId: parseInt($castId),
+      type: append,
+      date: date,
+    };
 
     let res = await axios({
       method: "post",
@@ -104,11 +100,13 @@
       movies = [...movies, ...new_movies];
     } else if (append == "prepend") {
       movies = [...new_movies, ...movies];
-      // increase scrollY by the height of the new movies so that the scroll position remains the same and 
+      // increase scrollY by the height of the new movies so that the scroll position remains the same and
       scrollY.update((n) => n + new_movies.length * itemHeight);
     } else if (append == "new") {
       movies = new_movies;
       scrollY.update((n) => 0);
+      $year = movies.length > 0 ? movies[0].getReleaseYear().toString() : "";
+      await checkAppendPrepend();
     }
     getPopularityIndexAndColor(movies);
     containerHeight = movies.length * itemHeight; // Set container height based on the number of movies
@@ -134,7 +132,7 @@
     });
 
     movies.sort((a, b) => a.releaseDate - b.releaseDate);
-    
+
     movies.forEach((movie, index) => {
       movie.color = getColor(movie.popularity_index);
     });
@@ -153,8 +151,48 @@
     return `${hours}:${minutes}`;
   }
 
+  async function checkAppendPrepend() {
+    if (
+      movies.length > 0 &&
+      movies.length - $firstVisibleIndex < 15 &&
+      !$runningQuery
+    ) {
+      await queryDatabase(
+        "append",
+        movies[movies.length - 1].releaseDate,
+        $selectedLanguage,
+        $selectedGenres,
+        $minReviewCount,
+        $maxReviewCount,
+        $minYear,
+        $crewId,
+        $castId
+      );
+    }
+
+    if (
+      movies.length > 0 &&
+      $firstVisibleIndex == 0 &&
+      !$runningQuery &&
+      new Date(movies[0].releaseDate) > new Date("12/31/1902")
+    ) {
+      console.log("hello");
+      await queryDatabase(
+        "prepend",
+        movies[0].releaseDate,
+        $selectedLanguage,
+        $selectedGenres,
+        $minReviewCount,
+        $maxReviewCount,
+        $minYear,
+        $crewId,
+        $castId
+      );
+    }
+  }
+
   // Function to handle scroll event
-  function handleScroll(event) {
+  async function handleScroll(event) {
     // check that movie list div is not at cursor position
 
     let movie_list_div = document.querySelector(".movie-list");
@@ -181,6 +219,8 @@
       movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length
         ? movies[getFirstVisibleIndex($scrollY)].getReleaseYear().toString()
         : "";
+
+    await checkAppendPrepend();
 
     event.preventDefault();
   }
@@ -226,26 +266,39 @@
       this.videos = data.videos;
       this.similar = data.similar;
       this.images = data.images;
-      this.keywords = data?.keywords[0]?.keywords.map((keyword) => keyword.name);
-      this.cast = data?.credits?.cast
+      this.keywords = data?.keywords[0]?.keywords.map(
+        (keyword) => keyword.name
+      );
+      this.cast = data?.credits?.cast;
       // by popularity
-      this.topNcast = data?.credits?.cast.sort((a, b) => b.popularity - a.popularity).slice(0, 10)
+      this.topNcast = data?.credits?.cast
+        .sort((a, b) => b.popularity - a.popularity)
+        .slice(0, 10);
 
-      this.crew = data?.credits?.crew
+      this.crew = data?.credits?.crew;
       // by popularity
-      this.topNcrew = data?.credits?.crew.sort((a, b) => {
-        // have director always at the top
-        if (a.job === "Director") {
-          return -1
-        } else if (b.job === "Director") {
-          return 1
-        }
-        return b.popularity - a.popularity
-      }).slice(0, 10)
+      this.topNcrew = data?.credits?.crew
+        .sort((a, b) => {
+          // have director always at the top
+          if (a.job === "Director") {
+            return -1;
+          } else if (b.job === "Director") {
+            return 1;
+          }
+          return b.popularity - a.popularity;
+        })
+        .slice(0, 10);
     }
 
     getFormattedReleaseDate() {
       return this.releaseDate.toLocaleDateString();
+    }
+
+    getFormattedMonthYear() {
+      return this.releaseDate.toLocaleString("default", {
+        month: "numeric",
+        year: "numeric",
+      });
     }
 
     getReleaseYear() {
@@ -287,7 +340,7 @@
 
   let selectedMovie = writable(null);
 
-  $: console.log($selectedMovie)
+  $: console.log($selectedMovie);
 
   onMount(async () => {
     // axios
@@ -391,28 +444,23 @@
               <!-- {console.log(movies[getFirstVisibleIndex($scrollY)])} -->
 
               <label for="year">Year:</label>
-              <textarea bind:value={$year} on:change={(e) => scrollToYear(e)}
+              <textarea
+                bind:value={$year}
+                on:change={(e) => {
+                  minYear.set(e.target.value);
+                  console.log("in here");
+                }}
               ></textarea>
             {/if}
           </div>
           <div class="min-max">
             <div class="minReviewCount-input">
-                <label for="minReviewCount">Min number of reviews:</label>
-                <textarea bind:value={$minReviewCount}></textarea>
+              <label for="minReviewCount">Min number of reviews:</label>
+              <textarea bind:value={$minReviewCount}></textarea>
             </div>
             <div class="maxReviewCount-input">
-                <label for="maxReviewCount">Max number of reviews:</label>
-                <textarea bind:value={$maxReviewCount}></textarea>
-            </div>
-          </div>
-          <div class="min-max">
-            <div class="minYear-input">
-                <label for="minYear">Min release year:</label>
-                <textarea bind:value={$minYear}></textarea>
-            </div>
-            <div class="maxYear-input">
-                <label for="maxYear">Max release year:</label>
-                <textarea bind:value={$maxYear}></textarea>
+              <label for="maxReviewCount">Max number of reviews:</label>
+              <textarea bind:value={$maxReviewCount}></textarea>
             </div>
           </div>
           <div>
@@ -432,22 +480,21 @@
               <option value="all">All</option>
             </select>
           </div>
-          </div>
+        </div>
 
-          <div class="genre-menu">
-            <!-- checkbox for each genre -->
-            <label for="genre">Genre:</label>
-            <div class="genre-selection">
-              {#each Object.keys(genre_emoji_dict) as genre, index}
+        <div class="genre-menu">
+          <!-- checkbox for each genre -->
+          <label for="genre">Genre:</label>
+          <div class="genre-selection">
+            {#each Object.keys(genre_emoji_dict) as genre, index}
               <div style="display: flex;">
-                <div style="padding-right: 10px" >
-                <input
-                  type="checkbox"
-                  id={genre}
-                  name={genre}
-                  value={genre}
-                  on:change={(e) => 
-                    {
+                <div style="padding-right: 10px">
+                  <input
+                    type="checkbox"
+                    id={genre}
+                    name={genre}
+                    value={genre}
+                    on:change={(e) => {
                       if (e.target.checked) {
                         selectedGenres.update((genres) => [...genres, genre]);
                       } else {
@@ -455,16 +502,15 @@
                           genres.filter((g) => g !== genre)
                         );
                       }
-                  }
-                }
-                />
+                    }}
+                  />
                 </div>
                 <label style="display:inline" for={genre}
-                  >{genre_emoji_dict[genre] + ' ' + genre}</label >
+                  >{genre_emoji_dict[genre] + " " + genre}</label
+                >
               </div>
-              {/each}
-            </div>
-
+            {/each}
+          </div>
         </div>
       </div>
       <div class="body">
@@ -609,8 +655,13 @@
                       <!-- display the release year of the movie -->
 
                       {#if getVisibleMovies($queryCount, $scrollY, viewportHeight)[index - 1] && getVisibleMovies($queryCount, $scrollY, viewportHeight)[index - 1].getReleaseYear() !== movie.getReleaseYear()}
-                        <text x="10" y="50" font-size="12"
-                          >{movie.getReleaseYear()}</text
+                        <text x="10" y="50" font-size="18" font-style="bold"
+                          >{movie.getFormattedMonthYear()}</text
+                        >
+                        <!-- else -->
+                      {:else}
+                        <text x="10" y="50" font-size="10"
+                          >{movie.getFormattedMonthYear()}</text
                         >
                       {/if}
                     </g>
@@ -639,7 +690,19 @@
               >
                 {$selectedMovie.title}
               </h2>
-
+              <!-- if not english -->
+              {#if $selectedMovie.originalLanguage !== "en"}
+                <h4
+                  class="link"
+                  on:click={(e) =>
+                    openYoutubeSearchUrl(
+                      $selectedMovie.originalTitle,
+                      $selectedMovie.getReleaseYear()
+                    )}
+                >
+                  {$selectedMovie.originalTitle}
+                </h4>
+              {/if}
               <p><strong>Description:</strong> {$selectedMovie.overview}</p>
               <p><strong>Genre:</strong> {$selectedMovie.genres.join(", ")}</p>
               <p>
@@ -662,15 +725,19 @@
                 >{` ${generateHourString($selectedMovie.runtime)}`}
               </p>
               <p>
-                <strong>Cast:</strong >
+                <strong>Cast:</strong>
                 {#each $selectedMovie.topNcast as cast}
-                  <p class="blue-text" on:click={setCast(cast)}>{cast.name} as {cast.character}</p>
+                  <p class="blue-text" on:click={setCast(cast)}>
+                    {cast.name} as {cast.character}
+                  </p>
                 {/each}
               </p>
               <p>
-                <strong>Crew:</strong >
+                <strong>Crew:</strong>
                 {#each $selectedMovie.topNcrew as crew}
-                  <p class="blue-text" on:click={setCrew(crew)}>{crew.name}: {crew.job}</p>
+                  <p class="blue-text" on:click={setCrew(crew)}>
+                    {crew.name}: {crew.job}
+                  </p>
                 {/each}
               </p>
             </div>
@@ -797,11 +864,10 @@
   .blue-text {
     color: blue;
     /* underline */
-    text-decoration: underline; 
+    text-decoration: underline;
   }
 
   body {
-    font-family: 'Arial', 'Helvetica', sans-serif;
+    font-family: "Arial", "Helvetica", sans-serif;
   }
-
 </style>

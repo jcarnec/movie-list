@@ -68,18 +68,14 @@ const Movie = mongoose.model("Movie", movieSchema);
 app.post("/movies", async (req, res) => {
   try {
 
-    const filter = {};
+    let filter = {};
 
     // check if minYear and maxYear are valid between 1900 and 2025
-    if (req.body.minYear && (req.body.minYear < 1900 || req.body.minYear > 2025)) {
-      res.status(400).json({ message: "minYear must be between 1900 and 2025" });
+    if (req.body.minYear && (req.body.minYear < 1887 || req.body.minYear > 2025)) {
+      res.status(400).json({ message: "minYear must be between 1887 and 2025" });
       return;
     }
 
-    if (req.body.maxYear && (req.body.maxYear < 1900 || req.body.maxYear > 2025)) {
-      res.status(400).json({ message: "maxYear must be between 1900 and 2025" });
-      return;
-    }
 
     if (req.body.adult) filter.adult = req.body.adult;
     if (req.body.budget) filter.budget = { $gte: Number(req.body.budget) };
@@ -98,11 +94,6 @@ app.post("/movies", async (req, res) => {
       if (req.body.minYear) {
         filter.release_date === undefined ? (filter.release_date = {}) : null;
         filter.release_date["$gte"] = new Date("01/01/" + req.body.minYear);
-      }
-
-      if (req.body.maxYear) {
-        filter.release_date === undefined ? (filter.release_date = {}) : null;
-        filter.release_date["$lte"] = new Date("12/31/" + req.body.maxYear);
       }
     } else if (req.body.type === "append") {
       // if append then get next movies released after req.body.date
