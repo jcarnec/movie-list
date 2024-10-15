@@ -582,13 +582,13 @@
                         height={barWidth}
                         width={(10 * movie.runtime) / 60}
                       >
-                        <div style="display: flex; height: 100%">
+                        <div style="height: 100%">
                           <div
                             style="background-color: {getColorCountry(
                               movie.originalLanguage
                             )};"
                             xmlns="http://www.w3.org/1999/xhtml"
-                            class="bar-div"
+                            class="time-div"
                           ></div>
                         </div>
                       </foreignObject>
@@ -855,12 +855,14 @@
 
   .bar-div {
     width: 100%;
+  }
+
+  .time-div {
     height: 100%;
-    display: block;
-    justify-content: left;
+    display: flex;
+    justify-content: center;
     align-items: center;
     padding: 0px;
-    border: 1px solid #333;
   }
 
   .parent-div {
