@@ -3,11 +3,17 @@
   import { writable } from "svelte/store";
   import axios from "axios";
 
+  let selectedMovie = writable(null);
+  let titleType = writable("english"); // State to track the current title type
+  let titleInputTitle = writable("english"); // State to track the current title type
+  let selectedTitle = writable(""); // State to track the current title type
+
   let width = 100; // Default width
   let scrollY = writable(0); // Scroll position
   let containerHeight = 0; // Height of the scroll container
 
   const itemHeight = 100; // Height of each movie item
+  const barWidth = 50; // Height of each movie item
   const viewportHeight = 1000; // Adjust based on your viewport
 
   let movieColumn;
@@ -49,6 +55,33 @@
   );
 
   $: console.log($firstVisibleIndex);
+
+  $: $selectedTitle = getTitleInputTitle($selectedMovie, titleType);
+
+  function toggleTitleType() {
+    titleType.update((type) => (type === "english" ? "original" : "english"));
+  }
+
+  function updateTitle(event) {
+    selectedMovie.update((movie) => {
+      if (titleType === "english") {
+        movie.title = event.target.value;
+      } else {
+        movie.originalTitle = event.target.value;
+      }
+      return movie;
+    });
+  }
+
+  function getTitleInputTitle(selectedMovie, titleType) {
+    if (selectedMovie) {
+      if (titleType == "english") {
+        return selectedMovie.title;
+      } else {
+        return selectedMovie.originalTitle;
+      }
+    }
+  }
 
   function setCrew(p) {
     castId.set(0);
@@ -144,7 +177,7 @@
   async function checkAppendPrepend() {
     if (
       movies.length > 0 &&
-      movies.length - $firstVisibleIndex < 15 &&
+      movies.length - $firstVisibleIndex < 10 &&
       !$runningQuery
     ) {
       await queryDatabase(
@@ -257,7 +290,7 @@
       this.cast = data?.credits?.cast;
       this.topNcast = data?.credits?.cast
         .sort((a, b) => b.popularity - a.popularity)
-        .slice(0, 10);
+        .slice(0, 6);
 
       this.crew = data?.credits?.crew;
       this.topNcrew = data?.credits?.crew
@@ -269,7 +302,7 @@
           }
           return b.popularity - a.popularity;
         })
-        .slice(0, 10);
+        .slice(0, 6);
     }
 
     getFormattedReleaseDate() {
@@ -319,8 +352,6 @@
     Western: "🤠",
     "TV Movie": "📺",
   };
-
-  let selectedMovie = writable(null);
 
   $: console.log($selectedMovie);
 
@@ -420,6 +451,16 @@
             <h1>Movie List</h1>
           </div> -->
         <div class="form">
+          <button on:click={toggleTitleType}>
+            Toggle to {titleType === "english"
+              ? "Original Title"
+              : "English Title"}
+          </button>
+          <input
+            type="text"
+            bind:value={$selectedTitle}
+            on:input={updateTitle}
+          />
           <div class="year-input">
             <!-- have a text box that shows the year of the first visible movie -->
             {#if movies.length > 0 && getFirstVisibleIndex($scrollY) < movies.length && movies[getFirstVisibleIndex($scrollY)]}
@@ -510,14 +551,14 @@
                       <!-- 20px width for every hour of runtime -->
                       <circle
                         cx="0"
-                        cy="50"
+                        cy="{barWidth / 2}"
                         r={Math.sqrt(movie.budget / 1000000) * 2}
                         fill="none"
                         stroke="red"
                       />
                       <circle
                         cx="0"
-                        cy="50"
+                        cy="{barWidth / 2}"
                         r={Math.sqrt(movie.revenue / 1000000) * 2}
                         fill="none"
                         stroke="green"
@@ -538,7 +579,7 @@
                       <foreignObject
                         x="0"
                         y="0"
-                        height="100"
+                        height={barWidth}
                         width={(10 * movie.runtime) / 60}
                       >
                         <div style="display: flex; height: 100%">
@@ -566,7 +607,7 @@
                       <foreignObject
                         x="0"
                         y="0"
-                        height="100"
+                        height={barWidth}
                         width={width * (movie.voteAverage / 10)}
                       >
                         <div style="display: flex; height: 100%">
@@ -576,14 +617,14 @@
                             class="bar-div"
                           >
                             <p>{movie.title}</p>
-                            {#if movie.originalLanguage !== "en"}
+                            <!-- {#if movie.originalLanguage !== "en"}
                               <p>
                                 <span
                                   style="font-weight: bold; font-size: 25px; padding-right: 10px"
                                   >{movie.originalLanguage}</span
                                 >{movie.originalTitle}
                               </p>
-                            {/if}
+                            {/if} -->
                           </div>
                         </div>
                       </foreignObject>
@@ -601,14 +642,14 @@
                     >
                       {#each Object.keys(genreEmojiDict) as genre, index}
                         {#if movie.genres.includes(genre)}
-                          <text x={16 * (index + 1)} y={50} font-size="13"
+                          <text x={16 * (index + 1)} y={itemHeight / 2} font-size="13"
                             >{genreEmojiDict[genre]}</text
                           >
                         {:else}
                           <!-- faint emoji with alpha-->
                           <text
                             x={16 * (index + 1)}
-                            y={50}
+                            y={itemHeight / 2}
                             font-size="13"
                             fill="gray"
                             opacity="0.2">{genreEmojiDict[genre]}</text
@@ -630,11 +671,11 @@
                       <!-- display the release year of the movie -->
 
                       {#if getVisibleMovies($queryCount, $scrollY, viewportHeight)[index - 1] && getVisibleMovies($queryCount, $scrollY, viewportHeight)[index - 1].getReleaseYear() !== movie.getReleaseYear()}
-                        <text x="10" y="50" font-size="18" font-style="bold"
+                        <text x="10" y="{itemHeight / 2}" font-size="18" font-style="bold"
                           >{movie.getFormattedMonthYear()}</text
                         >
                       {:else}
-                        <text x="10" y="50" font-size="10"
+                        <text x="10" y="{itemHeight / 2}" font-size="10"
                           >{movie.getFormattedMonthYear()}</text
                         >
                       {/if}
@@ -650,69 +691,79 @@
         <div class="movie-details">
           {#if $selectedMovie}
             <div>
-              <img
-                src={$selectedMovie.getPosterUrl()}
-                alt={$selectedMovie.title}
-              />
-              <h2
-                class="link"
-                on:click={(e) =>
-                  openYoutubeSearchUrl(
-                    $selectedMovie.title,
-                    $selectedMovie.getReleaseYear()
-                  )}
-              >
-                {$selectedMovie.title}
-              </h2>
-              {#if $selectedMovie.originalLanguage !== "en"}
-                <h4
-                  class="link"
-                  on:click={(e) =>
-                    openYoutubeSearchUrl(
-                      $selectedMovie.originalTitle,
-                      $selectedMovie.getReleaseYear()
-                    )}
-                >
-                  {$selectedMovie.originalTitle}
-                </h4>
-              {/if}
-              <p><strong>Description:</strong> {$selectedMovie.overview}</p>
-              <p><strong>Genre:</strong> {$selectedMovie.genres.join(", ")}</p>
-              <p>
-                <strong>Keywords:</strong>
-                {$selectedMovie.keywords.join(", ")}
-              </p>
-              <p>
-                <strong>Release Date:</strong>
-                {$selectedMovie.getFormattedReleaseDate()}
-              </p>
-              <p>
-                <strong>Rating:</strong
-                >{` ${$selectedMovie.voteAverage} (${$selectedMovie.voteCount})`}
-              </p>
-              <p>
-                <strong>Popularity:</strong>{` ${$selectedMovie.popularity}`}
-              </p>
-              <p>
-                <strong>Runtime:</strong
-                >{` ${generateHourString($selectedMovie.runtime)}`}
-              </p>
-              <p>
-                <strong>Cast:</strong>
-                {#each $selectedMovie.topNcast as cast}
-                  <p class="blue-text" on:click={() => setCast(cast)}>
-                    {cast.name} as {cast.character}
+              <div class="top-detail">
+                <div class="top-detail-poster">
+                  <img
+                    src={$selectedMovie.getPosterUrl()}
+                    alt={$selectedMovie.title}
+                  />
+                  <h2
+                    class="link"
+                    on:click={(e) =>
+                      openYoutubeSearchUrl(
+                        $selectedMovie.title,
+                        $selectedMovie.getReleaseYear()
+                      )}
+                  >
+                    {$selectedMovie.title}
+                  </h2>
+                  {#if $selectedMovie.originalLanguage !== "en"}
+                    <h4
+                      class="link"
+                      on:click={(e) =>
+                        openYoutubeSearchUrl(
+                          $selectedMovie.originalTitle,
+                          $selectedMovie.getReleaseYear()
+                        )}
+                    >
+                      {$selectedMovie.originalTitle}
+                    </h4>
+                  {/if}
+                  <p>
+                    <strong>Cast:</strong>
+                    {#each $selectedMovie.topNcast as cast}
+                      <p class="blue-text" on:click={() => setCast(cast)}>
+                        {cast.name} as {cast.character}
+                      </p>
+                    {/each}
                   </p>
-                {/each}
-              </p>
-              <p>
-                <strong>Crew:</strong>
-                {#each $selectedMovie.topNcrew as crew}
-                  <p class="blue-text" on:click={() => setCrew(crew)}>
-                    {crew.name}: {crew.job}
+                </div>
+                <div class=top-detail-text>
+                  <p>
+                    <strong>Genre:</strong>
+                    {$selectedMovie.genres.join(", ")}
                   </p>
-                {/each}
-              </p>
+                  <p>
+                    <strong>Keywords:</strong>
+                    {$selectedMovie.keywords.join(", ")}
+                  </p>
+                  <p>
+                    <strong>Release Date:</strong>
+                    {$selectedMovie.getFormattedReleaseDate()}
+                  </p>
+                  <p>
+                    <strong>Rating:</strong
+                    >{` ${$selectedMovie.voteAverage} (${$selectedMovie.voteCount})`}
+                  </p>
+                  <p>
+                    <strong>Popularity:</strong
+                    >{` ${$selectedMovie.popularity}`}
+                  </p>
+                  <p>
+                    <strong>Runtime:</strong
+                    >{` ${generateHourString($selectedMovie.runtime)}`}
+                  </p>
+                  <p><strong>Description:</strong> {$selectedMovie.overview}</p>
+                  <p>
+                    <strong>Crew:</strong>
+                    {#each $selectedMovie.topNcrew as crew}
+                      <p class="blue-text" on:click={() => setCrew(crew)}>
+                        {crew.name}: {crew.job}
+                      </p>
+                    {/each}
+                  </p>
+                </div>
+              </div>
             </div>
           {/if}
         </div>
@@ -808,7 +859,7 @@
     display: block;
     justify-content: left;
     align-items: center;
-    padding: 10px;
+    padding: 0px;
     border: 1px solid #333;
   }
 
@@ -841,5 +892,18 @@
 
   body {
     font-family: "Arial", "Helvetica", sans-serif;
+  }
+
+  .top-detail {
+      display: flex;
+      gap: 20px; /* Adjust the gap between the poster and text as needed */
+    }
+
+  .top-detail-poster {
+    flex: 1;
+  }
+
+  .top-detail-text {
+    flex: 1;
   }
 </style>
