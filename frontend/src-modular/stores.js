@@ -1,0 +1,23 @@
+import { writable } from 'svelte/store';
+
+export const selectedMovie = writable(null);
+export const titleType = writable('english');
+export const selectedTitle = writable('');
+export const scrollY = writable(0);
+export const selectedLanguage = writable('all');
+export const containerHeight = writable(0);
+export const viewportHeight = writable(1500);
+export const startY = writable(0);
+export const selectedGenres = writable([]);
+export const minYear = writable('1970');
+export const year = writable('');
+export const minReviewCount = writable(10);
+export const maxReviewCount = writable(null);
+export const queryCount = writable(0);
+export const crewId = writable(0);
+export const castId = writable(0);
+export const selectedPerson = writable(null);
+export const selectedPersonName = writable(null);
+export const firstVisibleIndex = writable(0);
+export const runningQuery = writable(false);
+export const itemHeight = writable(100);

@@ -13,7 +13,6 @@
   let containerHeight = 0; // Height of the scroll container
 
   const itemHeight = 100; // Height of each movie item
-  const barWidth = 50; // Height of each movie item
   const viewportHeight = 1000; // Adjust based on your viewport
 
   let movieColumn;
@@ -55,6 +54,8 @@
   );
 
   $: console.log($firstVisibleIndex);
+
+  $: console.log($scrollY);
 
   $: $selectedTitle = getTitleInputTitle($selectedMovie, titleType);
 
@@ -214,7 +215,7 @@
     }
   }
 
-  async function handleScroll(event) {
+  async function handleScroll(event, movies) {
     let movieListDiv = document.querySelector(".movie-list");
     let cursorPositionX = event.clientX;
     let cursorPositionY = event.clientY;
@@ -540,149 +541,27 @@
         <div class="movie-list">
           {#if movies.length > 0}
             <div class="movie-column" bind:this={movieColumn}>
-              <div style="flex: 1">
-                <svg width="100%" height={containerHeight}>
-                  {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
-                    <g
-                      transform="translate(0, {index * itemHeight -
-                        ($scrollY % itemHeight)})"
-                      on:click={() => handleBarClick(movie)}
-                    >
-                      <!-- 20px width for every hour of runtime -->
-                      <circle
-                        cx="0"
-                        cy="{barWidth / 2}"
-                        r={Math.sqrt(movie.budget / 1000000) * 2}
-                        fill="none"
-                        stroke="red"
-                      />
-                      <circle
-                        cx="0"
-                        cy="{barWidth / 2}"
-                        r={Math.sqrt(movie.revenue / 1000000) * 2}
-                        fill="none"
-                        stroke="green"
-                      />
-                    </g>
-                  {/each}
-                </svg>
-              </div>
-              <div style="flex: 1">
-                <svg width="100%" height={containerHeight}>
-                  {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
-                    <g
-                      transform="translate(0, {index * itemHeight -
-                        ($scrollY % itemHeight)})"
-                      on:click={() => handleBarClick(movie)}
-                    >
-                      <!-- full length of screen -->
-                      <foreignObject
-                        x="0"
-                        y="0"
-                        height={barWidth}
-                        width={(10 * movie.runtime) / 60}
-                      >
-                        <div style="height: 100%">
-                          <div
-                            style="background-color: {getColorCountry(
-                              movie.originalLanguage
-                            )};"
-                            xmlns="http://www.w3.org/1999/xhtml"
-                            class="time-div"
-                          ></div>
-                        </div>
-                      </foreignObject>
-                    </g>
-                  {/each}
-                </svg>
-              </div>
-              <div class="movie-bar">
-                <svg width="100%" height={containerHeight}>
-                  {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
-                    <g
-                      transform="translate(0, {index * itemHeight -
-                        ($scrollY % itemHeight)})"
-                      on:click={() => handleBarClick(movie)}
-                    >
-                      <foreignObject
-                        x="0"
-                        y="0"
-                        height={barWidth}
-                        width={width * (movie.voteAverage / 10)}
-                      >
-                        <div style="display: flex; height: 100%">
-                          <div
-                            style="background-color: {movie.color};"
-                            xmlns="http://www.w3.org/1999/xhtml"
-                            class="bar-div"
-                          >
-                            <p>{movie.title}</p>
-                            <!-- {#if movie.originalLanguage !== "en"}
-                              <p>
-                                <span
-                                  style="font-weight: bold; font-size: 25px; padding-right: 10px"
-                                  >{movie.originalLanguage}</span
-                                >{movie.originalTitle}
-                              </p>
-                            {/if} -->
-                          </div>
-                        </div>
-                      </foreignObject>
-                    </g>
-                  {/each}
-                </svg>
-              </div>
-              <div class="genre-column">
-                <svg width="100%" height={containerHeight}>
-                  {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
-                    <g
-                      transform="translate(0, {index * itemHeight -
-                        ($scrollY % itemHeight)})"
-                      on:click={() => handleBarClick(movie)}
-                    >
-                      {#each Object.keys(genreEmojiDict) as genre, index}
-                        {#if movie.genres.includes(genre)}
-                          <text x={16 * (index + 1)} y={itemHeight / 2} font-size="13"
-                            >{genreEmojiDict[genre]}</text
-                          >
-                        {:else}
-                          <!-- faint emoji with alpha-->
-                          <text
-                            x={16 * (index + 1)}
-                            y={itemHeight / 2}
-                            font-size="13"
-                            fill="gray"
-                            opacity="0.2">{genreEmojiDict[genre]}</text
-                          >
-                        {/if}
-                      {/each}
-                    </g>
-                  {/each}
-                </svg>
-              </div>
-              <div class="year-column">
-                <svg width="100%" height={containerHeight}>
-                  {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
-                    <g
-                      transform="translate(0, {index * itemHeight -
-                        ($scrollY % itemHeight)})"
-                      on:click={() => handleBarClick(movie)}
-                    >
-                      <!-- display the release year of the movie -->
-
-                      {#if getVisibleMovies($queryCount, $scrollY, viewportHeight)[index - 1] && getVisibleMovies($queryCount, $scrollY, viewportHeight)[index - 1].getReleaseYear() !== movie.getReleaseYear()}
-                        <text x="10" y="{itemHeight / 2}" font-size="18" font-style="bold"
-                          >{movie.getFormattedMonthYear()}</text
-                        >
-                      {:else}
-                        <text x="10" y="{itemHeight / 2}" font-size="10"
-                          >{movie.getFormattedMonthYear()}</text
-                        >
-                      {/if}
-                    </g>
-                  {/each}
-                </svg>
-              </div>
+              {#each getVisibleMovies($queryCount, $scrollY, viewportHeight) as movie, index}
+                <div on:click={() => handleBarClick(movie)}>
+                  <div
+                    class="movie-item"
+                    style="transform: translateY({index * itemHeight -
+                      ($scrollY % itemHeight)}px); height: {itemHeight}px"
+                    on:click={() => handleBarClick(movie)}
+                    
+                  >
+                    <div>
+                      <p>test</p>
+                    </div>
+                    <div>
+                      <p>test</p>
+                    </div>
+                    <div>
+                      <p>test</p>
+                    </div>
+                  </div>
+                </div>
+              {/each}
             </div>
           {:else}
             <p>Loading...</p>
@@ -728,7 +607,7 @@
                     {/each}
                   </p>
                 </div>
-                <div class=top-detail-text>
+                <div class="top-detail-text">
                   <p>
                     <strong>Genre:</strong>
                     {$selectedMovie.genres.join(", ")}
@@ -797,9 +676,23 @@
     overflow: hidden; /* Prevent overflow from disrupting layout */
   }
 
+  .movie-list {
+    flex: 1;
+    position: relative; /* Required for absolute positioning of items */
+  }
+
   .movie-column {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    height: 100%; /* Ensure the movie column takes the full height */
+    position: relative; /* Required for absolute positioning of items */
+  }
+
+  .movie-item {
+    position: absolute; /* Position items absolutely within the container */
+    width: 100%; /* Ensure items take the full width of the container */
+    border: 1px solid #ccc;
+    cursor: pointer;
   }
 
   .movie-bar {
@@ -897,9 +790,9 @@
   }
 
   .top-detail {
-      display: flex;
-      gap: 20px; /* Adjust the gap between the poster and text as needed */
-    }
+    display: flex;
+    gap: 20px; /* Adjust the gap between the poster and text as needed */
+  }
 
   .top-detail-poster {
     flex: 1;
