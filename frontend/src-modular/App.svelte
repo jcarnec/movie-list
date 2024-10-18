@@ -4,15 +4,23 @@
   import Header from "./components/Header.svelte";
   import MovieList from "./components/MovieList.svelte";
   import MovieDetails from "./components/MovieDetails.svelte";
-  import { handleScroll, handleTouchStart, queryDatabase, queryMovies } from "./utils";
-  import { queryCount, year, containerHeight, itemHeight, viewportHeight } from "./stores.js";
+  import { handleScroll, handleTouchStart, queryMovies } from "./utils";
+  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, castOrCrewQuery, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguage } from "./stores.js";
 
   let movies = [];
 
-  onMount(async () => {
-    // axios
+// Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
+  $: updateMovies($castOrCrewQuery, $minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage);
+
+  $: console.log($selectedMovie)
+
+  async function updateMovies() {
     movies = await queryMovies(movies);
     await tick(); // Wait for the DOM to update
+
+  }
+
+  onMount(async () => {
 
     document.addEventListener("wheel", async (event) => {
       movies = await handleScroll(event, movies);
@@ -44,7 +52,7 @@
       </div>
       <div class="body">
         <div class="movie-list-container">
-          <MovieList {itemHeight} {viewportHeight} {movies} {queryCount} />
+          <MovieList {itemHeight} {viewportHeight} {movies} />
         </div>
         <div class="movie-details-container">
           <MovieDetails />

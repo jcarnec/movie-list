@@ -1,20 +1,6 @@
 <script>
-  import { selectedMovie } from "../stores.js";
+  import { selectedMovie, selectedPerson } from "../stores.js";
   import { generateHourString } from "../utils.js";
-
-  function setCrew(p) {
-    castId.set(0);
-    crewId.set(p.id);
-    console.log(p.id);
-    selectedPerson.set(p);
-  }
-
-  function setCast(p) {
-    crewId.set(0);
-    castId.set(p.id);
-    console.log(p.id);
-    selectedPerson.set(p);
-  }
 
   function openYoutubeSearchUrl(title, year) {
     window.open(
@@ -54,7 +40,7 @@
           <p>
             <strong>Cast:</strong>
             {#each $selectedMovie.topNcast as cast}
-              <p class="blue-text" on:click={() => setCast(cast)}>
+              <p class="blue-text" on:click={() => selectedPerson.set(cast)}>
                 {cast.name} as {cast.character}
               </p>
             {/each}
@@ -88,7 +74,7 @@
           <p>
             <strong>Crew:</strong>
             {#each $selectedMovie.topNcrew as crew}
-              <p class="blue-text" on:click={() => setCrew(crew)}>
+              <p class="blue-text" on:click={() => selectedPerson.set(crew)}>
                 {crew.name}: {crew.job}
               </p>
             {/each}

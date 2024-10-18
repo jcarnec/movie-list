@@ -1,4 +1,5 @@
 import { get } from "svelte/store";
+import { tick } from "svelte";
 import {
   firstVisibleIndex,
   startY,
@@ -9,12 +10,13 @@ import {
   minReviewCount,
   maxReviewCount,
   minYear,
-  crewId,
-  castId,
   runningQuery,
   scrollY,
   itemHeight,
   queryCount,
+  selectedPerson,
+  castOrCrewQuery,
+  currentMinYear,
 } from "./stores";
 import axios from "axios";
 import Movie from "./Movie.js";
@@ -58,8 +60,13 @@ export function getColor(popularityIndex, movies) {
   return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 }
 
-export async function queryDatabase(movies, append = "new", date = null) {
-  console.log(append);
+export async function queryDatabase(movies, append = "new") {
+
+  if (get(runningQuery)) {
+    return movies
+  }
+
+
   runningQuery.set(true);
   let url = "http://localhost:3000/movies";
 
@@ -69,15 +76,15 @@ export async function queryDatabase(movies, append = "new", date = null) {
     minReviewCount: get(minReviewCount),
     maxReviewCount: get(maxReviewCount),
     minYear: get(minYear),
-    crewId: get(crewId),
-    castId: get(castId),
+    personId: get(selectedPerson).id,
+    castOrCrewQuery: get(castOrCrewQuery),
     type: append,
   };
 
   if (append == "append") {
-    body["date"] = movies[0].releaseDate;
-  } else if (append == "prepend") {
     body["date"] = movies[movies.length - 1].releaseDate;
+  } else if (append == "prepend") {
+    body["date"] = movies[0].releaseDate;
   } else {
     body["date"] = null;
   }
@@ -95,6 +102,8 @@ export async function queryDatabase(movies, append = "new", date = null) {
 
   let newMovies = movieResponse.map((movie) => new Movie(movie));
 
+  runningQuery.set(false);
+
   return newMovies;
 }
 
@@ -106,10 +115,8 @@ export async function handleScroll(event, movies) {
     let rect = movieListDiv.getBoundingClientRect();
 
     if (!(cursorPositionY > rect.top && cursorPositionY < rect.bottom)) {
-      console.log('handlescroll going out 1', movies)
       return movies;
     } else if (!(cursorPositionX > rect.left && cursorPositionX < rect.right)) {
-      console.log('handlescroll going out 2', movies)
       return movies;
     }
   }
@@ -121,9 +128,9 @@ export async function handleScroll(event, movies) {
 
   startY.set(event.touches ? event.touches[0].clientY : startY);
 
-  minYear.set(
-    movies.length > 0 && getFirstVisibleIndex(get(scrollY)) < movies.length
-      ? movies[getFirstVisibleIndex(get(scrollY))].getReleaseYear().toString()
+  currentMinYear.set(
+    movies.length > 0 && get(firstVisibleIndex) < movies.length
+      ? movies[get(firstVisibleIndex)].getReleaseYear().toString()
       : ""
   );
 
@@ -145,6 +152,7 @@ export async function checkAppendPrepend(movies) {
     movies.length - get(firstVisibleIndex) < 20 &&
     !get(runningQuery)
   ) {
+    console.log('appending')
     let newMovies = await queryDatabase(movies, "append");
 
     movies = [...movies, ...newMovies];
@@ -152,7 +160,6 @@ export async function checkAppendPrepend(movies) {
     movies = setPopularityIndexAndColor(movies);
     containerHeight.set(movies.length * get(itemHeight));
     queryCount.update((n) => n + 1);
-    runningQuery.set(false);
 
     return movies;
   }
@@ -163,13 +170,13 @@ export async function checkAppendPrepend(movies) {
     !get(runningQuery) &&
     new Date(movies[0].releaseDate) > new Date("12/31/1902")
   ) {
+    console.log('prepending')
     let newMovies = await queryDatabase(movies, "prepend");
     movies = [...newMovies, ...movies];
     scrollY.update((n) => n + newMovies.length * get(itemHeight));
     movies = setPopularityIndexAndColor(movies);
     containerHeight.set(movies.length * get(itemHeight));
     queryCount.update((n) => n + 1);
-    runningQuery.set(false);
 
     return movies;
   }
@@ -177,11 +184,6 @@ export async function checkAppendPrepend(movies) {
   return movies
 }
 
-export function getFirstVisibleIndex(scrollY) {
-  let fvi = Math.floor(scrollY / get(itemHeight));
-  firstVisibleIndex.set(fvi);
-  return Math.floor(fvi);
-}
 
 export function getVisibleMovies(movies) {
   const startIndex = Math.floor(get(scrollY) / get(itemHeight));
@@ -189,19 +191,17 @@ export function getVisibleMovies(movies) {
     movies.length,
     Math.ceil((get(scrollY) + get(viewportHeight)) / get(itemHeight))
   );
-  console.log(startIndex, endIndex);
   return movies.slice(startIndex, endIndex);
 }
 
 
 export async function queryMovies(movies) {
-    movies = await queryDatabase(movies, "new", null);
-    scrollY.update((n) => 0);
-    minYear.set(movies.length > 0 ? movies[0].getReleaseYear().toString() : "")
-    await checkAppendPrepend(movies);
+    movies = await queryDatabase(movies, "new");
+    scrollY.set(0);
+    currentMinYear.set(movies.length > 0 ? movies[0].getReleaseYear().toString() : "")
     movies = setPopularityIndexAndColor(movies);
     containerHeight.set(movies.length * get(itemHeight));
     queryCount.update((n) => n + 1);
-    runningQuery.set(false);
     return movies
 }
+

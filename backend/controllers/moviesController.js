@@ -1,6 +1,5 @@
 // controllers/moviesController.js
 const Movie = require('../models/Movie');
-const { validateMinYear } = require('../utils/validation');
 
 const getMovies = async (req, res) => {
   try {
@@ -18,15 +17,13 @@ const getMovies = async (req, res) => {
 const buildFilter = (params) => {
   const filter = {};
 
-  // Validate minYear
-  validateMinYear(params.minYear);
 
   if (params.adult) filter.adult = params.adult;
   if (params.budget) filter.budget = { $gte: Number(params.budget) };
-  if (params.original_language && params.original_language !== 'all')
-    filter.original_language = params.original_language;
+  if (params.originalLanguage && params.originalLanguage !== 'all')
+    filter.original_language = params.originalLanguage;
   if (params.popularity) filter.popularity = { $gte: Number(params.popularity) };
-  if (params.vote_average) filter.vote_average = { $gte: Number(params.vote_average) };
+  if (params.voteAverage) filter.voteAverage = { $gte: Number(params.vote_average) };
   if (params.minReviewCount || params.maxReviewCount) {
     filter.vote_count = {};
     if (params.minReviewCount) filter.vote_count.$gte = Number(params.minReviewCount);
@@ -36,6 +33,8 @@ const buildFilter = (params) => {
   buildReleaseDateFilter(filter, params);
   buildGenresFilter(filter, params.genres);
   buildCreditsFilter(filter, params);
+
+  console.log(filter)
 
   return filter;
 };
@@ -61,8 +60,18 @@ const buildGenresFilter = (filter, genres) => {
 };
 
 const buildCreditsFilter = (filter, params) => {
-  if (params.crewId) filter['credits.crew.id'] = Number(params.crewId);
-  if (params.castId) filter['credits.cast.id'] = Number(params.castId);
+
+  console.log(params)
+  if (params.castOrCrewQuery == 'cast') {
+    filter['credits.cast.id'] = Number(params.personId);
+  } else if(params.castOrCrewQuery == 'cast') {
+    filter['credits.crew.id'] = Number(params.personId);
+  } else if(params.castOrCrewQuery == 'both') {
+    filter.$or = [
+        { 'credits.cast.id': Number(params.castId) },
+        { 'credits.crew.id': Number(params.crewId) }
+      ]; 
+  }
 };
 
 const getSorting = (type) => {

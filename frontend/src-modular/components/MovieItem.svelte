@@ -1,5 +1,5 @@
 <script>
-  import { selectedMovie, scrollY, itemHeight } from '../stores.js';
+  import { selectedMovie, scrollY, itemHeight, queryCount } from '../stores.js';
 
   export let movie;
   export let index;
@@ -15,8 +15,7 @@
     class="movie-item"
     style="transform: translateY({index * $itemHeight - ($scrollY % $itemHeight)}px); height: {$itemHeight}px"
   >
-  {index}
-  {movie.title}
+  {movie.releaseDate}
   </div>
 </div>
 

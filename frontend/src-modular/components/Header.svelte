@@ -1,54 +1,57 @@
 <script>
-  import { get } from 'svelte/store';
   import {
-    titleType,
-    selectedTitle,
     selectedLanguage,
     selectedGenres,
     minYear,
     minReviewCount,
     maxReviewCount,
-    selectedPersonName,
-  } from '../stores.js';
-
-  function toggleTitleType() {
-    titleType.update((type) => (type === 'english' ? 'original' : 'english'));
-  }
+    selectedPerson,
+    currentMinYear,
+    currentCastOrCrewQuery,
+    currentMinReviewCount,
+    currentMaxReviewCount,
+    currentSelectedGenres,
+    currentSelectedLanguage,
+  } from "../stores.js";
 
   const genreEmojiDict = {
-    Documentary: '📚',
-    Adventure: '🧗',
-    'Science Fiction': '👽',
-    Comedy: '😂',
-    Fantasy: '🧙',
-    Horror: '👻',
-    Drama: '🎭',
-    History: '🏰',
-    War: '⚔️',
-    Romance: '❤️',
-    Thriller: '😱',
-    Crime: '🔪',
-    Action: '💥',
-    Mystery: '🕵️‍♂️',
-    Music: '🎵',
-    Family: '👨‍👩‍👧‍👦',
-    Animation: '🎨',
-    Western: '🤠',
-    'TV Movie': '📺',
+    Documentary: "📚",
+    Adventure: "🧗",
+    "Science Fiction": "👽",
+    Comedy: "😂",
+    Fantasy: "🧙",
+    Horror: "👻",
+    Drama: "🎭",
+    History: "🏰",
+    War: "⚔️",
+    Romance: "❤️",
+    Thriller: "😱",
+    Crime: "🔪",
+    Action: "💥",
+    Mystery: "🕵️‍♂️",
+    Music: "🎵",
+    Family: "👨‍👩‍👧‍👦",
+    Animation: "🎨",
+    Western: "🤠",
+    "TV Movie": "📺",
   };
 </script>
 
 <div class="header">
   <div class="form">
-    <button on:click={toggleTitleType}>
-      Toggle to {get(titleType) === 'english' ? 'Original Title' : 'English Title'}
-    </button>
-    <textarea bind:value={$selectedTitle} />
+    <!-- <title-input>
+      <button on:click={toggleTitleType}>
+        Toggle to {get(titleType) === "english"
+          ? "Original Title"
+          : "English Title"}
+      </button>
+      <textarea bind:value={$selectedTitle} />
+    </title-input> -->
     <div class="year-input">
       <label for="year">Year:</label>
       <textarea
-        bind:value={$minYear}
-        on:change={(e) => {
+        bind:value={$currentMinYear}
+        on:blur={(e) => {
           minYear.set(e.target.value);
         }}
       ></textarea>
@@ -56,16 +59,26 @@
     <div class="min-max">
       <div class="minReviewCount-input">
         <label for="minReviewCount">Min number of reviews:</label>
-        <textarea bind:value={$minReviewCount}></textarea>
+        <textarea
+          bind:value={$currentMinReviewCount}
+          on:blur={(e) => {
+            minReviewCount.set(e.target.value);
+          }}
+        ></textarea>
       </div>
       <div class="maxReviewCount-input">
         <label for="maxReviewCount">Max number of reviews:</label>
-        <textarea bind:value={$maxReviewCount}></textarea>
+        <textarea
+          bind:value={$currentMaxReviewCount}
+          on:blur={(e) => {
+            maxReviewCount.set(e.target.value);
+          }}
+        ></textarea>
       </div>
     </div>
     <div>
       <label for="Person">Person:</label>
-      <textarea bind:value={$selectedPersonName}></textarea>
+      <textarea bind:value={$selectedPerson.name}></textarea>
     </div>
     <div class="language-input">
       <label for="language">Language:</label>
@@ -104,7 +117,7 @@
             />
           </div>
           <label style="display:inline" for={genre}
-            >{genreEmojiDict[genre] + ' ' + genre}</label
+            >{genreEmojiDict[genre] + " " + genre}</label
           >
         </div>
       {/each}
@@ -113,13 +126,12 @@
 </div>
 
 <style>
-
   .genre-menu {
-    flex: 1
+    flex: 1;
   }
 
   .form {
-    flex: 1
+    flex: 1;
   }
 
   .genre-selection {
