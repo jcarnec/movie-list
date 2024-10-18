@@ -5,14 +5,12 @@
   import MovieList from "./components/MovieList.svelte";
   import MovieDetails from "./components/MovieDetails.svelte";
   import { handleScroll, handleTouchStart, queryMovies } from "./utils";
-  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, castOrCrewQuery, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguage } from "./stores.js";
+  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, castOrCrewQuery, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguage, selectedGenres, selectedTitle } from "./stores.js";
 
   let movies = [];
 
 // Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
-  $: updateMovies($castOrCrewQuery, $minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage);
-
-  $: console.log($selectedMovie)
+  $: updateMovies($castOrCrewQuery, $minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage, $selectedGenres, $selectedTitle);
 
   async function updateMovies() {
     movies = await queryMovies(movies);

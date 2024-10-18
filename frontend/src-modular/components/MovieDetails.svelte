@@ -1,11 +1,15 @@
 <script>
-  import { selectedMovie, selectedPerson } from "../stores.js";
+  import { castOrCrewQuery, selectedMovie, selectedPerson } from "../stores.js";
   import { generateHourString } from "../utils.js";
 
   function openYoutubeSearchUrl(title, year) {
     window.open(
       `https://www.youtube.com/results?search_query=${title} (${year}) trailer`
     );
+  }
+
+  function personToPersonQuery(person) {
+    return {id: person.id, name: person.name, castOrCrew: person.character ? 'cast' : 'crew'}
   }
 </script>
 
@@ -40,7 +44,7 @@
           <p>
             <strong>Cast:</strong>
             {#each $selectedMovie.topNcast as cast}
-              <p class="blue-text" on:click={() => selectedPerson.set(cast)}>
+              <p class="blue-text" on:click={() => selectedPerson.set(personToPersonQuery(cast))}>
                 {cast.name} as {cast.character}
               </p>
             {/each}
@@ -74,7 +78,7 @@
           <p>
             <strong>Crew:</strong>
             {#each $selectedMovie.topNcrew as crew}
-              <p class="blue-text" on:click={() => selectedPerson.set(crew)}>
+              <p class="blue-text" on:click={() => selectedPerson.set(personToPersonQuery(crew))}>
                 {crew.name}: {crew.job}
               </p>
             {/each}

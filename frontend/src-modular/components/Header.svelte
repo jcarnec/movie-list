@@ -6,47 +6,27 @@
     minReviewCount,
     maxReviewCount,
     selectedPerson,
+    currentSelectedPerson,
     currentMinYear,
-    currentCastOrCrewQuery,
     currentMinReviewCount,
     currentMaxReviewCount,
-    currentSelectedGenres,
-    currentSelectedLanguage,
+    currentSelectedTitle,
+    selectedTitle,
   } from "../stores.js";
 
-  const genreEmojiDict = {
-    Documentary: "📚",
-    Adventure: "🧗",
-    "Science Fiction": "👽",
-    Comedy: "😂",
-    Fantasy: "🧙",
-    Horror: "👻",
-    Drama: "🎭",
-    History: "🏰",
-    War: "⚔️",
-    Romance: "❤️",
-    Thriller: "😱",
-    Crime: "🔪",
-    Action: "💥",
-    Mystery: "🕵️‍♂️",
-    Music: "🎵",
-    Family: "👨‍👩‍👧‍👦",
-    Animation: "🎨",
-    Western: "🤠",
-    "TV Movie": "📺",
-  };
+  import GenreMenu from "./GenreMenu.svelte";
 </script>
 
 <div class="header">
   <div class="form">
-    <!-- <title-input>
-      <button on:click={toggleTitleType}>
-        Toggle to {get(titleType) === "english"
-          ? "Original Title"
-          : "English Title"}
-      </button>
-      <textarea bind:value={$selectedTitle} />
-    </title-input> -->
+    <title-input>
+      <textarea
+        bind:value={$currentSelectedTitle}
+        on:blur={(e) => {
+          selectedTitle.set(e.target.value);
+        }}
+      />
+    </title-input>
     <div class="year-input">
       <label for="year">Year:</label>
       <textarea
@@ -56,7 +36,7 @@
         }}
       ></textarea>
     </div>
-    <div class="min-max">
+    <div class="min-max-input">
       <div class="minReviewCount-input">
         <label for="minReviewCount">Min number of reviews:</label>
         <textarea
@@ -76,9 +56,21 @@
         ></textarea>
       </div>
     </div>
-    <div>
+    <div class="person-input">
       <label for="Person">Person:</label>
-      <textarea bind:value={$selectedPerson.name}></textarea>
+      <textarea
+        bind:value={$currentSelectedPerson.name}
+        on:change={(e) => {
+          currentSelectedPerson.set({
+            name: e.target.value,
+            id: null,
+            castOrCrew: null
+          });
+        }}
+        on:blur={(e) => {
+          selectedPerson.set($currentSelectedPerson);
+        }}
+      ></textarea>
     </div>
     <div class="language-input">
       <label for="language">Language:</label>
@@ -94,51 +86,14 @@
     </div>
   </div>
 
-  <div class="genre-menu">
-    <label for="genre">Genre:</label>
-    <div class="genre-selection">
-      {#each Object.keys(genreEmojiDict) as genre}
-        <div style="display: flex;">
-          <div style="padding-right: 10px">
-            <input
-              type="checkbox"
-              id={genre}
-              name={genre}
-              value={genre}
-              on:change={(e) => {
-                if (e.target.checked) {
-                  selectedGenres.update((genres) => [...genres, genre]);
-                } else {
-                  selectedGenres.update((genres) =>
-                    genres.filter((g) => g !== genre)
-                  );
-                }
-              }}
-            />
-          </div>
-          <label style="display:inline" for={genre}
-            >{genreEmojiDict[genre] + " " + genre}</label
-          >
-        </div>
-      {/each}
-    </div>
+  <div>
+    <GenreMenu />
   </div>
 </div>
 
 <style>
-  .genre-menu {
-    flex: 1;
-  }
-
   .form {
     flex: 1;
-  }
-
-  .genre-selection {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 30px 10px;
   }
 
   .header {

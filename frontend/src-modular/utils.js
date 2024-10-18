@@ -17,6 +17,7 @@ import {
   selectedPerson,
   castOrCrewQuery,
   currentMinYear,
+  selectedTitle,
 } from "./stores";
 import axios from "axios";
 import Movie from "./Movie.js";
@@ -76,9 +77,10 @@ export async function queryDatabase(movies, append = "new") {
     minReviewCount: get(minReviewCount),
     maxReviewCount: get(maxReviewCount),
     minYear: get(minYear),
-    personId: get(selectedPerson).id,
+    person: get(selectedPerson),
     castOrCrewQuery: get(castOrCrewQuery),
     type: append,
+    title: get(selectedTitle)
   };
 
   if (append == "append") {

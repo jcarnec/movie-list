@@ -8,7 +8,6 @@ export const startY = writable(0);
 export const queryCount = writable(0);
 export const runningQuery = writable(false);
 export const itemHeight = writable(100);
-export const selectedPerson = writable({ name: null, id: null, character: false});
 export const firstVisibleIndex = derived(
   [scrollY, itemHeight],
   ([$scrollY, $itemHeight]) => {
@@ -16,38 +15,35 @@ export const firstVisibleIndex = derived(
   }
 );
 
+export const selectedPerson = writable({ name: null, id: null, castOrCrew: null});
 export const selectedLanguage = writable('all');
 export const selectedGenres = writable([]);
 export const minYear = writable('1970');
 export const minReviewCount = writable(10);
 export const maxReviewCount = writable(null);
-export const castOrCrewQuery = writable('both');
+export const selectedTitle = writable('');
 
-export const currentSelectedLanguage = writable(get(selectedLanguage));
-export const currentSelectedGenres = writable(get(selectedGenres));
+export const currentSelectedPerson = writable(get(selectedPerson));
 export const currentMinYear = writable(get(minYear));
 export const currentMinReviewCount = writable(get(minReviewCount));
 export const currentMaxReviewCount = writable(get(maxReviewCount));
-export const currentCastOrCrewQuery = writable(get(castOrCrewQuery));
+export const currentSelectedTitle = writable(get(selectedTitle));
 
-selectedLanguage.subscribe(value => currentSelectedLanguage.set(value));
-selectedGenres.subscribe(value => currentSelectedGenres.set(value));
+selectedPerson.subscribe(value => currentSelectedPerson.set(value))
 minYear.subscribe(value => currentMinYear.set(value));
 minReviewCount.subscribe(value => currentMinReviewCount.set(value));
 maxReviewCount.subscribe(value => currentMaxReviewCount.set(value));
-castOrCrewQuery.subscribe(value => currentCastOrCrewQuery.set(value));
-
-function setCastOrCrewQuery(person) {
-  if (person.character) {
-    castOrCrewQuery.set('cast');
-  } else {
-    castOrCrewQuery.set('crew');
-  }
-}
+selectedTitle.subscribe(value => currentSelectedTitle.set(value) )
 
 function logChange(newValue) {
   console.log(newValue);
 }
-
 selectedPerson.subscribe(logChange);
-selectedPerson.subscribe(setCastOrCrewQuery);
+selectedMovie.subscribe(logChange)
+
+
+selectedMovie.subscribe((value) => {
+  if(value && value.title) {
+    currentSelectedTitle.set(value.title)
+  }
+})
