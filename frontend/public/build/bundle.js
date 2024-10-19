@@ -61,7 +61,7 @@ var app = (function () {
         : typeof globalThis !== 'undefined'
             ? globalThis
             : global);
-    function append(target, node) {
+    function append$1(target, node) {
         target.appendChild(node);
     }
     function insert(target, node, anchor) {
@@ -156,6 +156,17 @@ var app = (function () {
      */
     function onMount(fn) {
         get_current_component().$$.on_mount.push(fn);
+    }
+    /**
+     * Schedules a callback to run immediately before the component is unmounted.
+     *
+     * Out of `onMount`, `beforeUpdate`, `afterUpdate` and `onDestroy`, this is the
+     * only one that runs inside a server-side component.
+     *
+     * https://svelte.dev/docs#run-time-svelte-ondestroy
+     */
+    function onDestroy(fn) {
+        get_current_component().$$.on_destroy.push(fn);
     }
 
     const dirty_components = [];
@@ -448,7 +459,7 @@ var app = (function () {
     }
     function append_dev(target, node) {
         dispatch_dev('SvelteDOMInsert', { target, node });
-        append(target, node);
+        append$1(target, node);
     }
     function insert_dev(target, node, anchor) {
         dispatch_dev('SvelteDOMInsert', { target, node, anchor });
@@ -479,6 +490,10 @@ var app = (function () {
             dispatch_dev('SvelteDOMRemoveAttribute', { node, attribute });
         else
             dispatch_dev('SvelteDOMSetAttribute', { node, attribute, value });
+    }
+    function prop_dev(node, property, value) {
+        node[property] = value;
+        dispatch_dev('SvelteDOMSetProperty', { node, property, value });
     }
     function set_data_dev(text, data) {
         data = '' + data;
@@ -633,7 +648,7 @@ var app = (function () {
     const startY = writable(0);
     const queryCount = writable(0);
     const runningQuery = writable(false);
-    const itemHeight = writable(100);
+    const itemHeight = writable(85);
     const firstVisibleIndex = derived(
       [scrollY, itemHeight],
       ([$scrollY, $itemHeight]) => {
@@ -641,27 +656,28 @@ var app = (function () {
       }
     );
 
-    const selectedPerson = writable({ name: null, id: null, castOrCrew: null});
+    const selectedPerson = writable({ name: '', id: null, castOrCrew: null});
     const selectedLanguage = writable('all');
     const selectedGenres = writable([]);
-    const minYear = writable('1970');
+    const minYear = writable('2014');
     const minReviewCount = writable(10);
     const maxReviewCount = writable(null);
-    const castOrCrewQuery = writable('both');
     const selectedTitle = writable('');
+
+    const lastAppendedID = writable(null);
+    const lastPrependedID = writable(null);
 
     const currentSelectedPerson = writable(get_store_value(selectedPerson));
     const currentMinYear = writable(get_store_value(minYear));
     const currentMinReviewCount = writable(get_store_value(minReviewCount));
     const currentMaxReviewCount = writable(get_store_value(maxReviewCount));
-    const currentCastOrCrewQuery = writable(get_store_value(castOrCrewQuery));
     const currentSelectedTitle = writable(get_store_value(selectedTitle));
+
 
     selectedPerson.subscribe(value => currentSelectedPerson.set(value));
     minYear.subscribe(value => currentMinYear.set(value));
     minReviewCount.subscribe(value => currentMinReviewCount.set(value));
     maxReviewCount.subscribe(value => currentMaxReviewCount.set(value));
-    castOrCrewQuery.subscribe(value => currentCastOrCrewQuery.set(value));
     selectedTitle.subscribe(value => currentSelectedTitle.set(value) );
 
     function logChange(newValue) {
@@ -677,32 +693,498 @@ var app = (function () {
       }
     });
 
+    const LANGUAGEINFO = {
+      en: {
+        flag: "🇬🇧", // English flag
+        name: "English", // Language name
+        color: "#FF5733", // Orange color
+      },
+      fr: {
+        flag: "🇫🇷",
+        name: "French",
+        color: "#3498DB", // Blue color
+      },
+      es: {
+        flag: "🇪🇸",
+        name: "Spanish",
+        color: "#F1C40F", // Yellow color
+      },
+      de: {
+        flag: "🇩🇪",
+        name: "German",
+        color: "#2ECC71", // Green color
+      },
+      ja: {
+        flag: "🇯🇵",
+        name: "Japanese",
+        color: "#9B59B6", // Purple color
+      },
+      it: {
+        flag: "🇮🇹",
+        name: "Italian",
+        color: "#E74C3C", // Red color
+      },
+      hi: {
+        flag: "🇮🇳",
+        name: "Hindi",
+        color: "#FF9933", // Saffron color
+      },
+      et: {
+        flag: "🇪🇪",
+        name: "Estonian",
+        color: "#00ADEF", // Blue color
+      },
+      bn: {
+        flag: "🇧🇩",
+        name: "Bengali",
+        color: "#006A4E", // Green color
+      },
+      cs: {
+        flag: "🇨🇿",
+        name: "Czech",
+        color: "#D7141A", // Red color
+      },
+      sv: {
+        flag: "🇸🇪",
+        name: "Swedish",
+        color: "#006AA7", // Blue color
+      },
+      pl: {
+        flag: "🇵🇱",
+        name: "Polish",
+        color: "#DC143C", // Crimson color
+      },
+      fa: {
+        flag: "🇮🇷",
+        name: "Persian (Farsi)",
+        color: "#DAA520", // Goldenrod color
+      },
+      ru: {
+        flag: "🇷🇺",
+        name: "Russian",
+        color: "#C0392B", // Dark Red color
+      },
+      tr: {
+        flag: "🇹🇷",
+        name: "Turkish",
+        color: "#E30A17", // Red color
+      },
+      sh: {
+        flag: "🇷🇸",
+        name: "Serbo-Croatian",
+        color: "#4B0082", // Indigo color
+      },
+      ga: {
+        flag: "🇮🇪",
+        name: "Irish (Gaeilge)",
+        color: "#009A44", // Green color
+      },
+      hu: {
+        flag: "🇭🇺",
+        name: "Hungarian",
+        color: "#C8102E", // Red color
+      },
+      pt: {
+        flag: "🇵🇹",
+        name: "Portuguese",
+        color: "#1ABC9C", // Teal color
+      },
+      zh: {
+        flag: "🇨🇳",
+        name: "Chinese",
+        color: "#16A085", // Jade Green color
+      },
+      ar: {
+        flag: "🇸🇦",
+        name: "Arabic",
+        color: "#2980B9", // Royal Blue color
+      },
+      da: {
+        flag: "🇩🇰",
+        name: "Danish",
+        color: "#C60C30", // Red color
+      },
+      uk: {
+        flag: "🇺🇦",
+        name: "Ukrainian",
+        color: "#0057B7", // Blue color
+      },
+      ro: {
+        flag: "🇷🇴",
+        name: "Romanian",
+        color: "#FFD700", // Yellow color
+      },
+      no: {
+        flag: "🇳🇴",
+        name: "Norwegian",
+        color: "#BA0C2F", // Red color
+      },
+      fi: {
+        flag: "🇫🇮",
+        name: "Finnish",
+        color: "#003580", // Blue color
+      },
+      hr: {
+        flag: "🇭🇷",
+        name: "Croatian",
+        color: "#FF0000", // Red color
+      },
+      el: {
+        flag: "🇬🇷",
+        name: "Greek",
+        color: "#0D5EAF", // Blue color
+      },
+      nl: {
+        flag: "🇳🇱",
+        name: "Dutch",
+        color: "#21468B", // Blue color
+      },
+      sk: {
+        flag: "🇸🇰",
+        name: "Slovak",
+        color: "#0B4EA2", // Blue color
+      },
+      id: {
+        flag: "🇮🇩",
+        name: "Indonesian",
+        color: "#E74C3C", // Red color
+      },
+      td: {
+        flag: "🇹🇩",
+        name: "Chadian",
+        color: "#FFCC00", // Yellow color
+      },
+      cl: {
+        flag: "🇨🇱",
+        name: "Chilean",
+        color: "#D52B1E", // Red color
+      },
+      sr: {
+        flag: "🇷🇸",
+        name: "Serbian",
+        color: "#4B0082", // Indigo color
+      },
+      ko: {
+        flag: "🇰🇷",
+        name: "Korean",
+        color: "#2ECC71", // Green color
+      },
+      ur: {
+        flag: "🇵🇰",
+        name: "Urdu",
+        color: "#006A4E", // Dark Green color
+      },
+      cn: {
+        flag: "🇨🇳",
+        name: "Simplified Chinese",
+        color: "#E74C3C", // Red color
+      },
+      he: {
+        flag: "🇮🇱",
+        name: "Hebrew",
+        color: "#3498DB", // Blue color
+      },
+      az: {
+        flag: "🇦🇿",
+        name: "Azerbaijani",
+        color: "#00BFFF", // Deep Sky Blue color
+      },
+      bg: {
+        flag: "🇧🇬",
+        name: "Bulgarian",
+        color: "#D32F2F", // Red color
+      },
+      sl: {
+        flag: "🇸🇮",
+        name: "Slovenian",
+        color: "#C8102E", // Red color
+      },
+      lv: {
+        flag: "🇱🇻",
+        name: "Latvian",
+        color: "#9B2335", // Dark Red color
+      },
+      wo: {
+        flag: "🇸🇳",
+        name: "Wolof",
+        color: "#FFCC00", // Yellow color
+      },
+      mo: {
+        flag: "🇲🇩",
+        name: "Moldovan",
+        color: "#0033A0", // Blue color
+      },
+      ln: {
+        flag: "🇨🇬",
+        name: "Lingala",
+        color: "#FF4500", // Orange Red color
+      },
+      vi: {
+        flag: "🇻🇳",
+        name: "Vietnamese",
+        color: "#DA291C", // Red color
+      },
+      th: {
+        flag: "🇹🇭",
+        name: "Thai",
+        color: "#0066CC", // Blue color
+      },
+      my: {
+        flag: "🇲🇲",
+        name: "Burmese",
+        color: "#FFD700", // Yellow color
+      },
+      tl: {
+        flag: "🇵🇭",
+        name: "Tagalog",
+        color: "#0038A8", // Blue color
+      },
+      ms: {
+        flag: "🇲🇾",
+        name: "Malay",
+        color: "#FFCC00", // Yellow color
+      },
+      ta: {
+        flag: "🇱🇰",
+        name: "Tamil",
+        color: "#800000", // Maroon color
+      },
+      mr: {
+        flag: "🇮🇳",
+        name: "Marathi",
+        color: "#FF6600", // Orange color
+      },
+      pa: {
+        flag: "🇮🇳",
+        name: "Punjabi",
+        color: "#FF9933", // Saffron color
+      },
+      yo: {
+        flag: "🇳🇬",
+        name: "Yoruba",
+        color: "#32CD32", // Lime Green color
+      },
+      ha: {
+        flag: "🇳🇬",
+        name: "Hausa",
+        color: "#008000", // Green color
+      },
+      sw: {
+        flag: "🇹🇿",
+        name: "Swahili",
+        color: "#00A550", // Green color
+      },
+      am: {
+        flag: "🇪🇹",
+        name: "Amharic",
+        color: "#DA291C", // Red color
+      },
+      om: {
+        flag: "🇪🇹",
+        name: "Oromo",
+        color: "#FFCC00", // Yellow color
+      },
+      ig: {
+        flag: "🇳🇬",
+        name: "Igbo",
+        color: "#008000", // Green color
+      },
+      rw: {
+        flag: "🇷🇼",
+        name: "Kinyarwanda",
+        color: "#FFD700", // Yellow color
+      },
+      ts: {
+        flag: "🇿🇦",
+        name: "Tsonga",
+        color: "#FF9933", // Saffron color
+      },
+      xh: {
+        flag: "🇿🇦",
+        name: "Xhosa",
+        color: "#000000", // Black color
+      },
+      zu: {
+        flag: "🇿🇦",
+        name: "Zulu",
+        color: "#008080", // Teal color
+      },
+      tn: {
+        flag: "🇧🇼",
+        name: "Tswana",
+        color: "#00BFFF", // Deep Sky Blue color
+      },
+      kg: {
+        flag: "🇨🇬",
+        name: "Kongo",
+        color: "#FF4500", // Orange Red color
+      },
+      ne: {
+        flag: "🇳🇵",
+        name: "Nepali",
+        color: "#DC143C", // Crimson
+      },
+      ps: {
+        flag: "🇦🇫",
+        name: "Pashto",
+        color: "#1C1C1C", // Charcoal
+      },
+      si: {
+        flag: "🇱🇰",
+        name: "Sinhala",
+        color: "#FFCC33", // Yellow
+      },
+      ti: {
+        flag: "🇪🇷",
+        name: "Tigrinya",
+        color: "#8B0000", // Dark Red
+      },
+      mi: {
+        flag: "🇳🇿",
+        name: "Maori",
+        color: "#000080", // Navy Blue
+      },
+      mn: {
+        flag: "🇲🇳",
+        name: "Mongolian",
+        color: "#0033A0", // Blue
+      },
+      km: {
+        flag: "🇰🇭",
+        name: "Khmer",
+        color: "#CC0000", // Red
+      },
+      lo: {
+        flag: "🇱🇦",
+        name: "Lao",
+        color: "#0033CC", // Blue
+      },
+      ka: {
+        flag: "🇬🇪",
+        name: "Georgian",
+        color: "#E74C3C", // Red
+      },
+      be: {
+        flag: "🇧🇾",
+        name: "Belarusian",
+        color: "#FFD700", // Yellow color
+      },
+      ca: {
+        flag: "🇪🇸",
+        name: "Catalan",
+        color: "#F39C12", // Orange color
+      },
+      eu: {
+        flag: "🇪🇸",
+        name: "Basque",
+        color: "#2980B9", // Blue color
+      },
+      gl: {
+        flag: "🇪🇸",
+        name: "Galician",
+        color: "#1ABC9C", // Teal color
+      },
+      is: {
+        flag: "🇮🇸",
+        name: "Icelandic",
+        color: "#0033CC", // Blue color
+      },
+      sq: {
+        flag: "🇦🇱",
+        name: "Albanian",
+        color: "#E41B17", // Red color
+      },
+      bs: {
+        flag: "🇧🇦",
+        name: "Bosnian",
+        color: "#007FFF", // Azure Blue color
+      },
+      mk: {
+        flag: "🇲🇰",
+        name: "Macedonian",
+        color: "#D20000", // Red color
+      },
+      mt: {
+        flag: "🇲🇹",
+        name: "Maltese",
+        color: "#FF4500", // Orange Red color
+      },
+      cy: {
+        flag: "🏴",
+        name: "Welsh",
+        color: "#228B22", // Forest Green color
+      },
+      sc: {
+        flag: "🇮🇹",
+        name: "Sardinian",
+        color: "#DC143C", // Crimson color
+      },
+      gsw: {
+        flag: "🇨🇭",
+        name: "Swiss German",
+        color: "#FF0000", // Red color
+      },
+      br: {
+        flag: "🇫🇷",
+        name: "Breton",
+        color: "#2F4F4F", // Dark Slate Grey color
+      },
+    };
+
+    function getLanguageFlag(language) {
+      if (LANGUAGEINFO[language]) {
+        return LANGUAGEINFO[language].flag;
+      } else {
+        console.log(`Language flag not supported for: ${language}`);
+        return undefined;
+      }
+    }
+
+    function getLanguageName(language) {
+      if (LANGUAGEINFO[language]) {
+        return LANGUAGEINFO[language].name;
+      } else {
+        console.log(`Language name not supported for: ${language}`);
+        return undefined;
+      }
+    }
+
+    function getLanguageColor(language) {
+      if (LANGUAGEINFO[language]) {
+        return LANGUAGEINFO[language].color;
+      } else {
+        console.log(`Language color not supported for: ${language}`);
+        return undefined;
+      }
+    }
+
     /* src-modular/components/GenreMenu.svelte generated by Svelte v3.59.2 */
 
-    const { Object: Object_1 } = globals;
-    const file$5 = "src-modular/components/GenreMenu.svelte";
+    const { Object: Object_1$1 } = globals;
+    const file$7 = "src-modular/components/GenreMenu.svelte";
 
-    function get_each_context$2(ctx, list, i) {
+    function get_each_context$4(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[2] = list[i];
+    	child_ctx[4] = list[i];
     	return child_ctx;
     }
 
-    // (31:4) {#each Object.keys(genreEmojiDict) as genre}
-    function create_each_block$2(ctx) {
+    // (41:4) {#each Object.keys(genreEmojiDict) as genre}
+    function create_each_block$4(ctx) {
     	let div1;
     	let div0;
     	let input;
+    	let input_checked_value;
     	let t0;
     	let label;
-    	let t1_value = /*genreEmojiDict*/ ctx[0][/*genre*/ ctx[2]] + " " + /*genre*/ ctx[2] + "";
+    	let t1_value = /*genreEmojiDict*/ ctx[1][/*genre*/ ctx[4]] + " " + /*genre*/ ctx[4] + "";
     	let t1;
     	let t2;
     	let mounted;
     	let dispose;
 
     	function change_handler(...args) {
-    		return /*change_handler*/ ctx[1](/*genre*/ ctx[2], ...args);
+    		return /*change_handler*/ ctx[2](/*genre*/ ctx[4], ...args);
     	}
 
     	const block = {
@@ -715,17 +1197,18 @@ var app = (function () {
     			t1 = text(t1_value);
     			t2 = space();
     			attr_dev(input, "type", "checkbox");
-    			attr_dev(input, "id", /*genre*/ ctx[2]);
-    			attr_dev(input, "name", /*genre*/ ctx[2]);
-    			input.value = /*genre*/ ctx[2];
-    			add_location(input, file$5, 33, 10, 794);
+    			attr_dev(input, "id", /*genre*/ ctx[4]);
+    			attr_dev(input, "name", /*genre*/ ctx[4]);
+    			input.value = /*genre*/ ctx[4];
+    			input.checked = input_checked_value = /*genres*/ ctx[0].includes(/*genre*/ ctx[4]);
+    			add_location(input, file$7, 43, 10, 899);
     			set_style(div0, "padding-right", "10px");
-    			add_location(div0, file$5, 32, 8, 750);
+    			add_location(div0, file$7, 42, 8, 855);
     			set_style(label, "display", "inline");
-    			attr_dev(label, "for", /*genre*/ ctx[2]);
-    			add_location(label, file$5, 49, 8, 1255);
+    			attr_dev(label, "for", /*genre*/ ctx[4]);
+    			add_location(label, file$7, 60, 8, 1405);
     			set_style(div1, "display", "flex");
-    			add_location(div1, file$5, 31, 6, 713);
+    			add_location(div1, file$7, 41, 6, 818);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -743,6 +1226,10 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
+
+    			if (dirty & /*genres*/ 1 && input_checked_value !== (input_checked_value = /*genres*/ ctx[0].includes(/*genre*/ ctx[4]))) {
+    				prop_dev(input, "checked", input_checked_value);
+    			}
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div1);
@@ -753,26 +1240,26 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_each_block$2.name,
+    		id: create_each_block$4.name,
     		type: "each",
-    		source: "(31:4) {#each Object.keys(genreEmojiDict) as genre}",
+    		source: "(41:4) {#each Object.keys(genreEmojiDict) as genre}",
     		ctx
     	});
 
     	return block;
     }
 
-    function create_fragment$5(ctx) {
+    function create_fragment$7(ctx) {
     	let div1;
     	let label;
     	let t1;
     	let div0;
-    	let each_value = Object.keys(/*genreEmojiDict*/ ctx[0]);
+    	let each_value = Object.keys(/*genreEmojiDict*/ ctx[1]);
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
     	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block$2(get_each_context$2(ctx, each_value, i));
+    		each_blocks[i] = create_each_block$4(get_each_context$4(ctx, each_value, i));
     	}
 
     	const block = {
@@ -788,11 +1275,11 @@ var app = (function () {
     			}
 
     			attr_dev(label, "for", "genre");
-    			add_location(label, file$5, 28, 2, 592);
+    			add_location(label, file$7, 38, 2, 697);
     			attr_dev(div0, "class", "genre-selection");
-    			add_location(div0, file$5, 29, 2, 628);
+    			add_location(div0, file$7, 39, 2, 733);
     			attr_dev(div1, "class", "genre-menu");
-    			add_location(div1, file$5, 27, 0, 565);
+    			add_location(div1, file$7, 37, 0, 670);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -810,18 +1297,18 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*Object, genreEmojiDict, selectedGenres*/ 1) {
-    				each_value = Object.keys(/*genreEmojiDict*/ ctx[0]);
+    			if (dirty & /*Object, genreEmojiDict, genres, selectedGenres*/ 3) {
+    				each_value = Object.keys(/*genreEmojiDict*/ ctx[1]);
     				validate_each_argument(each_value);
     				let i;
 
     				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context$2(ctx, each_value, i);
+    					const child_ctx = get_each_context$4(ctx, each_value, i);
 
     					if (each_blocks[i]) {
     						each_blocks[i].p(child_ctx, dirty);
     					} else {
-    						each_blocks[i] = create_each_block$2(child_ctx);
+    						each_blocks[i] = create_each_block$4(child_ctx);
     						each_blocks[i].c();
     						each_blocks[i].m(div0, null);
     					}
@@ -844,7 +1331,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$5.name,
+    		id: create_fragment$7.name,
     		type: "component",
     		source: "",
     		ctx
@@ -853,7 +1340,7 @@ var app = (function () {
     	return block;
     }
 
-    function instance$5($$self, $$props, $$invalidate) {
+    function instance$7($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('GenreMenu', slots, []);
 
@@ -879,9 +1366,19 @@ var app = (function () {
     		"TV Movie": "📺"
     	};
 
+    	let genres = [];
+
+    	const unsubscribe = selectedGenres.subscribe(value => {
+    		$$invalidate(0, genres = value);
+    	});
+
+    	onDestroy(() => {
+    		unsubscribe();
+    	});
+
     	const writable_props = [];
 
-    	Object_1.keys($$props).forEach(key => {
+    	Object_1$1.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<GenreMenu> was created with unknown prop '${key}'`);
     	});
 
@@ -893,28 +1390,86 @@ var app = (function () {
     		}
     	};
 
-    	$$self.$capture_state = () => ({ selectedGenres, genreEmojiDict });
-    	return [genreEmojiDict, change_handler];
+    	$$self.$capture_state = () => ({
+    		selectedGenres,
+    		onDestroy,
+    		genreEmojiDict,
+    		genres,
+    		unsubscribe
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ('genres' in $$props) $$invalidate(0, genres = $$props.genres);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [genres, genreEmojiDict, change_handler];
     }
 
     class GenreMenu extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$5, create_fragment$5, safe_not_equal, {});
+    		init(this, options, instance$7, create_fragment$7, safe_not_equal, {});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "GenreMenu",
     			options,
-    			id: create_fragment$5.name
+    			id: create_fragment$7.name
     		});
     	}
     }
 
     /* src-modular/components/Header.svelte generated by Svelte v3.59.2 */
-    const file$4 = "src-modular/components/Header.svelte";
 
-    function create_fragment$4(ctx) {
+    const { Object: Object_1 } = globals;
+    const file$6 = "src-modular/components/Header.svelte";
+
+    function get_each_context$3(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[18] = list[i];
+    	return child_ctx;
+    }
+
+    // (80:8) {#each Object.keys(LANGUAGEINFO) as languageCode}
+    function create_each_block$3(ctx) {
+    	let option;
+    	let t_value = LANGUAGEINFO[/*languageCode*/ ctx[18]].name + "";
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			option = element("option");
+    			t = text(t_value);
+    			option.__value = /*languageCode*/ ctx[18];
+    			option.value = option.__value;
+    			add_location(option, file$6, 80, 10, 2128);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, option, anchor);
+    			append_dev(option, t);
+    		},
+    		p: noop$1,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(option);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block$3.name,
+    		type: "each",
+    		source: "(80:8) {#each Object.keys(LANGUAGEINFO) as languageCode}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$6(ctx) {
     	let div8;
     	let div6;
     	let title_input;
@@ -945,19 +1500,21 @@ var app = (function () {
     	let label4;
     	let t14;
     	let select;
-    	let option0;
-    	let option1;
-    	let option2;
-    	let option3;
-    	let option4;
-    	let option5;
-    	let option6;
-    	let t22;
+    	let option;
+    	let t16;
     	let div7;
     	let genremenu;
     	let current;
     	let mounted;
     	let dispose;
+    	let each_value = Object.keys(LANGUAGEINFO);
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$3(get_each_context$3(ctx, each_value, i));
+    	}
+
     	genremenu = new GenreMenu({ $$inline: true });
 
     	const block = {
@@ -997,79 +1554,54 @@ var app = (function () {
     			label4.textContent = "Language:";
     			t14 = space();
     			select = element("select");
-    			option0 = element("option");
-    			option0.textContent = "English";
-    			option1 = element("option");
-    			option1.textContent = "French";
-    			option2 = element("option");
-    			option2.textContent = "Spanish";
-    			option3 = element("option");
-    			option3.textContent = "German";
-    			option4 = element("option");
-    			option4.textContent = "Japanese";
-    			option5 = element("option");
-    			option5.textContent = "Italian";
-    			option6 = element("option");
-    			option6.textContent = "All";
-    			t22 = space();
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			option = element("option");
+    			option.textContent = "All";
+    			t16 = space();
     			div7 = element("div");
     			create_component(genremenu.$$.fragment);
-    			add_location(textarea0, file$4, 22, 6, 430);
-    			add_location(title_input, file$4, 21, 4, 410);
+    			add_location(textarea0, file$6, 24, 6, 478);
+    			add_location(title_input, file$6, 23, 4, 458);
     			attr_dev(label0, "for", "year");
-    			add_location(label0, file$4, 30, 6, 628);
-    			add_location(textarea1, file$4, 31, 6, 666);
+    			add_location(label0, file$6, 32, 6, 676);
+    			add_location(textarea1, file$6, 33, 6, 714);
     			attr_dev(div0, "class", "year-input");
-    			add_location(div0, file$4, 29, 4, 597);
+    			add_location(div0, file$6, 31, 4, 645);
     			attr_dev(label1, "for", "minReviewCount");
-    			add_location(label1, file$4, 40, 8, 900);
-    			add_location(textarea2, file$4, 41, 8, 967);
+    			add_location(label1, file$6, 42, 8, 948);
+    			add_location(textarea2, file$6, 43, 8, 1015);
     			attr_dev(div1, "class", "minReviewCount-input");
-    			add_location(div1, file$4, 39, 6, 857);
+    			add_location(div1, file$6, 41, 6, 905);
     			attr_dev(label2, "for", "maxReviewCount");
-    			add_location(label2, file$4, 49, 8, 1195);
-    			add_location(textarea3, file$4, 50, 8, 1262);
+    			add_location(label2, file$6, 51, 8, 1243);
+    			add_location(textarea3, file$6, 52, 8, 1310);
     			attr_dev(div2, "class", "maxReviewCount-input");
-    			add_location(div2, file$4, 48, 6, 1152);
+    			add_location(div2, file$6, 50, 6, 1200);
     			attr_dev(div3, "class", "min-max-input");
-    			add_location(div3, file$4, 38, 4, 823);
+    			add_location(div3, file$6, 40, 4, 871);
     			attr_dev(label3, "for", "Person");
-    			add_location(label3, file$4, 59, 6, 1489);
-    			add_location(textarea4, file$4, 60, 6, 1531);
+    			add_location(label3, file$6, 61, 6, 1537);
+    			add_location(textarea4, file$6, 62, 6, 1579);
     			attr_dev(div4, "class", "person-input");
-    			add_location(div4, file$4, 58, 4, 1456);
+    			add_location(div4, file$6, 60, 4, 1504);
     			attr_dev(label4, "for", "language");
-    			add_location(label4, file$4, 75, 6, 1926);
-    			option0.__value = "en";
-    			option0.value = option0.__value;
-    			add_location(option0, file$4, 77, 8, 2020);
-    			option1.__value = "fr";
-    			option1.value = option1.__value;
-    			add_location(option1, file$4, 78, 8, 2064);
-    			option2.__value = "es";
-    			option2.value = option2.__value;
-    			add_location(option2, file$4, 79, 8, 2107);
-    			option3.__value = "de";
-    			option3.value = option3.__value;
-    			add_location(option3, file$4, 80, 8, 2151);
-    			option4.__value = "ja";
-    			option4.value = option4.__value;
-    			add_location(option4, file$4, 81, 8, 2194);
-    			option5.__value = "it";
-    			option5.value = option5.__value;
-    			add_location(option5, file$4, 82, 8, 2239);
-    			option6.__value = "all";
-    			option6.value = option6.__value;
-    			add_location(option6, file$4, 83, 8, 2283);
+    			add_location(label4, file$6, 77, 6, 1974);
+    			option.__value = "all";
+    			option.value = option.__value;
+    			add_location(option, file$6, 82, 8, 2224);
     			if (/*$selectedLanguage*/ ctx[5] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[17].call(select));
-    			add_location(select, file$4, 76, 6, 1972);
+    			add_location(select, file$6, 78, 6, 2020);
     			attr_dev(div5, "class", "language-input");
-    			add_location(div5, file$4, 74, 4, 1891);
+    			add_location(div5, file$6, 76, 4, 1939);
     			attr_dev(div6, "class", "form svelte-jmilq3");
-    			add_location(div6, file$4, 20, 2, 387);
-    			add_location(div7, file$4, 88, 2, 2355);
+    			add_location(div6, file$6, 22, 2, 435);
+    			add_location(div7, file$6, 87, 2, 2296);
     			attr_dev(div8, "class", "header svelte-jmilq3");
-    			add_location(div8, file$4, 19, 0, 364);
+    			add_location(div8, file$6, 21, 0, 412);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1110,15 +1642,16 @@ var app = (function () {
     			append_dev(div5, label4);
     			append_dev(div5, t14);
     			append_dev(div5, select);
-    			append_dev(select, option0);
-    			append_dev(select, option1);
-    			append_dev(select, option2);
-    			append_dev(select, option3);
-    			append_dev(select, option4);
-    			append_dev(select, option5);
-    			append_dev(select, option6);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				if (each_blocks[i]) {
+    					each_blocks[i].m(select, null);
+    				}
+    			}
+
+    			append_dev(select, option);
     			select_option(select, /*$selectedLanguage*/ ctx[5], true);
-    			append_dev(div8, t22);
+    			append_dev(div8, t16);
     			append_dev(div8, div7);
     			mount_component(genremenu, div7, null);
     			current = true;
@@ -1163,7 +1696,31 @@ var app = (function () {
     				set_input_value(textarea4, /*$currentSelectedPerson*/ ctx[4].name);
     			}
 
-    			if (dirty & /*$selectedLanguage*/ 32) {
+    			if (dirty & /*Object, LANGUAGEINFO*/ 0) {
+    				each_value = Object.keys(LANGUAGEINFO);
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$3(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$3(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(select, option);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+
+    			if (dirty & /*$selectedLanguage, Object, LANGUAGEINFO*/ 32) {
     				select_option(select, /*$selectedLanguage*/ ctx[5]);
     			}
     		},
@@ -1178,6 +1735,7 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div8);
+    			destroy_each(each_blocks, detaching);
     			destroy_component(genremenu);
     			mounted = false;
     			run_all(dispose);
@@ -1186,7 +1744,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$4.name,
+    		id: create_fragment$6.name,
     		type: "component",
     		source: "",
     		ctx
@@ -1195,7 +1753,7 @@ var app = (function () {
     	return block;
     }
 
-    function instance$4($$self, $$props, $$invalidate) {
+    function instance$6($$self, $$props, $$invalidate) {
     	let $currentSelectedTitle;
     	let $currentMinYear;
     	let $currentMinReviewCount;
@@ -1218,7 +1776,7 @@ var app = (function () {
     	validate_slots('Header', slots, []);
     	const writable_props = [];
 
-    	Object.keys($$props).forEach(key => {
+    	Object_1.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Header> was created with unknown prop '${key}'`);
     	});
 
@@ -1293,6 +1851,7 @@ var app = (function () {
     		currentMaxReviewCount,
     		currentSelectedTitle,
     		selectedTitle,
+    		LANGUAGEINFO,
     		GenreMenu,
     		$currentSelectedTitle,
     		$currentMinYear,
@@ -1327,24 +1886,255 @@ var app = (function () {
     class Header extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$4, create_fragment$4, safe_not_equal, {});
+    		init(this, options, instance$6, create_fragment$6, safe_not_equal, {});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "Header",
     			options,
-    			id: create_fragment$4.name
+    			id: create_fragment$6.name
     		});
     	}
     }
 
-    /* src-modular/components/MovieItem.svelte generated by Svelte v3.59.2 */
-    const file$3 = "src-modular/components/MovieItem.svelte";
+    /* src-modular/components/EmojiList.svelte generated by Svelte v3.59.2 */
+    const file$5 = "src-modular/components/EmojiList.svelte";
 
-    function create_fragment$3(ctx) {
+    function get_each_context$2(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[4] = list[i];
+    	return child_ctx;
+    }
+
+    // (30:0) {#each movie.genres as genre }
+    function create_each_block$2(ctx) {
+    	let div;
+    	let t_value = /*genreEmojiDict*/ ctx[2][/*genre*/ ctx[4]] + "";
+    	let t;
+    	let mounted;
+    	let dispose;
+
+    	function click_handler() {
+    		return /*click_handler*/ ctx[3](/*genre*/ ctx[4]);
+    	}
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			t = text(t_value);
+    			attr_dev(div, "class", "emoji svelte-h4bmhw");
+    			add_location(div, file$5, 30, 4, 643);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			append_dev(div, t);
+
+    			if (!mounted) {
+    				dispose = listen_dev(div, "click", click_handler, false, false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(new_ctx, dirty) {
+    			ctx = new_ctx;
+    			if (dirty & /*movie*/ 1 && t_value !== (t_value = /*genreEmojiDict*/ ctx[2][/*genre*/ ctx[4]] + "")) set_data_dev(t, t_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block$2.name,
+    		type: "each",
+    		source: "(30:0) {#each movie.genres as genre }",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$5(ctx) {
+    	let div;
+    	let each_value = /*movie*/ ctx[0].genres;
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$2(get_each_context$2(ctx, each_value, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr_dev(div, "class", "emoji-list svelte-h4bmhw");
+    			add_location(div, file$5, 28, 0, 583);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				if (each_blocks[i]) {
+    					each_blocks[i].m(div, null);
+    				}
+    			}
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*$selectedGenres, movie, selectedGenres, genreEmojiDict*/ 7) {
+    				each_value = /*movie*/ ctx[0].genres;
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$2(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$2(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(div, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		i: noop$1,
+    		o: noop$1,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$5.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$5($$self, $$props, $$invalidate) {
+    	let $selectedGenres;
+    	validate_store(selectedGenres, 'selectedGenres');
+    	component_subscribe($$self, selectedGenres, $$value => $$invalidate(1, $selectedGenres = $$value));
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots('EmojiList', slots, []);
+    	let { movie } = $$props;
+
+    	const genreEmojiDict = {
+    		Documentary: "📚",
+    		Adventure: "🧗",
+    		"Science Fiction": "👽",
+    		Comedy: "😂",
+    		Fantasy: "🧙",
+    		Horror: "👻",
+    		Drama: "🎭",
+    		History: "🏰",
+    		War: "⚔️",
+    		Romance: "❤️",
+    		Thriller: "😱",
+    		Crime: "🔪",
+    		Action: "💥",
+    		Mystery: "🕵️‍♂️",
+    		Music: "🎵",
+    		Family: "👨‍👩‍👧‍👦",
+    		Animation: "🎨",
+    		Western: "🤠",
+    		"TV Movie": "📺"
+    	};
+
+    	$$self.$$.on_mount.push(function () {
+    		if (movie === undefined && !('movie' in $$props || $$self.$$.bound[$$self.$$.props['movie']])) {
+    			console.warn("<EmojiList> was created without expected prop 'movie'");
+    		}
+    	});
+
+    	const writable_props = ['movie'];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<EmojiList> was created with unknown prop '${key}'`);
+    	});
+
+    	const click_handler = genre => {
+    		if ($selectedGenres.includes(genre)) {
+    			selectedGenres.update(genres => genres.filter(g => g !== genre));
+    		} else {
+    			selectedGenres.update(genres => [...genres, genre]);
+    		}
+    	};
+
+    	$$self.$$set = $$props => {
+    		if ('movie' in $$props) $$invalidate(0, movie = $$props.movie);
+    	};
+
+    	$$self.$capture_state = () => ({
+    		selectedGenres,
+    		movie,
+    		genreEmojiDict,
+    		$selectedGenres
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ('movie' in $$props) $$invalidate(0, movie = $$props.movie);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [movie, $selectedGenres, genreEmojiDict, click_handler];
+    }
+
+    class EmojiList extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$5, create_fragment$5, safe_not_equal, { movie: 0 });
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "EmojiList",
+    			options,
+    			id: create_fragment$5.name
+    		});
+    	}
+
+    	get movie() {
+    		throw new Error("<EmojiList>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set movie(value) {
+    		throw new Error("<EmojiList>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
+
+    /* src-modular/components/MovieItem.svelte generated by Svelte v3.59.2 */
+
+    const file$4 = "src-modular/components/MovieItem.svelte";
+
+    // (51:10) {:else}
+    function create_else_block_1(ctx) {
     	let div1;
     	let div0;
-    	let t_value = /*movie*/ ctx[0].releaseDate + "";
     	let t;
     	let mounted;
     	let dispose;
@@ -1353,15 +2143,11 @@ var app = (function () {
     		c: function create() {
     			div1 = element("div");
     			div0 = element("div");
-    			t = text(t_value);
-    			attr_dev(div0, "class", "movie-item svelte-1aoqtxy");
-    			set_style(div0, "transform", "translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[2] - /*$scrollY*/ ctx[3] % /*$itemHeight*/ ctx[2]) + "px)");
-    			set_style(div0, "height", /*$itemHeight*/ ctx[2] + "px");
-    			add_location(div0, file$3, 13, 2, 242);
-    			add_location(div1, file$3, 12, 0, 208);
-    		},
-    		l: function claim(nodes) {
-    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    			t = text(/*languageFlag*/ ctx[4]);
+    			attr_dev(div0, "class", "flag svelte-j9chy0");
+    			add_location(div0, file$4, 52, 14, 1518);
+    			attr_dev(div1, "class", "original-title svelte-j9chy0");
+    			add_location(div1, file$4, 51, 12, 1475);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -1369,23 +2155,13 @@ var app = (function () {
     			append_dev(div0, t);
 
     			if (!mounted) {
-    				dispose = listen_dev(div1, "click", /*handleBarClick*/ ctx[4], false, false, false, false);
+    				dispose = listen_dev(div0, "click", /*click_handler_1*/ ctx[11], false, false, false, false);
     				mounted = true;
     			}
     		},
-    		p: function update(ctx, [dirty]) {
-    			if (dirty & /*movie*/ 1 && t_value !== (t_value = /*movie*/ ctx[0].releaseDate + "")) set_data_dev(t, t_value);
-
-    			if (dirty & /*index, $itemHeight, $scrollY*/ 14) {
-    				set_style(div0, "transform", "translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[2] - /*$scrollY*/ ctx[3] % /*$itemHeight*/ ctx[2]) + "px)");
-    			}
-
-    			if (dirty & /*$itemHeight*/ 4) {
-    				set_style(div0, "height", /*$itemHeight*/ ctx[2] + "px");
-    			}
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*languageFlag*/ 16) set_data_dev(t, /*languageFlag*/ ctx[4]);
     		},
-    		i: noop$1,
-    		o: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div1);
     			mounted = false;
@@ -1395,7 +2171,356 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$3.name,
+    		id: create_else_block_1.name,
+    		type: "else",
+    		source: "(51:10) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (47:10) {#if movie.originalLanguage != "en"}
+    function create_if_block_1$1(ctx) {
+    	let div1;
+    	let div0;
+    	let t0;
+    	let t1;
+    	let t2_value = /*movie*/ ctx[0].originalTitle + "";
+    	let t2;
+    	let mounted;
+    	let dispose;
+
+    	const block = {
+    		c: function create() {
+    			div1 = element("div");
+    			div0 = element("div");
+    			t0 = text(/*languageFlag*/ ctx[4]);
+    			t1 = space();
+    			t2 = text(t2_value);
+    			attr_dev(div0, "class", "flag svelte-j9chy0");
+    			add_location(div0, file$4, 48, 14, 1301);
+    			attr_dev(div1, "class", "original-title svelte-j9chy0");
+    			add_location(div1, file$4, 47, 12, 1258);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, div0);
+    			append_dev(div0, t0);
+    			append_dev(div1, t1);
+    			append_dev(div1, t2);
+
+    			if (!mounted) {
+    				dispose = listen_dev(div0, "click", /*click_handler*/ ctx[10], false, false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*languageFlag*/ 16) set_data_dev(t0, /*languageFlag*/ ctx[4]);
+    			if (dirty & /*movie*/ 1 && t2_value !== (t2_value = /*movie*/ ctx[0].originalTitle + "")) set_data_dev(t2, t2_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div1);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1$1.name,
+    		type: "if",
+    		source: "(47:10) {#if movie.originalLanguage != \\\"en\\\"}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (59:12) {:else}
+    function create_else_block$1(ctx) {
+    	let t_value = /*movie*/ ctx[0].title + "";
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			t = text(t_value);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*movie*/ 1 && t_value !== (t_value = /*movie*/ ctx[0].title + "")) set_data_dev(t, t_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block$1.name,
+    		type: "else",
+    		source: "(59:12) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (57:12) {#if isEnglish}
+    function create_if_block$3(ctx) {
+    	let t_value = /*movie*/ ctx[0].title + "";
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			t = text(t_value);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*movie*/ 1 && t_value !== (t_value = /*movie*/ ctx[0].title + "")) set_data_dev(t, t_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$3.name,
+    		type: "if",
+    		source: "(57:12) {#if isEnglish}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$4(ctx) {
+    	let div12;
+    	let div11;
+    	let div10;
+    	let div1;
+    	let div0;
+    	let t0_value = /*movie*/ ctx[0].getReleaseDateString() + "";
+    	let t0;
+    	let t1;
+    	let div4;
+    	let div3;
+    	let t2;
+    	let div2;
+    	let t3;
+    	let emojilist;
+    	let t4;
+    	let div6;
+    	let div5;
+    	let t5;
+    	let div8;
+    	let div7;
+    	let t6_value = /*movie*/ ctx[0].generateHourString() + "";
+    	let t6;
+    	let t7;
+    	let div9;
+    	let t8_value = /*movie*/ ctx[0].title + "";
+    	let t8;
+    	let current;
+    	let mounted;
+    	let dispose;
+
+    	function select_block_type(ctx, dirty) {
+    		if (/*movie*/ ctx[0].originalLanguage != "en") return create_if_block_1$1;
+    		return create_else_block_1;
+    	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block0 = current_block_type(ctx);
+
+    	function select_block_type_1(ctx, dirty) {
+    		if (/*isEnglish*/ ctx[5]) return create_if_block$3;
+    		return create_else_block$1;
+    	}
+
+    	let current_block_type_1 = select_block_type_1(ctx);
+    	let if_block1 = current_block_type_1(ctx);
+
+    	emojilist = new EmojiList({
+    			props: { movie: /*movie*/ ctx[0] },
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			div12 = element("div");
+    			div11 = element("div");
+    			div10 = element("div");
+    			div1 = element("div");
+    			div0 = element("div");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			div4 = element("div");
+    			div3 = element("div");
+    			if_block0.c();
+    			t2 = space();
+    			div2 = element("div");
+    			if_block1.c();
+    			t3 = space();
+    			create_component(emojilist.$$.fragment);
+    			t4 = space();
+    			div6 = element("div");
+    			div5 = element("div");
+    			t5 = space();
+    			div8 = element("div");
+    			div7 = element("div");
+    			t6 = text(t6_value);
+    			t7 = space();
+    			div9 = element("div");
+    			t8 = text(t8_value);
+    			attr_dev(div0, "class", "date svelte-j9chy0");
+    			attr_dev(div0, "style", /*fontWeightDate*/ ctx[3]);
+    			add_location(div0, file$4, 42, 8, 1026);
+    			attr_dev(div1, "class", "date-container svelte-j9chy0");
+    			add_location(div1, file$4, 41, 6, 989);
+    			attr_dev(div2, "class", "english-title svelte-j9chy0");
+    			add_location(div2, file$4, 55, 10, 1666);
+    			attr_dev(div3, "class", "title-container svelte-j9chy0");
+    			add_location(div3, file$4, 45, 8, 1169);
+    			attr_dev(div4, "class", "title-genre-container svelte-j9chy0");
+    			add_location(div4, file$4, 44, 6, 1125);
+    			attr_dev(div5, "class", "movie-bar svelte-j9chy0");
+    			set_style(div5, "width", /*movie*/ ctx[0].voteAverage * 10 + "%");
+    			set_style(div5, "background-color", /*barColor*/ ctx[2]);
+    			add_location(div5, file$4, 66, 8, 1943);
+    			attr_dev(div6, "class", "bar-container svelte-j9chy0");
+    			add_location(div6, file$4, 65, 6, 1907);
+    			attr_dev(div7, "class", "time svelte-j9chy0");
+    			add_location(div7, file$4, 72, 8, 2129);
+    			attr_dev(div8, "class", "time-container svelte-j9chy0");
+    			add_location(div8, file$4, 71, 6, 2092);
+    			attr_dev(div9, "class", "movie-name svelte-j9chy0");
+    			add_location(div9, file$4, 74, 6, 2201);
+    			attr_dev(div10, "class", "border bc-parent svelte-j9chy0");
+    			add_location(div10, file$4, 40, 4, 952);
+    			attr_dev(div11, "class", "movie-item svelte-j9chy0");
+    			set_style(div11, "transform", "translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[6] - /*$scrollY*/ ctx[7] % /*$itemHeight*/ ctx[6]) + "px)");
+    			set_style(div11, "height", /*$itemHeight*/ ctx[6] + "px");
+    			add_location(div11, file$4, 35, 2, 799);
+    			add_location(div12, file$4, 34, 0, 765);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div12, anchor);
+    			append_dev(div12, div11);
+    			append_dev(div11, div10);
+    			append_dev(div10, div1);
+    			append_dev(div1, div0);
+    			append_dev(div0, t0);
+    			append_dev(div10, t1);
+    			append_dev(div10, div4);
+    			append_dev(div4, div3);
+    			if_block0.m(div3, null);
+    			append_dev(div3, t2);
+    			append_dev(div3, div2);
+    			if_block1.m(div2, null);
+    			append_dev(div4, t3);
+    			mount_component(emojilist, div4, null);
+    			append_dev(div10, t4);
+    			append_dev(div10, div6);
+    			append_dev(div6, div5);
+    			append_dev(div10, t5);
+    			append_dev(div10, div8);
+    			append_dev(div8, div7);
+    			append_dev(div7, t6);
+    			append_dev(div10, t7);
+    			append_dev(div10, div9);
+    			append_dev(div9, t8);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen_dev(div12, "click", /*handleBarClick*/ ctx[8], false, false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if ((!current || dirty & /*movie*/ 1) && t0_value !== (t0_value = /*movie*/ ctx[0].getReleaseDateString() + "")) set_data_dev(t0, t0_value);
+
+    			if (!current || dirty & /*fontWeightDate*/ 8) {
+    				attr_dev(div0, "style", /*fontWeightDate*/ ctx[3]);
+    			}
+
+    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block0) {
+    				if_block0.p(ctx, dirty);
+    			} else {
+    				if_block0.d(1);
+    				if_block0 = current_block_type(ctx);
+
+    				if (if_block0) {
+    					if_block0.c();
+    					if_block0.m(div3, t2);
+    				}
+    			}
+
+    			if (current_block_type_1 === (current_block_type_1 = select_block_type_1(ctx)) && if_block1) {
+    				if_block1.p(ctx, dirty);
+    			} else {
+    				if_block1.d(1);
+    				if_block1 = current_block_type_1(ctx);
+
+    				if (if_block1) {
+    					if_block1.c();
+    					if_block1.m(div2, null);
+    				}
+    			}
+
+    			const emojilist_changes = {};
+    			if (dirty & /*movie*/ 1) emojilist_changes.movie = /*movie*/ ctx[0];
+    			emojilist.$set(emojilist_changes);
+
+    			if (!current || dirty & /*movie*/ 1) {
+    				set_style(div5, "width", /*movie*/ ctx[0].voteAverage * 10 + "%");
+    			}
+
+    			if (!current || dirty & /*barColor*/ 4) {
+    				set_style(div5, "background-color", /*barColor*/ ctx[2]);
+    			}
+
+    			if ((!current || dirty & /*movie*/ 1) && t6_value !== (t6_value = /*movie*/ ctx[0].generateHourString() + "")) set_data_dev(t6, t6_value);
+    			if ((!current || dirty & /*movie*/ 1) && t8_value !== (t8_value = /*movie*/ ctx[0].title + "")) set_data_dev(t8, t8_value);
+
+    			if (!current || dirty & /*index, $itemHeight, $scrollY*/ 194) {
+    				set_style(div11, "transform", "translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[6] - /*$scrollY*/ ctx[7] % /*$itemHeight*/ ctx[6]) + "px)");
+    			}
+
+    			if (!current || dirty & /*$itemHeight*/ 64) {
+    				set_style(div11, "height", /*$itemHeight*/ ctx[6] + "px");
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(emojilist.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(emojilist.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div12);
+    			if_block0.d();
+    			if_block1.d();
+    			destroy_component(emojilist);
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$4.name,
     		type: "component",
     		source: "",
     		ctx
@@ -1404,17 +2529,24 @@ var app = (function () {
     	return block;
     }
 
-    function instance$3($$self, $$props, $$invalidate) {
+    function instance$4($$self, $$props, $$invalidate) {
+    	let isEnglish;
+    	let languageColour;
+    	let languageFlag;
+    	let languageName;
+    	let fontWeightDate;
     	let $itemHeight;
     	let $scrollY;
     	validate_store(itemHeight, 'itemHeight');
-    	component_subscribe($$self, itemHeight, $$value => $$invalidate(2, $itemHeight = $$value));
+    	component_subscribe($$self, itemHeight, $$value => $$invalidate(6, $itemHeight = $$value));
     	validate_store(scrollY, 'scrollY');
-    	component_subscribe($$self, scrollY, $$value => $$invalidate(3, $scrollY = $$value));
+    	component_subscribe($$self, scrollY, $$value => $$invalidate(7, $scrollY = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('MovieItem', slots, []);
     	let { movie } = $$props;
     	let { index } = $$props;
+    	let { barColor } = $$props;
+    	let { newYear } = $$props;
 
     	function handleBarClick() {
     		selectedMovie.set(movie);
@@ -1428,27 +2560,58 @@ var app = (function () {
     		if (index === undefined && !('index' in $$props || $$self.$$.bound[$$self.$$.props['index']])) {
     			console.warn("<MovieItem> was created without expected prop 'index'");
     		}
+
+    		if (barColor === undefined && !('barColor' in $$props || $$self.$$.bound[$$self.$$.props['barColor']])) {
+    			console.warn("<MovieItem> was created without expected prop 'barColor'");
+    		}
+
+    		if (newYear === undefined && !('newYear' in $$props || $$self.$$.bound[$$self.$$.props['newYear']])) {
+    			console.warn("<MovieItem> was created without expected prop 'newYear'");
+    		}
     	});
 
-    	const writable_props = ['movie', 'index'];
+    	const writable_props = ['movie', 'index', 'barColor', 'newYear'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MovieItem> was created with unknown prop '${key}'`);
     	});
 
+    	const click_handler = () => {
+    		selectedLanguage.set(movie.originalLanguage);
+    	};
+
+    	const click_handler_1 = () => {
+    		selectedLanguage.set(movie.originalLanguage);
+    	};
+
     	$$self.$$set = $$props => {
     		if ('movie' in $$props) $$invalidate(0, movie = $$props.movie);
     		if ('index' in $$props) $$invalidate(1, index = $$props.index);
+    		if ('barColor' in $$props) $$invalidate(2, barColor = $$props.barColor);
+    		if ('newYear' in $$props) $$invalidate(9, newYear = $$props.newYear);
     	};
 
     	$$self.$capture_state = () => ({
     		selectedMovie,
     		scrollY,
     		itemHeight,
+    		selectedGenres,
     		queryCount,
+    		selectedLanguage,
+    		EmojiList,
+    		getLanguageColor,
+    		getLanguageFlag,
+    		getLanguageName,
     		movie,
     		index,
+    		barColor,
+    		newYear,
     		handleBarClick,
+    		fontWeightDate,
+    		languageName,
+    		languageFlag,
+    		languageColour,
+    		isEnglish,
     		$itemHeight,
     		$scrollY
     	});
@@ -1456,25 +2619,73 @@ var app = (function () {
     	$$self.$inject_state = $$props => {
     		if ('movie' in $$props) $$invalidate(0, movie = $$props.movie);
     		if ('index' in $$props) $$invalidate(1, index = $$props.index);
+    		if ('barColor' in $$props) $$invalidate(2, barColor = $$props.barColor);
+    		if ('newYear' in $$props) $$invalidate(9, newYear = $$props.newYear);
+    		if ('fontWeightDate' in $$props) $$invalidate(3, fontWeightDate = $$props.fontWeightDate);
+    		if ('languageName' in $$props) languageName = $$props.languageName;
+    		if ('languageFlag' in $$props) $$invalidate(4, languageFlag = $$props.languageFlag);
+    		if ('languageColour' in $$props) languageColour = $$props.languageColour;
+    		if ('isEnglish' in $$props) $$invalidate(5, isEnglish = $$props.isEnglish);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [movie, index, $itemHeight, $scrollY, handleBarClick];
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*movie*/ 1) {
+    			$$invalidate(5, isEnglish = movie.originalLanguage === "en");
+    		}
+
+    		if ($$self.$$.dirty & /*movie*/ 1) {
+    			languageColour = getLanguageColor(movie.originalLanguage);
+    		}
+
+    		if ($$self.$$.dirty & /*movie*/ 1) {
+    			$$invalidate(4, languageFlag = getLanguageFlag(movie.originalLanguage));
+    		}
+
+    		if ($$self.$$.dirty & /*movie*/ 1) {
+    			languageName = getLanguageName(movie.originalLanguage);
+    		}
+
+    		if ($$self.$$.dirty & /*newYear*/ 512) {
+    			$$invalidate(3, fontWeightDate = `font-weight: ${newYear ? '700' : '400'}`);
+    		}
+    	};
+
+    	return [
+    		movie,
+    		index,
+    		barColor,
+    		fontWeightDate,
+    		languageFlag,
+    		isEnglish,
+    		$itemHeight,
+    		$scrollY,
+    		handleBarClick,
+    		newYear,
+    		click_handler,
+    		click_handler_1
+    	];
     }
 
     class MovieItem extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$3, create_fragment$3, safe_not_equal, { movie: 0, index: 1 });
+
+    		init(this, options, instance$4, create_fragment$4, safe_not_equal, {
+    			movie: 0,
+    			index: 1,
+    			barColor: 2,
+    			newYear: 9
+    		});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "MovieItem",
     			options,
-    			id: create_fragment$3.name
+    			id: create_fragment$4.name
     		});
     	}
 
@@ -1491,6 +2702,22 @@ var app = (function () {
     	}
 
     	set index(value) {
+    		throw new Error("<MovieItem>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get barColor() {
+    		throw new Error("<MovieItem>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set barColor(value) {
+    		throw new Error("<MovieItem>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get newYear() {
+    		throw new Error("<MovieItem>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set newYear(value) {
     		throw new Error("<MovieItem>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -5269,6 +6496,8 @@ var app = (function () {
             return b.popularity - a.popularity;
           })
           .slice(0, 6);
+        
+        this.preloadPosterImage();
       }
 
       getFormattedReleaseDate() {
@@ -5282,6 +6511,14 @@ var app = (function () {
         });
       }
 
+      getReleaseDateString() {
+        return this.releaseDate.toLocaleString('default', {
+            month: 'numeric',
+            year: 'numeric',
+        });
+
+      }
+
       getReleaseYear() {
         return this.releaseDate.getFullYear();
       }
@@ -5293,12 +6530,29 @@ var app = (function () {
       getBackdropUrl() {
         return `https://image.tmdb.org/t/p/w1280${this.backdropPath}`;
       }
-    }
 
-    function generateHourString(time) {
-      let hours = Math.floor(time / 60);
-      let minutes = time % 60;
-      return `${hours}h ${minutes}m`;
+      preloadPosterImage() {
+        const img = new Image();
+        img.src = this.getPosterUrl();
+        img.onload = () => {
+          this.posterImage = img; // Store the loaded image
+          console.log('Poster image loaded successfully');
+        };
+        img.onerror = (error) => {
+          console.error('Error loading poster image', error);
+        };
+      }
+
+
+      generateHourString() {
+        let hours = Math.floor(this.runtime / 60);
+        let minutes = this.runtime % 60;
+        if(hours) {
+          return `${hours}h ${minutes}m`;
+        } else {
+          return `${minutes}m`;
+        }
+      }
     }
 
     function setPopularityIndexAndColor(movies) {
@@ -5312,13 +6566,17 @@ var app = (function () {
 
       movies.forEach((movie, index) => {
         movie.color = getColor(movie.popularityIndex, movies);
+        movie.isNewYear =
+          index == 0 ||
+          new Date(movies[index - 1].releaseDate).getYear() !=
+            new Date(movies[index].releaseDate).getYear();
       });
 
-      return movies
+      return movies;
     }
 
-    function getColor(popularityIndex, movies) {
-      const ratio = popularityIndex / movies.length;
+    function getColor(popularityIndex, numberOfMovies) {
+      const ratio = popularityIndex / numberOfMovies;
 
       // get color between blue and gold
 
@@ -5334,12 +6592,10 @@ var app = (function () {
       return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
     }
 
-    async function queryDatabase(movies, append = "new") {
-
+    async function queryDatabase(movies, append = "new", date = null) {
       if (get_store_value(runningQuery)) {
-        return movies
+        return movies;
       }
-
 
       runningQuery.set(true);
       let url = "http://localhost:3000/movies";
@@ -5351,15 +6607,14 @@ var app = (function () {
         maxReviewCount: get_store_value(maxReviewCount),
         minYear: get_store_value(minYear),
         person: get_store_value(selectedPerson),
-        castOrCrewQuery: get_store_value(castOrCrewQuery),
         type: append,
-        title: get_store_value(selectedTitle)
+        title: get_store_value(selectedTitle),
       };
 
       if (append == "append") {
-        body["date"] = movies[movies.length - 1].releaseDate;
+        body["date"] = date || movies[movies.length - 1].releaseDate;
       } else if (append == "prepend") {
-        body["date"] = movies[0].releaseDate;
+        body["date"] = date || movies[0].releaseDate;
       } else {
         body["date"] = null;
       }
@@ -5397,9 +6652,7 @@ var app = (function () {
       }
 
       const delta = event.deltaY || event.touches[0].clientY - get_store_value(startY);
-      scrollY.update((n) =>
-        Math.max(0, Math.min(get_store_value(containerHeight) - get_store_value(viewportHeight), n + delta))
-      );
+      scrollY.update((n) => Math.max(0, n + delta));
 
       startY.set(event.touches ? event.touches[0].clientY : startY);
 
@@ -5420,23 +6673,61 @@ var app = (function () {
       startY.set(event.touches[0].clientY);
     }
 
-    async function checkAppendPrepend(movies) {
+    async function append(movies) {
+      console.log("appending");
+      let newMovies = await queryDatabase(movies, "append");
+      movies = [...movies, ...newMovies];
+      movies = setPopularityIndexAndColor(movies);
+      containerHeight.set(movies.length * get_store_value(itemHeight));
+      queryCount.update((n) => n + 1);
 
+      return movies;
+    }
+
+    async function prependAfterFailure() {
+      console.log("prepending after failure");
+      let prependDate = get_store_value(currentMinYear);
+      let newMovies = await queryDatabase([], "prepend", prependDate);
+      let movies = [...newMovies];
+      scrollY.update((n) => (newMovies.length - 1) * get_store_value(itemHeight));
+      movies = setPopularityIndexAndColor(movies);
+      containerHeight.set(movies.length * get_store_value(itemHeight));
+      queryCount.update((n) => n + 1);
+
+      return movies;
+    }
+
+    async function prepend(movies) {
+      console.log("prepending");
+      let prependDate = null;
+
+      if (!movies || movies.length == 0) {
+        prependDate = get_store_value(currentMinYear);
+      }
+
+      let newMovies = await queryDatabase(movies, "prepend", prependDate);
+      movies = [...newMovies, ...movies];
+      scrollY.update((n) => newMovies.length * get_store_value(itemHeight));
+      movies = setPopularityIndexAndColor(movies);
+      containerHeight.set(movies.length * get_store_value(itemHeight));
+      queryCount.update((n) => n + 1);
+
+      return movies;
+    }
+
+    async function checkAppendPrepend(movies) {
       if (
         movies.length > 0 &&
         movies.length - get_store_value(firstVisibleIndex) < 20 &&
         !get_store_value(runningQuery)
       ) {
-        console.log('appending');
-        let newMovies = await queryDatabase(movies, "append");
-
-        movies = [...movies, ...newMovies];
-
-        movies = setPopularityIndexAndColor(movies);
-        containerHeight.set(movies.length * get_store_value(itemHeight));
-        queryCount.update((n) => n + 1);
-
-        return movies;
+        if (
+          get_store_value(lastAppendedID) == null ||
+          movies[movies.length - 1].id != get_store_value(lastAppendedID)
+        ) {
+          lastAppendedID.set(movies[movies.length - 1].id);
+          movies = await append(movies);
+        }
       }
 
       if (
@@ -5445,20 +6736,17 @@ var app = (function () {
         !get_store_value(runningQuery) &&
         new Date(movies[0].releaseDate) > new Date("12/31/1902")
       ) {
-        console.log('prepending');
-        let newMovies = await queryDatabase(movies, "prepend");
-        movies = [...newMovies, ...movies];
-        scrollY.update((n) => n + newMovies.length * get_store_value(itemHeight));
-        movies = setPopularityIndexAndColor(movies);
-        containerHeight.set(movies.length * get_store_value(itemHeight));
-        queryCount.update((n) => n + 1);
-
-        return movies;
+        if (
+          get_store_value(lastPrependedID) == null ||
+          movies[0].id != get_store_value(lastPrependedID)
+        ) {
+          lastPrependedID.set(movies[0].id);
+          movies = await prepend(movies);
+        }
       }
 
-      return movies
+      return movies;
     }
-
 
     function getVisibleMovies(movies) {
       const startIndex = Math.floor(get_store_value(scrollY) / get_store_value(itemHeight));
@@ -5469,19 +6757,22 @@ var app = (function () {
       return movies.slice(startIndex, endIndex);
     }
 
-
     async function queryMovies(movies) {
-        movies = await queryDatabase(movies, "new");
-        scrollY.set(0);
-        currentMinYear.set(movies.length > 0 ? movies[0].getReleaseYear().toString() : "");
+      movies = await queryDatabase(movies, "new");
+      scrollY.set(0);
+      if (movies && movies.length !== 0) {
+        currentMinYear.set(
+          movies.length > 0 ? movies[0].getReleaseYear().toString() : ""
+        );
         movies = setPopularityIndexAndColor(movies);
         containerHeight.set(movies.length * get_store_value(itemHeight));
-        queryCount.update((n) => n + 1);
-        return movies
+      }
+      queryCount.update((n) => n + 1);
+      return movies;
     }
 
     /* src-modular/components/MovieList.svelte generated by Svelte v3.59.2 */
-    const file$2 = "src-modular/components/MovieList.svelte";
+    const file$3 = "src-modular/components/MovieList.svelte";
 
     function get_each_context$1(ctx, list, i) {
     	const child_ctx = ctx.slice();
@@ -5490,7 +6781,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (16:2) {:else}
+    // (15:2) {:else}
     function create_else_block(ctx) {
     	let p;
 
@@ -5498,7 +6789,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "Loading...";
-    			add_location(p, file$2, 16, 4, 344);
+    			add_location(p, file$3, 15, 4, 437);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -5515,15 +6806,15 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(16:2) {:else}",
+    		source: "(15:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (12:2) {#if movies.length > 0}
-    function create_if_block$1(ctx) {
+    // (11:2) {#if movies.length > 0}
+    function create_if_block$2(ctx) {
     	let each_1_anchor;
     	let current;
     	let each_value = getVisibleMovies(/*movies*/ ctx[0]);
@@ -5557,7 +6848,7 @@ var app = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*getVisibleMovies, movies*/ 1) {
+    			if (dirty & /*getVisibleMovies, movies, getColor*/ 1) {
     				each_value = getVisibleMovies(/*movies*/ ctx[0]);
     				validate_each_argument(each_value);
     				let i;
@@ -5611,16 +6902,16 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block$1.name,
+    		id: create_if_block$2.name,
     		type: "if",
-    		source: "(12:2) {#if movies.length > 0}",
+    		source: "(11:2) {#if movies.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (13:6) {#each getVisibleMovies(movies) as movie, index}
+    // (12:6) {#each getVisibleMovies(movies) as movie, index}
     function create_each_block$1(ctx) {
     	let movieitem;
     	let current;
@@ -5628,7 +6919,9 @@ var app = (function () {
     	movieitem = new MovieItem({
     			props: {
     				movie: /*movie*/ ctx[1],
-    				index: /*index*/ ctx[3]
+    				index: /*index*/ ctx[3],
+    				barColor: getColor(/*movie*/ ctx[1].popularityIndex, /*movies*/ ctx[0].length),
+    				newYear: /*movie*/ ctx[1].isNewYear
     			},
     			$$inline: true
     		});
@@ -5644,6 +6937,8 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const movieitem_changes = {};
     			if (dirty & /*movies*/ 1) movieitem_changes.movie = /*movie*/ ctx[1];
+    			if (dirty & /*movies*/ 1) movieitem_changes.barColor = getColor(/*movie*/ ctx[1].popularityIndex, /*movies*/ ctx[0].length);
+    			if (dirty & /*movies*/ 1) movieitem_changes.newYear = /*movie*/ ctx[1].isNewYear;
     			movieitem.$set(movieitem_changes);
     		},
     		i: function intro(local) {
@@ -5664,19 +6959,19 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(13:6) {#each getVisibleMovies(movies) as movie, index}",
+    		source: "(12:6) {#each getVisibleMovies(movies) as movie, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    function create_fragment$2(ctx) {
+    function create_fragment$3(ctx) {
     	let div;
     	let current_block_type_index;
     	let if_block;
     	let current;
-    	const if_block_creators = [create_if_block$1, create_else_block];
+    	const if_block_creators = [create_if_block$2, create_else_block];
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
@@ -5692,7 +6987,7 @@ var app = (function () {
     			div = element("div");
     			if_block.c();
     			attr_dev(div, "class", "movie-list svelte-1r9ir4v");
-    			add_location(div, file$2, 10, 0, 172);
+    			add_location(div, file$3, 9, 0, 181);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -5746,7 +7041,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_fragment$2.name,
+    		id: create_fragment$3.name,
     		type: "component",
     		source: "",
     		ctx
@@ -5755,7 +7050,7 @@ var app = (function () {
     	return block;
     }
 
-    function instance$2($$self, $$props, $$invalidate) {
+    function instance$3($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('MovieList', slots, []);
     	let { movies } = $$props;
@@ -5780,6 +7075,7 @@ var app = (function () {
     		MovieItem,
     		queryCount,
     		getVisibleMovies,
+    		getColor,
     		movies
     	});
 
@@ -5797,13 +7093,13 @@ var app = (function () {
     class MovieList extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$2, create_fragment$2, safe_not_equal, { movies: 0 });
+    		init(this, options, instance$3, create_fragment$3, safe_not_equal, { movies: 0 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
     			tagName: "MovieList",
     			options,
-    			id: create_fragment$2.name
+    			id: create_fragment$3.name
     		});
     	}
 
@@ -5813,6 +7109,253 @@ var app = (function () {
 
     	set movies(value) {
     		throw new Error("<MovieList>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+    }
+
+    /* src-modular/components/MovieOnHoverDetails.svelte generated by Svelte v3.59.2 */
+    const file$2 = "src-modular/components/MovieOnHoverDetails.svelte";
+
+    // (6:2) {#if $selectedMovie}
+    function create_if_block$1(ctx) {
+    	let div1;
+    	let img;
+    	let img_src_value;
+    	let img_alt_value;
+    	let t0;
+    	let div0;
+    	let h2;
+    	let t1_value = /*$selectedMovie*/ ctx[0].title + "";
+    	let t1;
+    	let t2;
+    	let p0;
+    	let strong0;
+    	let t4;
+    	let t5_value = /*$selectedMovie*/ ctx[0].voteAverage + "";
+    	let t5;
+    	let t6;
+    	let t7_value = /*$selectedMovie*/ ctx[0].voteCount + "";
+    	let t7;
+    	let t8;
+    	let t9;
+    	let p1;
+    	let strong1;
+    	let t11;
+    	let t12_value = /*$selectedMovie*/ ctx[0].popularity + "";
+    	let t12;
+    	let t13;
+    	let p2;
+    	let strong2;
+    	let t15;
+    	let t16_value = /*$selectedMovie*/ ctx[0].generateHourString() + "";
+    	let t16;
+    	let t17;
+    	let p3;
+    	let strong3;
+    	let t19;
+    	let t20_value = /*$selectedMovie*/ ctx[0].overview + "";
+    	let t20;
+
+    	const block = {
+    		c: function create() {
+    			div1 = element("div");
+    			img = element("img");
+    			t0 = space();
+    			div0 = element("div");
+    			h2 = element("h2");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			p0 = element("p");
+    			strong0 = element("strong");
+    			strong0.textContent = "Rating:";
+    			t4 = space();
+    			t5 = text(t5_value);
+    			t6 = text(" (");
+    			t7 = text(t7_value);
+    			t8 = text(")");
+    			t9 = space();
+    			p1 = element("p");
+    			strong1 = element("strong");
+    			strong1.textContent = "Popularity:";
+    			t11 = space();
+    			t12 = text(t12_value);
+    			t13 = space();
+    			p2 = element("p");
+    			strong2 = element("strong");
+    			strong2.textContent = "Runtime:";
+    			t15 = space();
+    			t16 = text(t16_value);
+    			t17 = space();
+    			p3 = element("p");
+    			strong3 = element("strong");
+    			strong3.textContent = "Description:";
+    			t19 = space();
+    			t20 = text(t20_value);
+
+    			if (!src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].posterImage
+    			? /*$selectedMovie*/ ctx[0].posterImage.src
+    			: /*$selectedMovie*/ ctx[0].getPosterUrl())) attr_dev(img, "src", img_src_value);
+
+    			attr_dev(img, "alt", img_alt_value = /*$selectedMovie*/ ctx[0].title);
+    			attr_dev(img, "class", "svelte-18l4o9f");
+    			add_location(img, file$2, 7, 6, 157);
+    			attr_dev(h2, "class", "svelte-18l4o9f");
+    			add_location(h2, file$2, 12, 8, 351);
+    			add_location(strong0, file$2, 14, 10, 405);
+    			add_location(p0, file$2, 13, 8, 391);
+    			add_location(strong1, file$2, 17, 10, 523);
+    			add_location(p1, file$2, 16, 8, 509);
+    			add_location(strong2, file$2, 20, 10, 615);
+    			add_location(p2, file$2, 19, 8, 601);
+    			add_location(strong3, file$2, 23, 10, 714);
+    			add_location(p3, file$2, 22, 8, 700);
+    			attr_dev(div0, "class", "movie-info svelte-18l4o9f");
+    			add_location(div0, file$2, 11, 6, 318);
+    			attr_dev(div1, "class", "movie-item svelte-18l4o9f");
+    			add_location(div1, file$2, 6, 4, 126);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, img);
+    			append_dev(div1, t0);
+    			append_dev(div1, div0);
+    			append_dev(div0, h2);
+    			append_dev(h2, t1);
+    			append_dev(div0, t2);
+    			append_dev(div0, p0);
+    			append_dev(p0, strong0);
+    			append_dev(p0, t4);
+    			append_dev(p0, t5);
+    			append_dev(p0, t6);
+    			append_dev(p0, t7);
+    			append_dev(p0, t8);
+    			append_dev(div0, t9);
+    			append_dev(div0, p1);
+    			append_dev(p1, strong1);
+    			append_dev(p1, t11);
+    			append_dev(p1, t12);
+    			append_dev(div0, t13);
+    			append_dev(div0, p2);
+    			append_dev(p2, strong2);
+    			append_dev(p2, t15);
+    			append_dev(p2, t16);
+    			append_dev(div0, t17);
+    			append_dev(div0, p3);
+    			append_dev(p3, strong3);
+    			append_dev(p3, t19);
+    			append_dev(p3, t20);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].posterImage
+    			? /*$selectedMovie*/ ctx[0].posterImage.src
+    			: /*$selectedMovie*/ ctx[0].getPosterUrl())) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+
+    			if (dirty & /*$selectedMovie*/ 1 && img_alt_value !== (img_alt_value = /*$selectedMovie*/ ctx[0].title)) {
+    				attr_dev(img, "alt", img_alt_value);
+    			}
+
+    			if (dirty & /*$selectedMovie*/ 1 && t1_value !== (t1_value = /*$selectedMovie*/ ctx[0].title + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t5_value !== (t5_value = /*$selectedMovie*/ ctx[0].voteAverage + "")) set_data_dev(t5, t5_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t7_value !== (t7_value = /*$selectedMovie*/ ctx[0].voteCount + "")) set_data_dev(t7, t7_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t12_value !== (t12_value = /*$selectedMovie*/ ctx[0].popularity + "")) set_data_dev(t12, t12_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t16_value !== (t16_value = /*$selectedMovie*/ ctx[0].generateHourString() + "")) set_data_dev(t16, t16_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t20_value !== (t20_value = /*$selectedMovie*/ ctx[0].overview + "")) set_data_dev(t20, t20_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div1);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$1.name,
+    		type: "if",
+    		source: "(6:2) {#if $selectedMovie}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$2(ctx) {
+    	let div;
+    	let if_block = /*$selectedMovie*/ ctx[0] && create_if_block$1(ctx);
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			if (if_block) if_block.c();
+    			attr_dev(div, "class", "movie-horizontal svelte-18l4o9f");
+    			add_location(div, file$2, 4, 0, 68);
+    		},
+    		l: function claim(nodes) {
+    			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			if (if_block) if_block.m(div, null);
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (/*$selectedMovie*/ ctx[0]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block$1(ctx);
+    					if_block.c();
+    					if_block.m(div, null);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+    		},
+    		i: noop$1,
+    		o: noop$1,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			if (if_block) if_block.d();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$2.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$2($$self, $$props, $$invalidate) {
+    	let $selectedMovie;
+    	validate_store(selectedMovie, 'selectedMovie');
+    	component_subscribe($$self, selectedMovie, $$value => $$invalidate(0, $selectedMovie = $$value));
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots('MovieOnHoverDetails', slots, []);
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<MovieOnHoverDetails> was created with unknown prop '${key}'`);
+    	});
+
+    	$$self.$capture_state = () => ({ selectedMovie, $selectedMovie });
+    	return [$selectedMovie];
+    }
+
+    class MovieOnHoverDetails extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$2, create_fragment$2, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "MovieOnHoverDetails",
+    			options,
+    			id: create_fragment$2.name
+    		});
     	}
     }
 
@@ -5880,7 +7423,7 @@ var app = (function () {
     	let t24;
     	let p6;
     	let strong6;
-    	let t26_value = ` ${generateHourString(/*$selectedMovie*/ ctx[0].runtime)}` + "";
+    	let t26_value = ` ${/*$selectedMovie*/ ctx[0].generateHourString()}` + "";
     	let t26;
     	let t27;
     	let p7;
@@ -5982,37 +7525,40 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			if (!src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].getPosterUrl())) attr_dev(img, "src", img_src_value);
+    			if (!src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].posterImage
+    			? /*$selectedMovie*/ ctx[0].posterImage.src
+    			: /*$selectedMovie*/ ctx[0].getPosterUrl())) attr_dev(img, "src", img_src_value);
+
     			attr_dev(img, "alt", img_alt_value = /*$selectedMovie*/ ctx[0].title);
-    			attr_dev(img, "class", "svelte-p1vtof");
-    			add_location(img, file$1, 20, 10, 591);
-    			attr_dev(h2, "class", "link svelte-p1vtof");
-    			add_location(h2, file$1, 21, 10, 672);
-    			add_location(strong0, file$1, 44, 12, 1335);
-    			add_location(p0, file$1, 43, 10, 1319);
-    			attr_dev(div0, "class", "top-detail-poster svelte-p1vtof");
-    			add_location(div0, file$1, 19, 8, 549);
-    			add_location(strong1, file$1, 54, 12, 1690);
-    			add_location(p1, file$1, 53, 10, 1674);
-    			add_location(strong2, file$1, 58, 12, 1802);
-    			add_location(p2, file$1, 57, 10, 1786);
-    			add_location(strong3, file$1, 62, 12, 1919);
-    			add_location(p3, file$1, 61, 10, 1903);
-    			add_location(strong4, file$1, 66, 12, 2046);
-    			add_location(p4, file$1, 65, 10, 2030);
-    			add_location(strong5, file$1, 70, 12, 2189);
-    			add_location(p5, file$1, 69, 10, 2173);
-    			add_location(strong6, file$1, 73, 12, 2292);
-    			add_location(p6, file$1, 72, 10, 2276);
-    			add_location(strong7, file$1, 76, 13, 2409);
-    			add_location(p7, file$1, 76, 10, 2406);
-    			add_location(strong8, file$1, 78, 12, 2495);
-    			add_location(p8, file$1, 77, 10, 2479);
-    			attr_dev(div1, "class", "top-detail-text svelte-p1vtof");
-    			add_location(div1, file$1, 52, 8, 1634);
-    			attr_dev(div2, "class", "top-detail svelte-p1vtof");
-    			add_location(div2, file$1, 18, 6, 516);
-    			add_location(div3, file$1, 17, 4, 504);
+    			attr_dev(img, "class", "svelte-gii73m");
+    			add_location(img, file$1, 20, 8, 585);
+    			attr_dev(h2, "class", "link svelte-gii73m");
+    			add_location(h2, file$1, 24, 10, 765);
+    			add_location(strong0, file$1, 47, 12, 1428);
+    			add_location(p0, file$1, 46, 10, 1412);
+    			attr_dev(div0, "class", "top-detail-poster svelte-gii73m");
+    			add_location(div0, file$1, 19, 8, 545);
+    			add_location(strong1, file$1, 57, 12, 1783);
+    			add_location(p1, file$1, 56, 10, 1767);
+    			add_location(strong2, file$1, 61, 12, 1895);
+    			add_location(p2, file$1, 60, 10, 1879);
+    			add_location(strong3, file$1, 65, 12, 2012);
+    			add_location(p3, file$1, 64, 10, 1996);
+    			add_location(strong4, file$1, 69, 12, 2139);
+    			add_location(p4, file$1, 68, 10, 2123);
+    			add_location(strong5, file$1, 73, 12, 2282);
+    			add_location(p5, file$1, 72, 10, 2266);
+    			add_location(strong6, file$1, 76, 12, 2385);
+    			add_location(p6, file$1, 75, 10, 2369);
+    			add_location(strong7, file$1, 79, 13, 2495);
+    			add_location(p7, file$1, 79, 10, 2492);
+    			add_location(strong8, file$1, 81, 12, 2581);
+    			add_location(p8, file$1, 80, 10, 2565);
+    			attr_dev(div1, "class", "top-detail-text svelte-gii73m");
+    			add_location(div1, file$1, 55, 8, 1727);
+    			attr_dev(div2, "class", "top-detail svelte-gii73m");
+    			add_location(div2, file$1, 18, 6, 512);
+    			add_location(div3, file$1, 17, 4, 500);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div3, anchor);
@@ -6085,7 +7631,9 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].getPosterUrl())) {
+    			if (dirty & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].posterImage
+    			? /*$selectedMovie*/ ctx[0].posterImage.src
+    			: /*$selectedMovie*/ ctx[0].getPosterUrl())) {
     				attr_dev(img, "src", img_src_value);
     			}
 
@@ -6137,7 +7685,7 @@ var app = (function () {
     			if (dirty & /*$selectedMovie*/ 1 && t17_value !== (t17_value = /*$selectedMovie*/ ctx[0].getFormattedReleaseDate() + "")) set_data_dev(t17, t17_value);
     			if (dirty & /*$selectedMovie*/ 1 && t20_value !== (t20_value = ` ${/*$selectedMovie*/ ctx[0].voteAverage} (${/*$selectedMovie*/ ctx[0].voteCount})` + "")) set_data_dev(t20, t20_value);
     			if (dirty & /*$selectedMovie*/ 1 && t23_value !== (t23_value = ` ${/*$selectedMovie*/ ctx[0].popularity}` + "")) set_data_dev(t23, t23_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t26_value !== (t26_value = ` ${generateHourString(/*$selectedMovie*/ ctx[0].runtime)}` + "")) set_data_dev(t26, t26_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t26_value !== (t26_value = ` ${/*$selectedMovie*/ ctx[0].generateHourString()}` + "")) set_data_dev(t26, t26_value);
     			if (dirty & /*$selectedMovie*/ 1 && t30_value !== (t30_value = /*$selectedMovie*/ ctx[0].overview + "")) set_data_dev(t30, t30_value);
 
     			if (dirty & /*selectedPerson, personToPersonQuery, $selectedMovie*/ 1) {
@@ -6185,7 +7733,7 @@ var app = (function () {
     	return block;
     }
 
-    // (32:10) {#if $selectedMovie.originalLanguage !== "en"}
+    // (35:10) {#if $selectedMovie.originalLanguage !== "en"}
     function create_if_block_1(ctx) {
     	let h4;
     	let t_value = /*$selectedMovie*/ ctx[0].originalTitle + "";
@@ -6197,8 +7745,8 @@ var app = (function () {
     		c: function create() {
     			h4 = element("h4");
     			t = text(t_value);
-    			attr_dev(h4, "class", "link svelte-p1vtof");
-    			add_location(h4, file$1, 32, 12, 1000);
+    			attr_dev(h4, "class", "link svelte-gii73m");
+    			add_location(h4, file$1, 35, 12, 1093);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h4, anchor);
@@ -6223,14 +7771,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(32:10) {#if $selectedMovie.originalLanguage !== \\\"en\\\"}",
+    		source: "(35:10) {#if $selectedMovie.originalLanguage !== \\\"en\\\"}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (46:12) {#each $selectedMovie.topNcast as cast}
+    // (49:12) {#each $selectedMovie.topNcast as cast}
     function create_each_block_1(ctx) {
     	let p;
     	let t0_value = /*cast*/ ctx[8].name + "";
@@ -6253,8 +7801,8 @@ var app = (function () {
     			t1 = text(" as ");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr_dev(p, "class", "blue-text svelte-p1vtof");
-    			add_location(p, file$1, 46, 14, 1424);
+    			attr_dev(p, "class", "blue-text svelte-gii73m");
+    			add_location(p, file$1, 49, 14, 1517);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -6284,14 +7832,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(46:12) {#each $selectedMovie.topNcast as cast}",
+    		source: "(49:12) {#each $selectedMovie.topNcast as cast}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (80:12) {#each $selectedMovie.topNcrew as crew}
+    // (83:12) {#each $selectedMovie.topNcrew as crew}
     function create_each_block(ctx) {
     	let p;
     	let t0_value = /*crew*/ ctx[5].name + "";
@@ -6314,8 +7862,8 @@ var app = (function () {
     			t1 = text(": ");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr_dev(p, "class", "blue-text svelte-p1vtof");
-    			add_location(p, file$1, 80, 14, 2584);
+    			attr_dev(p, "class", "blue-text svelte-gii73m");
+    			add_location(p, file$1, 83, 14, 2670);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -6345,7 +7893,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(80:12) {#each $selectedMovie.topNcrew as crew}",
+    		source: "(83:12) {#each $selectedMovie.topNcrew as crew}",
     		ctx
     	});
 
@@ -6354,14 +7902,20 @@ var app = (function () {
 
     function create_fragment$1(ctx) {
     	let div;
+    	let t;
+    	let movieonhoverdetails;
+    	let current;
     	let if_block = /*$selectedMovie*/ ctx[0] && create_if_block(ctx);
+    	movieonhoverdetails = new MovieOnHoverDetails({ $$inline: true });
 
     	const block = {
     		c: function create() {
     			div = element("div");
     			if (if_block) if_block.c();
-    			attr_dev(div, "class", "movie-details svelte-p1vtof");
-    			add_location(div, file$1, 15, 0, 449);
+    			t = space();
+    			create_component(movieonhoverdetails.$$.fragment);
+    			attr_dev(div, "class", "movie-details svelte-gii73m");
+    			add_location(div, file$1, 15, 0, 445);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -6369,6 +7923,9 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
     			if (if_block) if_block.m(div, null);
+    			append_dev(div, t);
+    			mount_component(movieonhoverdetails, div, null);
+    			current = true;
     		},
     		p: function update(ctx, [dirty]) {
     			if (/*$selectedMovie*/ ctx[0]) {
@@ -6377,18 +7934,26 @@ var app = (function () {
     				} else {
     					if_block = create_if_block(ctx);
     					if_block.c();
-    					if_block.m(div, null);
+    					if_block.m(div, t);
     				}
     			} else if (if_block) {
     				if_block.d(1);
     				if_block = null;
     			}
     		},
-    		i: noop$1,
-    		o: noop$1,
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(movieonhoverdetails.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(movieonhoverdetails.$$.fragment, local);
+    			current = false;
+    		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
     			if (if_block) if_block.d();
+    			destroy_component(movieonhoverdetails);
     		}
     	};
 
@@ -6433,10 +7998,9 @@ var app = (function () {
     	const click_handler_3 = crew => selectedPerson.set(personToPersonQuery(crew));
 
     	$$self.$capture_state = () => ({
-    		castOrCrewQuery,
     		selectedMovie,
     		selectedPerson,
-    		generateHourString,
+    		MovieOnHoverDetails,
     		openYoutubeSearchUrl,
     		personToPersonQuery,
     		$selectedMovie
@@ -6510,19 +8074,19 @@ var app = (function () {
     			t1 = space();
     			div2 = element("div");
     			create_component(moviedetails.$$.fragment);
-    			attr_dev(div0, "class", "header-container svelte-jgqfoe");
-    			add_location(div0, file, 47, 6, 1845);
-    			attr_dev(div1, "class", "movie-list-container svelte-jgqfoe");
-    			add_location(div1, file, 51, 8, 1941);
-    			attr_dev(div2, "class", "movie-details-container svelte-jgqfoe");
-    			add_location(div2, file, 54, 8, 2062);
-    			attr_dev(div3, "class", "body svelte-jgqfoe");
-    			add_location(div3, file, 50, 6, 1914);
-    			attr_dev(div4, "class", "header-body svelte-jgqfoe");
-    			add_location(div4, file, 46, 4, 1813);
+    			attr_dev(div0, "class", "header-container svelte-ka74mw");
+    			add_location(div0, file, 49, 6, 1970);
+    			attr_dev(div1, "class", "movie-list-container svelte-ka74mw");
+    			add_location(div1, file, 53, 8, 2066);
+    			attr_dev(div2, "class", "movie-details-container svelte-ka74mw");
+    			add_location(div2, file, 56, 8, 2187);
+    			attr_dev(div3, "class", "body svelte-ka74mw");
+    			add_location(div3, file, 52, 6, 2039);
+    			attr_dev(div4, "class", "header-body svelte-ka74mw");
+    			add_location(div4, file, 48, 4, 1938);
     			attr_dev(div5, "class", "parent-div");
-    			add_location(div5, file, 45, 2, 1784);
-    			add_location(main, file, 44, 0, 1775);
+    			add_location(div5, file, 47, 2, 1909);
+    			add_location(main, file, 46, 0, 1900);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -6587,7 +8151,6 @@ var app = (function () {
     	let $maxReviewCount;
     	let $minReviewCount;
     	let $minYear;
-    	let $castOrCrewQuery;
     	validate_store(selectedTitle, 'selectedTitle');
     	component_subscribe($$self, selectedTitle, $$value => $$invalidate(1, $selectedTitle = $$value));
     	validate_store(selectedGenres, 'selectedGenres');
@@ -6602,14 +8165,17 @@ var app = (function () {
     	component_subscribe($$self, minReviewCount, $$value => $$invalidate(6, $minReviewCount = $$value));
     	validate_store(minYear, 'minYear');
     	component_subscribe($$self, minYear, $$value => $$invalidate(7, $minYear = $$value));
-    	validate_store(castOrCrewQuery, 'castOrCrewQuery');
-    	component_subscribe($$self, castOrCrewQuery, $$value => $$invalidate(8, $castOrCrewQuery = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
     	let movies = [];
 
     	async function updateMovies() {
     		$$invalidate(0, movies = await queryMovies(movies));
+
+    		if (!movies || movies.length == 0) {
+    			$$invalidate(0, movies = await prependAfterFailure());
+    		}
+
     		await tick(); // Wait for the DOM to update
     	}
 
@@ -6649,15 +8215,17 @@ var app = (function () {
     		Header,
     		MovieList,
     		MovieDetails,
+    		checkAppendPrepend,
     		handleScroll,
     		handleTouchStart,
+    		prepend,
+    		prependAfterFailure,
     		queryMovies,
     		queryCount,
     		scrollY,
     		selectedMovie,
     		itemHeight,
     		viewportHeight,
-    		castOrCrewQuery,
     		minReviewCount,
     		maxReviewCount,
     		selectedPerson,
@@ -6665,6 +8233,7 @@ var app = (function () {
     		selectedLanguage,
     		selectedGenres,
     		selectedTitle,
+    		currentMinYear,
     		movies,
     		updateMovies,
     		$selectedTitle,
@@ -6673,8 +8242,7 @@ var app = (function () {
     		$selectedPerson,
     		$maxReviewCount,
     		$minReviewCount,
-    		$minYear,
-    		$castOrCrewQuery
+    		$minYear
     	});
 
     	$$self.$inject_state = $$props => {
@@ -6686,7 +8254,7 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$castOrCrewQuery, $minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage, $selectedGenres, $selectedTitle*/ 510) {
+    		if ($$self.$$.dirty & /*$minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage, $selectedGenres, $selectedTitle*/ 254) {
     			// Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
     			updateMovies();
     		}
@@ -6700,8 +8268,7 @@ var app = (function () {
     		$selectedPerson,
     		$maxReviewCount,
     		$minReviewCount,
-    		$minYear,
-    		$castOrCrewQuery
+    		$minYear
     	];
     }
 

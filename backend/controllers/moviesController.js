@@ -67,9 +67,9 @@ const buildCreditsFilter = (filter, params) => {
   if (params.person.id) {
     if (params.person.castOrCrew == "cast") {
       filter["credits.cast.id"] = Number(params.person.id);
-    } else if (params.castOrCrewQuery == "cast") {
+    } else if (params.person.castOrCrew == "crew") {
       filter["credits.crew.id"] = Number(params.person.id);
-    } else if (params.person.castOrCrewQuery == null) {
+    } else if (params.person.castOrCrew == null) {
       filter.$or = [
         { "credits.cast.id": Number(params.person.id) },
         { "credits.crew.id": Number(params.person.id) },
@@ -78,7 +78,7 @@ const buildCreditsFilter = (filter, params) => {
   } else if (params.person.name) {
     if (params.person.castOrCrew == "cast") {
       filter["credits.cast.name"] = { $regex: params.person.name, $options: "i" };
-    } else if (params.castOrCrewQuery == "cast") {
+    } else if (params.castOrCrewQuery == "crew") {
       filter["credits.crew.name"] = { $regex: params.person.name, $options: "i" };
     } else if (params.person.castOrCrewQuery == null) {
       filter.$or = [

@@ -14,6 +14,8 @@
     selectedTitle,
   } from "../stores.js";
 
+  import {LANGUAGEINFO} from "../constants.js"
+
   import GenreMenu from "./GenreMenu.svelte";
 </script>
 
@@ -75,12 +77,9 @@
     <div class="language-input">
       <label for="language">Language:</label>
       <select bind:value={$selectedLanguage}>
-        <option value="en">English</option>
-        <option value="fr">French</option>
-        <option value="es">Spanish</option>
-        <option value="de">German</option>
-        <option value="ja">Japanese</option>
-        <option value="it">Italian</option>
+        {#each Object.keys(LANGUAGEINFO) as languageCode}
+          <option value={languageCode}>{LANGUAGEINFO[languageCode].name}</option>
+        {/each}
         <option value="all">All</option>
       </select>
     </div>

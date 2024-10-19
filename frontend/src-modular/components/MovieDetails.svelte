@@ -1,6 +1,6 @@
 <script>
-  import { castOrCrewQuery, selectedMovie, selectedPerson } from "../stores.js";
-  import { generateHourString } from "../utils.js";
+  import {selectedMovie, selectedPerson } from "../stores.js";
+  import MovieOnHoverDetails from "./MovieOnHoverDetails.svelte";
 
   function openYoutubeSearchUrl(title, year) {
     window.open(
@@ -18,7 +18,10 @@
     <div>
       <div class="top-detail">
         <div class="top-detail-poster">
-          <img src={$selectedMovie.getPosterUrl()} alt={$selectedMovie.title} />
+        <img 
+            src={$selectedMovie.posterImage ? $selectedMovie.posterImage.src : $selectedMovie.getPosterUrl()} 
+            alt={$selectedMovie.title} 
+          />
           <h2
             class="link"
             on:click={() =>
@@ -72,7 +75,7 @@
           </p>
           <p>
             <strong>Runtime:</strong
-            >{` ${generateHourString($selectedMovie.runtime)}`}
+            >{` ${$selectedMovie.generateHourString()}`}
           </p>
           <p><strong>Description:</strong> {$selectedMovie.overview}</p>
           <p>
@@ -87,24 +90,25 @@
       </div>
     </div>
   {/if}
+<MovieOnHoverDetails></MovieOnHoverDetails>
 </div>
 
 <style>
   .movie-details {
     background: #f4f4f4;
-    border: 1px solid #ddd;
+    border: 0.1rem solid #ddd;
     overflow-y: auto; /* Allow scrolling for movie details */
     height: 99vh;
   }
 
   img {
     max-width: 100%;
-    border: 2px solid #333;
-    border-radius: 5px;
+    border: 0.2rem solid #333;
+    border-radius: 0.2rem;
   }
 
   .movie-details h2 {
-    margin-top: 10px;
+    margin-top: 1rem;
   }
   .link {
     cursor: pointer;
@@ -118,7 +122,7 @@
 
   .top-detail {
     display: flex;
-    gap: 20px; /* Adjust the gap between the poster and text as needed */
+    gap: 1.5rem; /* Adjust the gap between the poster and text as needed */
   }
 
   .top-detail-poster {

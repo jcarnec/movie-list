@@ -1,28 +1,38 @@
 <script>
-    import {selectedGenres} from '../stores'
-    
-    const genreEmojiDict = {
-        Documentary: "📚",
-        Adventure: "🧗",
-        "Science Fiction": "👽",
-        Comedy: "😂",
-        Fantasy: "🧙",
-        Horror: "👻",
-        Drama: "🎭",
-        History: "🏰",
-        War: "⚔️",
-        Romance: "❤️",
-        Thriller: "😱",
-        Crime: "🔪",
-        Action: "💥",
-        Mystery: "🕵️‍♂️",
-        Music: "🎵",
-        Family: "👨‍👩‍👧‍👦",
-        Animation: "🎨",
-        Western: "🤠",
-        "TV Movie": "📺",
-    };
+  import { selectedGenres } from '../stores';
+  import { onDestroy } from 'svelte';
 
+  const genreEmojiDict = {
+    Documentary: "📚",
+    Adventure: "🧗",
+    "Science Fiction": "👽",
+    Comedy: "😂",
+    Fantasy: "🧙",
+    Horror: "👻",
+    Drama: "🎭",
+    History: "🏰",
+    War: "⚔️",
+    Romance: "❤️",
+    Thriller: "😱",
+    Crime: "🔪",
+    Action: "💥",
+    Mystery: "🕵️‍♂️",
+    Music: "🎵",
+    Family: "👨‍👩‍👧‍👦",
+    Animation: "🎨",
+    Western: "🤠",
+    "TV Movie": "📺",
+  };
+
+  let genres = [];
+
+  const unsubscribe = selectedGenres.subscribe(value => {
+    genres = value;
+  });
+
+  onDestroy(() => {
+    unsubscribe();
+  });
 </script>
 
 <div class="genre-menu">
@@ -36,6 +46,7 @@
             id={genre}
             name={genre}
             value={genre}
+            checked={genres.includes(genre)}
             on:change={(e) => {
               if (e.target.checked) {
                 selectedGenres.update((genres) => [...genres, genre]);

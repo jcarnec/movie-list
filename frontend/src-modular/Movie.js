@@ -53,6 +53,8 @@ export default class Movie {
         return b.popularity - a.popularity;
       })
       .slice(0, 6);
+    
+    this.preloadPosterImage()
   }
 
   getFormattedReleaseDate() {
@@ -66,6 +68,14 @@ export default class Movie {
     });
   }
 
+  getReleaseDateString() {
+    return this.releaseDate.toLocaleString('default', {
+        month: 'numeric',
+        year: 'numeric',
+    });
+
+  }
+
   getReleaseYear() {
     return this.releaseDate.getFullYear();
   }
@@ -76,5 +86,28 @@ export default class Movie {
 
   getBackdropUrl() {
     return `https://image.tmdb.org/t/p/w1280${this.backdropPath}`;
+  }
+
+  preloadPosterImage() {
+    const img = new Image();
+    img.src = this.getPosterUrl();
+    img.onload = () => {
+      this.posterImage = img; // Store the loaded image
+      console.log('Poster image loaded successfully');
+    };
+    img.onerror = (error) => {
+      console.error('Error loading poster image', error);
+    };
+  }
+
+
+  generateHourString() {
+    let hours = Math.floor(this.runtime / 60);
+    let minutes = this.runtime % 60;
+    if(hours) {
+      return `${hours}h ${minutes}m`;
+    } else {
+      return `${minutes}m`;
+    }
   }
 }

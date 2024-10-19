@@ -7,7 +7,7 @@ export const viewportHeight = writable(1500);
 export const startY = writable(0);
 export const queryCount = writable(0);
 export const runningQuery = writable(false);
-export const itemHeight = writable(100);
+export const itemHeight = writable(85);
 export const firstVisibleIndex = derived(
   [scrollY, itemHeight],
   ([$scrollY, $itemHeight]) => {
@@ -15,19 +15,23 @@ export const firstVisibleIndex = derived(
   }
 );
 
-export const selectedPerson = writable({ name: null, id: null, castOrCrew: null});
+export const selectedPerson = writable({ name: '', id: null, castOrCrew: null});
 export const selectedLanguage = writable('all');
 export const selectedGenres = writable([]);
-export const minYear = writable('1970');
+export const minYear = writable('2014');
 export const minReviewCount = writable(10);
 export const maxReviewCount = writable(null);
 export const selectedTitle = writable('');
+
+export const lastAppendedID = writable(null)
+export const lastPrependedID = writable(null)
 
 export const currentSelectedPerson = writable(get(selectedPerson));
 export const currentMinYear = writable(get(minYear));
 export const currentMinReviewCount = writable(get(minReviewCount));
 export const currentMaxReviewCount = writable(get(maxReviewCount));
 export const currentSelectedTitle = writable(get(selectedTitle));
+
 
 selectedPerson.subscribe(value => currentSelectedPerson.set(value))
 minYear.subscribe(value => currentMinYear.set(value));

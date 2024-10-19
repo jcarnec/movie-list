@@ -1,9 +1,8 @@
 <script>
   import MovieItem from './MovieItem.svelte';
   import {queryCount} from '../stores'
-  import {getVisibleMovies} from '../utils'
+  import {getVisibleMovies, getColor} from '../utils'
   export let movies
-
 
 
 </script>
@@ -11,7 +10,7 @@
 <div class="movie-list">
   {#if movies.length > 0}
       {#each getVisibleMovies(movies) as movie, index}
-        <MovieItem {movie} {index} />
+        <MovieItem {movie} {index} barColor={getColor(movie.popularityIndex, movies.length)} newYear={movie.isNewYear} />
       {/each}
   {:else}
     <p>Loading...</p>

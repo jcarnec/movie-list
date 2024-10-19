@@ -4,18 +4,20 @@
   import Header from "./components/Header.svelte";
   import MovieList from "./components/MovieList.svelte";
   import MovieDetails from "./components/MovieDetails.svelte";
-  import { handleScroll, handleTouchStart, queryMovies } from "./utils";
-  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, castOrCrewQuery, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguage, selectedGenres, selectedTitle } from "./stores.js";
+  import { checkAppendPrepend, handleScroll, handleTouchStart, prepend, prependAfterFailure, queryMovies } from "./utils";
+  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguage, selectedGenres, selectedTitle, currentMinYear } from "./stores.js";
 
   let movies = [];
 
 // Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
-  $: updateMovies($castOrCrewQuery, $minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage, $selectedGenres, $selectedTitle);
+  $: updateMovies($minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage, $selectedGenres, $selectedTitle);
 
   async function updateMovies() {
     movies = await queryMovies(movies);
+    if(!movies || movies.length == 0) {
+      movies = await prependAfterFailure(movies)
+    }
     await tick(); // Wait for the DOM to update
-
   }
 
   onMount(async () => {
@@ -61,6 +63,10 @@
 </main>
 
 <style>
+  :global(body) {
+      font-size: 90%;
+  } 
+
   .header-container {
     flex: 1;
   }
@@ -78,8 +84,8 @@
   }
 
   .movie-list-container {
-    flex: 1;
-    padding: 5px;
+    flex: 3;
+    padding: 0.3rem;
   }
 
   .movie-details-container {
