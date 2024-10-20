@@ -24,6 +24,12 @@
   import { LANGUAGEINFO } from "../constants.js";
 
   import GenreMenu from "./GenreMenu.svelte";
+
+  function handleKeydown(event) {
+    if (event.key === "Enter") {
+      event.target.blur();
+    }
+  }
 </script>
 
 <div class="sidebar bg-light p-3">
@@ -41,6 +47,7 @@
             on:blur={(e) => {
               selectedTitle.set(e.target.value);
             }}
+            on:keydown={handleKeydown}
             placeholder="Title"
           />
           <label for="title-input">Title</label>
@@ -88,6 +95,7 @@
             minYear.set(e.target.value);
           }}
           placeholder="Year"
+          on:keydown={handleKeydown}
         />
         <label for="year-input">Year</label>
       </div>
@@ -108,6 +116,7 @@
               }
             }}
             placeholder="Min Reviews"
+            on:keydown={handleKeydown}
           />
           <label for="min-review-input">Min Reviews</label>
         </div>
@@ -158,6 +167,7 @@
               }
             }}
             placeholder="Max Reviews"
+            on:keydown={handleKeydown}
           />
           <label for="max-review-input">Max Reviews</label>
         </div>
@@ -214,7 +224,9 @@
               console.log($selectedPerson)
             }}
             placeholder="Person"
+            on:keydown={handleKeydown}
           />
+
           <label for="person-input">Person</label>
         </div>
         {#if $selectedPerson.name != ''}

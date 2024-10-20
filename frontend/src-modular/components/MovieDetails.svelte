@@ -1,6 +1,36 @@
 <script>
-  import { allowQueryMutex, minYear, selectedMovie, selectedPerson, DEFAULT_LANGUAGE, DEFAULT_MAX_REVIEWS, DEFAULT_MIN_REVIEWS, DEFAULT_PERSON, DEFAULT_SELECTED_GENRES, DEFAULT_TITLE, DEFAULT_YEAR, selectedTitle, minReviewCount, maxReviewCount, selectedGenres, selectedLanguage } from "../stores.js";
+  import {
+    allowQueryMutex,
+    minYear,
+    selectedMovie,
+    selectedPerson,
+    DEFAULT_LANGUAGE,
+    DEFAULT_MAX_REVIEWS,
+    DEFAULT_MIN_REVIEWS,
+    DEFAULT_PERSON,
+    DEFAULT_SELECTED_GENRES,
+    DEFAULT_TITLE,
+    DEFAULT_YEAR,
+    selectedTitle,
+    minReviewCount,
+    maxReviewCount,
+    selectedGenres,
+    selectedLanguage,
+  } from "../stores.js";
   import MovieOnHoverDetails from "./MovieOnHoverDetails.svelte";
+  import { onMount } from "svelte";
+
+  let showModal = false;
+  let fullImageUrl = "";
+
+  function openImageModal(imageUrl) {
+    fullImageUrl = imageUrl;
+    showModal = true;
+  }
+
+  function closeModal() {
+    showModal = false;
+  }
 
   function openYoutubeSearchUrl(title, year) {
     window.open(
@@ -10,13 +40,13 @@
 
   function personSelected(personQuery) {
     allowQueryMutex.set(false);
-    selectedPerson.set(personQuery)
-    minReviewCount.set(DEFAULT_MIN_REVIEWS)
-    maxReviewCount.set(DEFAULT_MAX_REVIEWS)
-    minYear.set(DEFAULT_YEAR)
-    selectedTitle.set(DEFAULT_TITLE)
-    selectedGenres.set(DEFAULT_SELECTED_GENRES)
-    selectedLanguage.set(DEFAULT_LANGUAGE)
+    selectedPerson.set(personQuery);
+    minReviewCount.set(DEFAULT_MIN_REVIEWS);
+    maxReviewCount.set(DEFAULT_MAX_REVIEWS);
+    minYear.set(DEFAULT_YEAR);
+    selectedTitle.set(DEFAULT_TITLE);
+    selectedGenres.set(DEFAULT_SELECTED_GENRES);
+    selectedLanguage.set(DEFAULT_LANGUAGE);
     allowQueryMutex.set(true);
   }
 
@@ -42,6 +72,13 @@
                   : $selectedMovie.getPosterUrl()}
                 class="poster img-fluid"
                 alt={$selectedMovie.title}
+                on:click={() =>
+                  openImageModal(
+                    $selectedMovie.posterImage
+                      ? $selectedMovie.posterImage.src
+                      : $selectedMovie.getPosterUrl()
+                  )}
+                style="cursor: pointer;"
               />
             </div>
           {/if}
@@ -69,7 +106,7 @@
                   )}
                 style="cursor: pointer;"
               >
-                {$selectedMovie.originalTitle} 
+                {$selectedMovie.originalTitle}
               </h4>
             {/if}
             {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}
@@ -121,8 +158,9 @@
                 {#each $selectedMovie.topNcast as cast}
                   <li
                     class="list-group-item"
-                    on:click={() =>
-                      {personSelected(personToPersonQuery(cast))}}
+                    on:click={() => {
+                      personSelected(personToPersonQuery(cast));
+                    }}
                     style="cursor: pointer;"
                   >
                     <span class="text-primary">{cast.name}</span> as {cast.character}
@@ -138,8 +176,9 @@
                 {#each $selectedMovie.topNcrew as crew}
                   <li
                     class="list-group-item"
-                    on:click={() =>
-                      {personSelected(personToPersonQuery(crew))}}
+                    on:click={() => {
+                      personSelected(personToPersonQuery(crew));
+                    }}
                     style="cursor: pointer;"
                   >
                     <span class="text-primary">{crew.name}</span>: {crew.job}
@@ -149,6 +188,15 @@
             {/if}
           </div>
         </div>
+      </div>
+    </div>
+  {/if}
+
+  {#if showModal}
+    <div class="modal" on:click={closeModal}>
+      <div class="modal-content">
+        <span class="close" on:click={closeModal}>&times;</span>
+        <img src={fullImageUrl} alt="Full Image" />
       </div>
     </div>
   {/if}
@@ -162,8 +210,13 @@
   }
 
   .poster {
-    width: 300px; /* Fixed width for the poster */
-    padding: 10px; /* Padding around the image */
+    width: 350px; /* Fixed width for the poster */
+    margin: 10px; /* Padding around the image */
+    transition: box-shadow 0.2s ease;
+  }
+
+  .poster:hover {
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
   }
 
   .card-title:hover,
@@ -189,8 +242,45 @@
     color: red;
   }
 
-
   h4:hover .youtube-icon {
     color: red;
+  }
+
+
+
+
+  .modal {
+    display: block;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-content {
+    position: relative;
+    margin: auto;
+    padding: 0;
+    width: 80%;
+    max-width: 700px;
+  }
+
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .modal img {
+    width: 100%;
+    height: auto;
   }
 </style>

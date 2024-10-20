@@ -101,7 +101,7 @@
 
  .badge.bg-secondary-custom {
     background-color: #6c757d;
-    transition: background-color 0.3s; /* Add this line */
+    transition: background-color 0.2s; /* Add this line */
   }
   .badge.bg-secondary-custom:hover {
     background-color: #0d6efd; /* Add this line */
