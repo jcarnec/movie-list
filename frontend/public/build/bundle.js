@@ -1700,11 +1700,11 @@ var app = (function () {
     			attr_dev(svg, "width", "16");
     			attr_dev(svg, "height", "16");
     			attr_dev(svg, "fill", "currentColor");
-    			attr_dev(svg, "class", "bi bi-x svelte-49stir");
+    			attr_dev(svg, "class", "bi bi-x svelte-nodthw");
     			attr_dev(svg, "viewBox", "0 0 16 16");
     			add_location(svg, file$6, 57, 12, 1499);
     			attr_dev(button, "type", "button");
-    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-49stir");
+    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-nodthw");
     			add_location(button, file$6, 48, 10, 1208);
     		},
     		m: function mount(target, anchor) {
@@ -1755,11 +1755,11 @@ var app = (function () {
     			attr_dev(svg, "width", "16");
     			attr_dev(svg, "height", "16");
     			attr_dev(svg, "fill", "currentColor");
-    			attr_dev(svg, "class", "bi bi-x svelte-49stir");
+    			attr_dev(svg, "class", "bi bi-x svelte-nodthw");
     			attr_dev(svg, "viewBox", "0 0 16 16");
     			add_location(svg, file$6, 123, 12, 3469);
     			attr_dev(button, "type", "button");
-    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-49stir");
+    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-nodthw");
     			add_location(button, file$6, 114, 10, 3157);
     		},
     		m: function mount(target, anchor) {
@@ -1810,11 +1810,11 @@ var app = (function () {
     			attr_dev(svg, "width", "16");
     			attr_dev(svg, "height", "16");
     			attr_dev(svg, "fill", "currentColor");
-    			attr_dev(svg, "class", "bi bi-x svelte-49stir");
+    			attr_dev(svg, "class", "bi bi-x svelte-nodthw");
     			attr_dev(svg, "viewBox", "0 0 16 16");
     			add_location(svg, file$6, 173, 12, 5047);
     			attr_dev(button, "type", "button");
-    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-49stir");
+    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-nodthw");
     			add_location(button, file$6, 164, 10, 4735);
     		},
     		m: function mount(target, anchor) {
@@ -1865,11 +1865,11 @@ var app = (function () {
     			attr_dev(svg, "width", "16");
     			attr_dev(svg, "height", "16");
     			attr_dev(svg, "fill", "currentColor");
-    			attr_dev(svg, "class", "bi bi-x svelte-49stir");
+    			attr_dev(svg, "class", "bi bi-x svelte-nodthw");
     			attr_dev(svg, "viewBox", "0 0 16 16");
     			add_location(svg, file$6, 230, 12, 6806);
     			attr_dev(button, "type", "button");
-    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-49stir");
+    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-nodthw");
     			add_location(button, file$6, 221, 10, 6477);
     		},
     		m: function mount(target, anchor) {
@@ -1958,11 +1958,11 @@ var app = (function () {
     			attr_dev(svg, "width", "16");
     			attr_dev(svg, "height", "16");
     			attr_dev(svg, "fill", "currentColor");
-    			attr_dev(svg, "class", "bi bi-x svelte-49stir");
+    			attr_dev(svg, "class", "bi bi-x svelte-nodthw");
     			attr_dev(svg, "viewBox", "0 0 16 16");
     			add_location(svg, file$6, 280, 12, 8391);
     			attr_dev(button, "type", "button");
-    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-49stir");
+    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-nodthw");
     			add_location(button, file$6, 272, 10, 8140);
     		},
     		m: function mount(target, anchor) {
@@ -2142,7 +2142,7 @@ var app = (function () {
     			attr_dev(h5, "class", "mb-4");
     			add_location(h5, file$6, 29, 2, 610);
     			attr_dev(input0, "type", "text");
-    			attr_dev(input0, "class", "form-control");
+    			attr_dev(input0, "class", "form-control svelte-nodthw");
     			attr_dev(input0, "id", "title-input");
     			attr_dev(input0, "placeholder", "Title");
     			add_location(input0, file$6, 35, 10, 808);
@@ -2155,7 +2155,7 @@ var app = (function () {
     			attr_dev(div2, "class", "mb-2");
     			add_location(div2, file$6, 32, 4, 685);
     			attr_dev(input1, "type", "number");
-    			attr_dev(input1, "class", "form-control svelte-49stir");
+    			attr_dev(input1, "class", "form-control svelte-nodthw");
     			attr_dev(input1, "id", "year-input");
     			attr_dev(input1, "placeholder", "Year");
     			add_location(input1, file$6, 81, 8, 2188);
@@ -2166,7 +2166,7 @@ var app = (function () {
     			attr_dev(div4, "class", "mb-2");
     			add_location(div4, file$6, 79, 4, 2127);
     			attr_dev(input2, "type", "number");
-    			attr_dev(input2, "class", "form-control svelte-49stir");
+    			attr_dev(input2, "class", "form-control svelte-nodthw");
     			attr_dev(input2, "id", "min-review-input");
     			attr_dev(input2, "placeholder", "Min Reviews");
     			add_location(input2, file$6, 99, 10, 2664);
@@ -2179,7 +2179,7 @@ var app = (function () {
     			attr_dev(div7, "class", "mb-2");
     			add_location(div7, file$6, 96, 4, 2541);
     			attr_dev(input3, "type", "number");
-    			attr_dev(input3, "class", "form-control svelte-49stir");
+    			attr_dev(input3, "class", "form-control svelte-nodthw");
     			attr_dev(input3, "id", "max-review-input");
     			attr_dev(input3, "placeholder", "Max Reviews");
     			add_location(input3, file$6, 149, 10, 4242);
@@ -2192,7 +2192,7 @@ var app = (function () {
     			attr_dev(div10, "class", "mb-2");
     			add_location(div10, file$6, 146, 4, 4119);
     			attr_dev(input4, "type", "text");
-    			attr_dev(input4, "class", "form-control");
+    			attr_dev(input4, "class", "form-control svelte-nodthw");
     			attr_dev(input4, "id", "person-input");
     			attr_dev(input4, "placeholder", "Person");
     			add_location(input4, file$6, 199, 10, 5816);
@@ -2207,7 +2207,7 @@ var app = (function () {
     			option.__value = "all";
     			option.value = option.__value;
     			add_location(option, file$6, 267, 12, 7953);
-    			attr_dev(select, "class", "form-select");
+    			attr_dev(select, "class", "form-select svelte-nodthw");
     			attr_dev(select, "id", "language-select");
     			attr_dev(select, "placeholder", "Language");
     			if (/*$selectedLanguage*/ ctx[7] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[23].call(select));
@@ -2223,7 +2223,7 @@ var app = (function () {
     			attr_dev(div17, "class", "mb-2");
     			add_location(div17, file$6, 303, 4, 9035);
     			add_location(form, file$6, 30, 2, 649);
-    			attr_dev(div18, "class", "sidebar bg-light p-3 svelte-49stir");
+    			attr_dev(div18, "class", "sidebar bg-light p-3 svelte-nodthw");
     			add_location(div18, file$6, 28, 0, 573);
     		},
     		l: function claim(nodes) {

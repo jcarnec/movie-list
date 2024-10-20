@@ -336,5 +336,17 @@
     pointer-events: none;
   }
 
+  /* Add transition for smooth effect */
+    input.form-control,
+    select.form-select,
+    textarea.form-control {
+      transition: box-shadow 0.2s ease;
+    }
 
+    /* Blue glow effect on hover */
+    input.form-control:hover,
+    select.form-select:hover,
+    textarea.form-control:hover {
+      box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    }
 </style>
