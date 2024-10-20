@@ -5,19 +5,25 @@
   import MovieList from "./components/MovieList.svelte";
   import MovieDetails from "./components/MovieDetails.svelte";
   import { checkAppendPrepend, handleScroll, handleTouchStart, prepend, prependAfterFailure, queryMovies } from "./utils";
-  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguage, selectedGenres, selectedTitle, currentMinYear } from "./stores.js";
+  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguage, selectedGenres, selectedTitle, currentMinYear, allowQueryMutex } from "./stores.js";
 
   let movies = [];
 
 // Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
-  $: updateMovies($minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage, $selectedGenres, $selectedTitle);
+  $: updateMovies($minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage, $selectedGenres, $selectedTitle, $allowQueryMutex);
 
   async function updateMovies() {
-    movies = await queryMovies(movies);
-    if(!movies || movies.length == 0) {
-      movies = await prependAfterFailure(movies)
+    if($allowQueryMutex) {
+      movies = await queryMovies(movies);
+      if(!movies || movies.length == 0) {
+        movies = await prependAfterFailure(movies)
+      } else {
+        movies = await prepend(movies)
+      }
+      await tick(); // Wait for the DOM to update
+    } else {
+      console.log('query blocked by mutex')
     }
-    await tick(); // Wait for the DOM to update
   }
 
   onMount(async () => {

@@ -662,12 +662,23 @@ var app = (function () {
       }
     );
 
-    const selectedPerson = writable({ name: '', id: null, castOrCrew: null});
-    const selectedLanguage = writable('all');
-    const selectedGenres = writable([]);
+    const allowQueryMutex = writable(true);
+
+    // Default values
+    const DEFAULT_TITLE = '';
+    const DEFAULT_YEAR = null;
+    const DEFAULT_MIN_REVIEWS = null;
+    const DEFAULT_MAX_REVIEWS = null;
+    const DEFAULT_PERSON = { name: '', id: null, castOrCrew: null };
+    const DEFAULT_LANGUAGE = 'all';
+    const DEFAULT_SELECTED_GENRES = [];
+
+    const selectedPerson = writable(DEFAULT_PERSON);
+    const selectedLanguage = writable(DEFAULT_LANGUAGE);
+    const selectedGenres = writable(DEFAULT_SELECTED_GENRES);
     const minYear = writable('2014');
     const minReviewCount = writable(10);
-    const maxReviewCount = writable(null);
+    const maxReviewCount = writable(DEFAULT_MAX_REVIEWS);
     const selectedTitle = writable('');
 
     const lastAppendedID = writable(null);
@@ -1666,12 +1677,12 @@ var app = (function () {
 
     function get_each_context$3(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[25] = list[i];
+    	child_ctx[24] = list[i];
     	return child_ctx;
     }
 
     // (46:8) {#if $selectedTitle !== DEFAULT_TITLE}
-    function create_if_block_4(ctx) {
+    function create_if_block_4$1(ctx) {
     	let button;
     	let svg;
     	let path;
@@ -1684,17 +1695,17 @@ var app = (function () {
     			svg = svg_element("svg");
     			path = svg_element("path");
     			attr_dev(path, "d", "M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z");
-    			add_location(path, file$6, 56, 14, 1609);
+    			add_location(path, file$6, 56, 14, 1517);
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg, "width", "16");
     			attr_dev(svg, "height", "16");
     			attr_dev(svg, "fill", "currentColor");
     			attr_dev(svg, "class", "bi bi-x svelte-opa7sj");
     			attr_dev(svg, "viewBox", "0 0 16 16");
-    			add_location(svg, file$6, 55, 12, 1475);
+    			add_location(svg, file$6, 55, 12, 1383);
     			attr_dev(button, "type", "button");
     			attr_dev(button, "class", "btn btn-outline-secondary reset-button svelte-opa7sj");
-    			add_location(button, file$6, 46, 10, 1189);
+    			add_location(button, file$6, 46, 10, 1097);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1702,7 +1713,7 @@ var app = (function () {
     			append_dev(svg, path);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler*/ ctx[10], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler*/ ctx[9], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -1716,7 +1727,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_4.name,
+    		id: create_if_block_4$1.name,
     		type: "if",
     		source: "(46:8) {#if $selectedTitle !== DEFAULT_TITLE}",
     		ctx
@@ -1726,7 +1737,7 @@ var app = (function () {
     }
 
     // (95:12) {#if $currentMinReviewCount !== DEFAULT_MIN_REVIEWS}
-    function create_if_block_3(ctx) {
+    function create_if_block_3$1(ctx) {
     	let button;
     	let svg;
     	let path;
@@ -1739,17 +1750,17 @@ var app = (function () {
     			svg = svg_element("svg");
     			path = svg_element("path");
     			attr_dev(path, "d", "M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z");
-    			add_location(path, file$6, 105, 18, 3349);
+    			add_location(path, file$6, 105, 18, 3257);
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg, "width", "16");
     			attr_dev(svg, "height", "16");
     			attr_dev(svg, "fill", "currentColor");
     			attr_dev(svg, "class", "bi bi-x svelte-opa7sj");
     			attr_dev(svg, "viewBox", "0 0 16 16");
-    			add_location(svg, file$6, 104, 16, 3211);
+    			add_location(svg, file$6, 104, 16, 3119);
     			attr_dev(button, "type", "button");
     			attr_dev(button, "class", "btn btn-outline-secondary reset-button svelte-opa7sj");
-    			add_location(button, file$6, 95, 14, 2868);
+    			add_location(button, file$6, 95, 14, 2776);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1757,7 +1768,7 @@ var app = (function () {
     			append_dev(svg, path);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler_1*/ ctx[15], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler_1*/ ctx[14], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -1771,7 +1782,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_3.name,
+    		id: create_if_block_3$1.name,
     		type: "if",
     		source: "(95:12) {#if $currentMinReviewCount !== DEFAULT_MIN_REVIEWS}",
     		ctx
@@ -1781,7 +1792,7 @@ var app = (function () {
     }
 
     // (124:12) {#if $currentMaxReviewCount !== DEFAULT_MAX_REVIEWS}
-    function create_if_block_2(ctx) {
+    function create_if_block_2$1(ctx) {
     	let button;
     	let svg;
     	let path;
@@ -1794,17 +1805,17 @@ var app = (function () {
     			svg = svg_element("svg");
     			path = svg_element("path");
     			attr_dev(path, "d", "M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z");
-    			add_location(path, file$6, 134, 18, 4629);
+    			add_location(path, file$6, 134, 18, 4537);
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg, "width", "16");
     			attr_dev(svg, "height", "16");
     			attr_dev(svg, "fill", "currentColor");
     			attr_dev(svg, "class", "bi bi-x svelte-opa7sj");
     			attr_dev(svg, "viewBox", "0 0 16 16");
-    			add_location(svg, file$6, 133, 16, 4491);
+    			add_location(svg, file$6, 133, 16, 4399);
     			attr_dev(button, "type", "button");
     			attr_dev(button, "class", "btn btn-outline-secondary reset-button svelte-opa7sj");
-    			add_location(button, file$6, 124, 14, 4148);
+    			add_location(button, file$6, 124, 14, 4056);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1812,7 +1823,7 @@ var app = (function () {
     			append_dev(svg, path);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler_2*/ ctx[18], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler_2*/ ctx[17], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -1826,7 +1837,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2.name,
+    		id: create_if_block_2$1.name,
     		type: "if",
     		source: "(124:12) {#if $currentMaxReviewCount !== DEFAULT_MAX_REVIEWS}",
     		ctx
@@ -1849,17 +1860,17 @@ var app = (function () {
     			svg = svg_element("svg");
     			path = svg_element("path");
     			attr_dev(path, "d", "M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z");
-    			add_location(path, file$6, 174, 14, 6055);
+    			add_location(path, file$6, 174, 14, 5963);
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg, "width", "16");
     			attr_dev(svg, "height", "16");
     			attr_dev(svg, "fill", "currentColor");
     			attr_dev(svg, "class", "bi bi-x svelte-opa7sj");
     			attr_dev(svg, "viewBox", "0 0 16 16");
-    			add_location(svg, file$6, 173, 12, 5921);
+    			add_location(svg, file$6, 173, 12, 5829);
     			attr_dev(button, "type", "button");
     			attr_dev(button, "class", "btn btn-outline-secondary reset-button svelte-opa7sj");
-    			add_location(button, file$6, 164, 10, 5614);
+    			add_location(button, file$6, 164, 10, 5522);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1867,7 +1878,7 @@ var app = (function () {
     			append_dev(svg, path);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler_3*/ ctx[22], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler_3*/ ctx[21], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -1893,7 +1904,7 @@ var app = (function () {
     // (191:10) {#each Object.keys(LANGUAGEINFO) as languageCode}
     function create_each_block$3(ctx) {
     	let option;
-    	let t0_value = LANGUAGEINFO[/*languageCode*/ ctx[25]].name + "";
+    	let t0_value = LANGUAGEINFO[/*languageCode*/ ctx[24]].name + "";
     	let t0;
     	let t1;
 
@@ -1902,9 +1913,9 @@ var app = (function () {
     			option = element("option");
     			t0 = text(t0_value);
     			t1 = space();
-    			option.__value = /*languageCode*/ ctx[25];
+    			option.__value = /*languageCode*/ ctx[24];
     			option.value = option.__value;
-    			add_location(option, file$6, 191, 12, 6684);
+    			add_location(option, file$6, 191, 12, 6592);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -1942,17 +1953,17 @@ var app = (function () {
     			svg = svg_element("svg");
     			path = svg_element("path");
     			attr_dev(path, "d", "M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z");
-    			add_location(path, file$6, 207, 14, 7306);
+    			add_location(path, file$6, 207, 14, 7214);
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
     			attr_dev(svg, "width", "16");
     			attr_dev(svg, "height", "16");
     			attr_dev(svg, "fill", "currentColor");
     			attr_dev(svg, "class", "bi bi-x svelte-opa7sj");
     			attr_dev(svg, "viewBox", "0 0 16 16");
-    			add_location(svg, file$6, 206, 12, 7172);
+    			add_location(svg, file$6, 206, 12, 7080);
     			attr_dev(button, "type", "button");
     			attr_dev(button, "class", "btn btn-outline-secondary reset-button svelte-opa7sj");
-    			add_location(button, file$6, 198, 10, 6926);
+    			add_location(button, file$6, 198, 10, 6834);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1960,7 +1971,7 @@ var app = (function () {
     			append_dev(svg, path);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler_4*/ ctx[24], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler_4*/ ctx[23], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -2037,10 +2048,10 @@ var app = (function () {
     	let current;
     	let mounted;
     	let dispose;
-    	let if_block0 = /*$selectedTitle*/ ctx[1] !== DEFAULT_TITLE && create_if_block_4(ctx);
-    	let if_block1 = /*$currentMinReviewCount*/ ctx[3] !== DEFAULT_MIN_REVIEWS && create_if_block_3(ctx);
-    	let if_block2 = /*$currentMaxReviewCount*/ ctx[4] !== DEFAULT_MAX_REVIEWS && create_if_block_2(ctx);
-    	let if_block3 = /*$currentSelectedPerson*/ ctx[5].name !== /*DEFAULT_PERSON*/ ctx[7].name && create_if_block_1$2(ctx);
+    	let if_block0 = /*$selectedTitle*/ ctx[1] !== DEFAULT_TITLE && create_if_block_4$1(ctx);
+    	let if_block1 = /*$currentMinReviewCount*/ ctx[3] !== DEFAULT_MIN_REVIEWS && create_if_block_3$1(ctx);
+    	let if_block2 = /*$currentMaxReviewCount*/ ctx[4] !== DEFAULT_MAX_REVIEWS && create_if_block_2$1(ctx);
+    	let if_block3 = /*$currentSelectedPerson*/ ctx[5].name !== DEFAULT_PERSON.name && create_if_block_1$2(ctx);
     	let each_value = Object.keys(LANGUAGEINFO);
     	validate_each_argument(each_value);
     	let each_blocks = [];
@@ -2123,85 +2134,85 @@ var app = (function () {
     			div14 = element("div");
     			create_component(genremenu.$$.fragment);
     			attr_dev(h5, "class", "mb-4");
-    			add_location(h5, file$6, 30, 2, 703);
+    			add_location(h5, file$6, 30, 2, 611);
     			attr_dev(label0, "for", "title-input");
     			attr_dev(label0, "class", "form-label");
-    			add_location(label0, file$6, 34, 6, 803);
+    			add_location(label0, file$6, 34, 6, 711);
     			attr_dev(input0, "type", "text");
     			attr_dev(input0, "class", "form-control");
     			attr_dev(input0, "id", "title-input");
-    			add_location(input0, file$6, 36, 8, 901);
+    			add_location(input0, file$6, 36, 8, 809);
     			attr_dev(div0, "class", "input-group");
-    			add_location(div0, file$6, 35, 6, 867);
+    			add_location(div0, file$6, 35, 6, 775);
     			attr_dev(div1, "class", "mb-2");
-    			add_location(div1, file$6, 33, 4, 778);
+    			add_location(div1, file$6, 33, 4, 686);
     			attr_dev(label1, "for", "year-input");
     			attr_dev(label1, "class", "form-label");
-    			add_location(label1, file$6, 65, 6, 1936);
+    			add_location(label1, file$6, 65, 6, 1844);
     			attr_dev(input1, "type", "number");
     			attr_dev(input1, "class", "form-control svelte-opa7sj");
     			attr_dev(input1, "id", "year-input");
-    			add_location(input1, file$6, 67, 8, 2032);
+    			add_location(input1, file$6, 67, 8, 1940);
     			attr_dev(div2, "class", "input-group");
-    			add_location(div2, file$6, 66, 6, 1998);
+    			add_location(div2, file$6, 66, 6, 1906);
     			attr_dev(div3, "class", "mb-2");
-    			add_location(div3, file$6, 64, 4, 1911);
+    			add_location(div3, file$6, 64, 4, 1819);
     			attr_dev(label2, "for", "min-review-input");
     			attr_dev(label2, "class", "form-label");
-    			add_location(label2, file$6, 83, 10, 2400);
+    			add_location(label2, file$6, 83, 10, 2308);
     			attr_dev(input2, "type", "number");
     			attr_dev(input2, "class", "form-control svelte-opa7sj");
     			attr_dev(input2, "id", "min-review-input");
-    			add_location(input2, file$6, 85, 12, 2517);
+    			add_location(input2, file$6, 85, 12, 2425);
     			attr_dev(div4, "class", "input-group");
-    			add_location(div4, file$6, 84, 10, 2479);
+    			add_location(div4, file$6, 84, 10, 2387);
     			attr_dev(div5, "class", "col-6");
-    			add_location(div5, file$6, 82, 8, 2370);
+    			add_location(div5, file$6, 82, 8, 2278);
     			attr_dev(label3, "for", "max-review-input");
     			attr_dev(label3, "class", "form-label");
-    			add_location(label3, file$6, 112, 10, 3680);
+    			add_location(label3, file$6, 112, 10, 3588);
     			attr_dev(input3, "type", "number");
     			attr_dev(input3, "class", "form-control svelte-opa7sj");
     			attr_dev(input3, "id", "max-review-input");
-    			add_location(input3, file$6, 114, 12, 3797);
+    			add_location(input3, file$6, 114, 12, 3705);
     			attr_dev(div6, "class", "input-group");
-    			add_location(div6, file$6, 113, 10, 3759);
+    			add_location(div6, file$6, 113, 10, 3667);
     			attr_dev(div7, "class", "col-6");
-    			add_location(div7, file$6, 111, 8, 3650);
+    			add_location(div7, file$6, 111, 8, 3558);
     			attr_dev(div8, "class", "row");
-    			add_location(div8, file$6, 81, 6, 2344);
+    			add_location(div8, file$6, 81, 6, 2252);
     			attr_dev(div9, "class", "mb-2");
-    			add_location(div9, file$6, 80, 4, 2319);
+    			add_location(div9, file$6, 80, 4, 2227);
     			attr_dev(label4, "for", "person-input");
     			attr_dev(label4, "class", "form-label");
-    			add_location(label4, file$6, 145, 6, 5002);
+    			add_location(label4, file$6, 145, 6, 4910);
     			attr_dev(input4, "type", "text");
     			attr_dev(input4, "class", "form-control");
     			attr_dev(input4, "id", "person-input");
-    			add_location(input4, file$6, 147, 8, 5102);
+    			add_location(input4, file$6, 147, 8, 5010);
     			attr_dev(div10, "class", "input-group");
-    			add_location(div10, file$6, 146, 6, 5068);
+    			add_location(div10, file$6, 146, 6, 4976);
     			attr_dev(div11, "class", "mb-2");
-    			add_location(div11, file$6, 144, 4, 4977);
+    			add_location(div11, file$6, 144, 4, 4885);
     			attr_dev(label5, "for", "language-select");
     			attr_dev(label5, "class", "form-label");
-    			add_location(label5, file$6, 183, 6, 6387);
+    			add_location(label5, file$6, 183, 6, 6295);
     			option.__value = "all";
     			option.value = option.__value;
-    			add_location(option, file$6, 195, 10, 6812);
+    			add_location(option, file$6, 195, 10, 6720);
     			attr_dev(select, "class", "form-select");
     			attr_dev(select, "id", "language-select");
-    			if (/*$selectedLanguage*/ ctx[6] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[23].call(select));
-    			add_location(select, file$6, 185, 8, 6492);
+    			if (/*$selectedLanguage*/ ctx[6] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[22].call(select));
+    			add_location(select, file$6, 185, 8, 6400);
     			attr_dev(div12, "class", "input-group");
-    			add_location(div12, file$6, 184, 6, 6458);
+    			add_location(div12, file$6, 184, 6, 6366);
     			attr_dev(div13, "class", "mb-2");
-    			add_location(div13, file$6, 182, 4, 6362);
+    			add_location(div13, file$6, 182, 4, 6270);
     			attr_dev(div14, "class", "mb-2");
-    			add_location(div14, file$6, 215, 4, 7608);
-    			add_location(form, file$6, 31, 2, 742);
+    			add_location(div14, file$6, 214, 4, 7492);
+    			add_location(form, file$6, 31, 2, 650);
     			attr_dev(div15, "class", "sidebar bg-light p-3 svelte-opa7sj");
-    			add_location(div15, file$6, 29, 0, 666);
+    			add_location(div15, file$6, 29, 0, 574);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -2279,18 +2290,18 @@ var app = (function () {
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[8]),
-    					listen_dev(input0, "blur", /*blur_handler*/ ctx[9], false, false, false, false),
-    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[11]),
-    					listen_dev(input1, "blur", /*blur_handler_1*/ ctx[12], false, false, false, false),
-    					listen_dev(input2, "input", /*input2_input_handler*/ ctx[13]),
-    					listen_dev(input2, "blur", /*blur_handler_2*/ ctx[14], false, false, false, false),
-    					listen_dev(input3, "input", /*input3_input_handler*/ ctx[16]),
-    					listen_dev(input3, "blur", /*blur_handler_3*/ ctx[17], false, false, false, false),
-    					listen_dev(input4, "input", /*input4_input_handler*/ ctx[19]),
-    					listen_dev(input4, "change", /*change_handler*/ ctx[20], false, false, false, false),
-    					listen_dev(input4, "blur", /*blur_handler_4*/ ctx[21], false, false, false, false),
-    					listen_dev(select, "change", /*select_change_handler*/ ctx[23])
+    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[7]),
+    					listen_dev(input0, "blur", /*blur_handler*/ ctx[8], false, false, false, false),
+    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[10]),
+    					listen_dev(input1, "blur", /*blur_handler_1*/ ctx[11], false, false, false, false),
+    					listen_dev(input2, "input", /*input2_input_handler*/ ctx[12]),
+    					listen_dev(input2, "blur", /*blur_handler_2*/ ctx[13], false, false, false, false),
+    					listen_dev(input3, "input", /*input3_input_handler*/ ctx[15]),
+    					listen_dev(input3, "blur", /*blur_handler_3*/ ctx[16], false, false, false, false),
+    					listen_dev(input4, "input", /*input4_input_handler*/ ctx[18]),
+    					listen_dev(input4, "change", /*change_handler*/ ctx[19], false, false, false, false),
+    					listen_dev(input4, "blur", /*blur_handler_4*/ ctx[20], false, false, false, false),
+    					listen_dev(select, "change", /*select_change_handler*/ ctx[22])
     				];
 
     				mounted = true;
@@ -2305,7 +2316,7 @@ var app = (function () {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_4(ctx);
+    					if_block0 = create_if_block_4$1(ctx);
     					if_block0.c();
     					if_block0.m(div0, null);
     				}
@@ -2326,7 +2337,7 @@ var app = (function () {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
-    					if_block1 = create_if_block_3(ctx);
+    					if_block1 = create_if_block_3$1(ctx);
     					if_block1.c();
     					if_block1.m(div4, null);
     				}
@@ -2343,7 +2354,7 @@ var app = (function () {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
     				} else {
-    					if_block2 = create_if_block_2(ctx);
+    					if_block2 = create_if_block_2$1(ctx);
     					if_block2.c();
     					if_block2.m(div6, null);
     				}
@@ -2356,7 +2367,7 @@ var app = (function () {
     				set_input_value(input4, /*$currentSelectedPerson*/ ctx[5].name);
     			}
 
-    			if (/*$currentSelectedPerson*/ ctx[5].name !== /*DEFAULT_PERSON*/ ctx[7].name) {
+    			if (/*$currentSelectedPerson*/ ctx[5].name !== DEFAULT_PERSON.name) {
     				if (if_block3) {
     					if_block3.p(ctx, dirty);
     				} else {
@@ -2444,12 +2455,6 @@ var app = (function () {
     	return block;
     }
 
-    const DEFAULT_TITLE = '';
-    const DEFAULT_YEAR = null;
-    const DEFAULT_MIN_REVIEWS = null;
-    const DEFAULT_MAX_REVIEWS = null;
-    const DEFAULT_LANGUAGE = 'all';
-
     function instance$6($$self, $$props, $$invalidate) {
     	let $currentSelectedTitle;
     	let $selectedTitle;
@@ -2474,7 +2479,6 @@ var app = (function () {
     	component_subscribe($$self, selectedLanguage, $$value => $$invalidate(6, $selectedLanguage = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Header', slots, []);
-    	const DEFAULT_PERSON = { name: '', id: null, castOrCrew: null };
     	const writable_props = [];
 
     	Object_1.keys($$props).forEach(key => {
@@ -2576,14 +2580,15 @@ var app = (function () {
     		currentMaxReviewCount,
     		currentSelectedTitle,
     		selectedTitle,
-    		LANGUAGEINFO,
-    		GenreMenu,
+    		DEFAULT_LANGUAGE,
+    		DEFAULT_MAX_REVIEWS,
+    		DEFAULT_MIN_REVIEWS,
+    		DEFAULT_PERSON,
+    		DEFAULT_SELECTED_GENRES,
     		DEFAULT_TITLE,
     		DEFAULT_YEAR,
-    		DEFAULT_MIN_REVIEWS,
-    		DEFAULT_MAX_REVIEWS,
-    		DEFAULT_PERSON,
-    		DEFAULT_LANGUAGE,
+    		LANGUAGEINFO,
+    		GenreMenu,
     		$currentSelectedTitle,
     		$selectedTitle,
     		$currentMinYear,
@@ -2601,7 +2606,6 @@ var app = (function () {
     		$currentMaxReviewCount,
     		$currentSelectedPerson,
     		$selectedLanguage,
-    		DEFAULT_PERSON,
     		input0_input_handler,
     		blur_handler,
     		click_handler,
@@ -8103,271 +8107,323 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[5] = list[i];
+    	child_ctx[6] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[8] = list[i];
+    	child_ctx[9] = list[i];
     	return child_ctx;
     }
 
-    // (17:2) {#if $selectedMovie}
+    // (33:2) {#if $selectedMovie}
     function create_if_block(ctx) {
+    	let div4;
     	let div3;
-    	let div2;
     	let div0;
-    	let img;
-    	let img_src_value;
-    	let img_alt_value;
+    	let show_if = /*$selectedMovie*/ ctx[0].posterImage || /*$selectedMovie*/ ctx[0].getPosterUrl();
     	let t0;
+    	let div2;
+    	let div1;
     	let h2;
     	let t1_value = /*$selectedMovie*/ ctx[0].title + "";
     	let t1;
     	let t2;
+    	let i;
     	let t3;
-    	let p0;
-    	let strong0;
+    	let t4;
     	let t5;
     	let t6;
-    	let div1;
-    	let p1;
-    	let strong1;
+    	let t7;
     	let t8;
-    	let t9_value = /*$selectedMovie*/ ctx[0].genres.join(", ") + "";
     	let t9;
     	let t10;
-    	let p2;
-    	let strong2;
-    	let t12;
-    	let t13_value = /*$selectedMovie*/ ctx[0].keywords.join(", ") + "";
-    	let t13;
-    	let t14;
-    	let p3;
-    	let strong3;
-    	let t16;
-    	let t17_value = /*$selectedMovie*/ ctx[0].getFormattedReleaseDate() + "";
-    	let t17;
-    	let t18;
-    	let p4;
-    	let strong4;
-    	let t20_value = ` ${/*$selectedMovie*/ ctx[0].voteAverage} (${/*$selectedMovie*/ ctx[0].voteCount})` + "";
-    	let t20;
-    	let t21;
-    	let p5;
-    	let strong5;
-    	let t23_value = ` ${/*$selectedMovie*/ ctx[0].popularity}` + "";
-    	let t23;
-    	let t24;
-    	let p6;
-    	let strong6;
-    	let t26_value = ` ${/*$selectedMovie*/ ctx[0].generateHourString()}` + "";
-    	let t26;
-    	let t27;
-    	let p7;
-    	let strong7;
-    	let t29;
-    	let t30_value = /*$selectedMovie*/ ctx[0].overview + "";
-    	let t30;
-    	let t31;
-    	let p8;
-    	let strong8;
-    	let t33;
+    	let t11;
     	let mounted;
     	let dispose;
-    	let if_block = /*$selectedMovie*/ ctx[0].originalLanguage !== "en" && create_if_block_1(ctx);
-    	let each_value_1 = /*$selectedMovie*/ ctx[0].topNcast;
-    	validate_each_argument(each_value_1);
-    	let each_blocks_1 = [];
-
-    	for (let i = 0; i < each_value_1.length; i += 1) {
-    		each_blocks_1[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
-    	}
-
-    	let each_value = /*$selectedMovie*/ ctx[0].topNcrew;
-    	validate_each_argument(each_value);
-    	let each_blocks = [];
-
-    	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
-    	}
+    	let if_block0 = show_if && create_if_block_10(ctx);
+    	let if_block1 = /*$selectedMovie*/ ctx[0].originalLanguage !== "en" && /*$selectedMovie*/ ctx[0].originalTitle && create_if_block_9(ctx);
+    	let if_block2 = /*$selectedMovie*/ ctx[0].genres && /*$selectedMovie*/ ctx[0].genres.length > 0 && create_if_block_8(ctx);
+    	let if_block3 = /*$selectedMovie*/ ctx[0].releaseDate && create_if_block_7(ctx);
+    	let if_block4 = /*$selectedMovie*/ ctx[0].voteAverage && /*$selectedMovie*/ ctx[0].voteCount && create_if_block_6(ctx);
+    	let if_block5 = /*$selectedMovie*/ ctx[0].popularity && create_if_block_5(ctx);
+    	let if_block6 = /*$selectedMovie*/ ctx[0].runtime && create_if_block_4(ctx);
+    	let if_block7 = /*$selectedMovie*/ ctx[0].overview && create_if_block_3(ctx);
+    	let if_block8 = /*$selectedMovie*/ ctx[0].topNcast && /*$selectedMovie*/ ctx[0].topNcast.length > 0 && create_if_block_2(ctx);
+    	let if_block9 = /*$selectedMovie*/ ctx[0].topNcrew && /*$selectedMovie*/ ctx[0].topNcrew.length > 0 && create_if_block_1(ctx);
 
     	const block = {
     		c: function create() {
+    			div4 = element("div");
     			div3 = element("div");
-    			div2 = element("div");
     			div0 = element("div");
-    			img = element("img");
+    			if (if_block0) if_block0.c();
     			t0 = space();
+    			div2 = element("div");
+    			div1 = element("div");
     			h2 = element("h2");
     			t1 = text(t1_value);
     			t2 = space();
-    			if (if_block) if_block.c();
+    			i = element("i");
     			t3 = space();
-    			p0 = element("p");
-    			strong0 = element("strong");
-    			strong0.textContent = "Cast:";
+    			if (if_block1) if_block1.c();
+    			t4 = space();
+    			if (if_block2) if_block2.c();
     			t5 = space();
-
-    			for (let i = 0; i < each_blocks_1.length; i += 1) {
-    				each_blocks_1[i].c();
-    			}
-
+    			if (if_block3) if_block3.c();
     			t6 = space();
-    			div1 = element("div");
-    			p1 = element("p");
-    			strong1 = element("strong");
-    			strong1.textContent = "Genre:";
+    			if (if_block4) if_block4.c();
+    			t7 = space();
+    			if (if_block5) if_block5.c();
     			t8 = space();
-    			t9 = text(t9_value);
+    			if (if_block6) if_block6.c();
+    			t9 = space();
+    			if (if_block7) if_block7.c();
     			t10 = space();
-    			p2 = element("p");
-    			strong2 = element("strong");
-    			strong2.textContent = "Keywords:";
-    			t12 = space();
-    			t13 = text(t13_value);
-    			t14 = space();
-    			p3 = element("p");
-    			strong3 = element("strong");
-    			strong3.textContent = "Release Date:";
-    			t16 = space();
-    			t17 = text(t17_value);
-    			t18 = space();
-    			p4 = element("p");
-    			strong4 = element("strong");
-    			strong4.textContent = "Rating:";
-    			t20 = text(t20_value);
-    			t21 = space();
-    			p5 = element("p");
-    			strong5 = element("strong");
-    			strong5.textContent = "Popularity:";
-    			t23 = text(t23_value);
-    			t24 = space();
-    			p6 = element("p");
-    			strong6 = element("strong");
-    			strong6.textContent = "Runtime:";
-    			t26 = text(t26_value);
-    			t27 = space();
-    			p7 = element("p");
-    			strong7 = element("strong");
-    			strong7.textContent = "Description:";
-    			t29 = space();
-    			t30 = text(t30_value);
-    			t31 = space();
-    			p8 = element("p");
-    			strong8 = element("strong");
-    			strong8.textContent = "Crew:";
-    			t33 = space();
+    			if (if_block8) if_block8.c();
+    			t11 = space();
+    			if (if_block9) if_block9.c();
+    			attr_dev(div0, "class", "row");
+    			add_location(div0, file$1, 35, 8, 1238);
+    			attr_dev(i, "class", "fab fa-youtube youtube-icon svelte-koymci");
+    			add_location(i, file$1, 59, 37, 2076);
+    			attr_dev(h2, "class", "card-title text-primary svelte-koymci");
+    			set_style(h2, "cursor", "pointer");
+    			add_location(h2, file$1, 50, 12, 1759);
+    			attr_dev(div1, "class", "card-body");
+    			add_location(div1, file$1, 49, 10, 1723);
+    			attr_dev(div2, "class", "col");
+    			add_location(div2, file$1, 48, 8, 1695);
+    			attr_dev(div3, "class", "row no-gutters");
+    			add_location(div3, file$1, 34, 6, 1201);
+    			attr_dev(div4, "class", "card mb-3");
+    			add_location(div4, file$1, 33, 4, 1171);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div4, anchor);
+    			append_dev(div4, div3);
+    			append_dev(div3, div0);
+    			if (if_block0) if_block0.m(div0, null);
+    			append_dev(div3, t0);
+    			append_dev(div3, div2);
+    			append_dev(div2, div1);
+    			append_dev(div1, h2);
+    			append_dev(h2, t1);
+    			append_dev(h2, t2);
+    			append_dev(h2, i);
+    			append_dev(div1, t3);
+    			if (if_block1) if_block1.m(div1, null);
+    			append_dev(div1, t4);
+    			if (if_block2) if_block2.m(div1, null);
+    			append_dev(div1, t5);
+    			if (if_block3) if_block3.m(div1, null);
+    			append_dev(div1, t6);
+    			if (if_block4) if_block4.m(div1, null);
+    			append_dev(div1, t7);
+    			if (if_block5) if_block5.m(div1, null);
+    			append_dev(div1, t8);
+    			if (if_block6) if_block6.m(div1, null);
+    			append_dev(div1, t9);
+    			if (if_block7) if_block7.m(div1, null);
+    			append_dev(div1, t10);
+    			if (if_block8) if_block8.m(div1, null);
+    			append_dev(div1, t11);
+    			if (if_block9) if_block9.m(div1, null);
 
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].c();
+    			if (!mounted) {
+    				dispose = listen_dev(h2, "click", /*click_handler*/ ctx[2], false, false, false, false);
+    				mounted = true;
     			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*$selectedMovie*/ 1) show_if = /*$selectedMovie*/ ctx[0].posterImage || /*$selectedMovie*/ ctx[0].getPosterUrl();
+
+    			if (show_if) {
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
+    				} else {
+    					if_block0 = create_if_block_10(ctx);
+    					if_block0.c();
+    					if_block0.m(div0, null);
+    				}
+    			} else if (if_block0) {
+    				if_block0.d(1);
+    				if_block0 = null;
+    			}
+
+    			if (dirty & /*$selectedMovie*/ 1 && t1_value !== (t1_value = /*$selectedMovie*/ ctx[0].title + "")) set_data_dev(t1, t1_value);
+
+    			if (/*$selectedMovie*/ ctx[0].originalLanguage !== "en" && /*$selectedMovie*/ ctx[0].originalTitle) {
+    				if (if_block1) {
+    					if_block1.p(ctx, dirty);
+    				} else {
+    					if_block1 = create_if_block_9(ctx);
+    					if_block1.c();
+    					if_block1.m(div1, t4);
+    				}
+    			} else if (if_block1) {
+    				if_block1.d(1);
+    				if_block1 = null;
+    			}
+
+    			if (/*$selectedMovie*/ ctx[0].genres && /*$selectedMovie*/ ctx[0].genres.length > 0) {
+    				if (if_block2) {
+    					if_block2.p(ctx, dirty);
+    				} else {
+    					if_block2 = create_if_block_8(ctx);
+    					if_block2.c();
+    					if_block2.m(div1, t5);
+    				}
+    			} else if (if_block2) {
+    				if_block2.d(1);
+    				if_block2 = null;
+    			}
+
+    			if (/*$selectedMovie*/ ctx[0].releaseDate) {
+    				if (if_block3) {
+    					if_block3.p(ctx, dirty);
+    				} else {
+    					if_block3 = create_if_block_7(ctx);
+    					if_block3.c();
+    					if_block3.m(div1, t6);
+    				}
+    			} else if (if_block3) {
+    				if_block3.d(1);
+    				if_block3 = null;
+    			}
+
+    			if (/*$selectedMovie*/ ctx[0].voteAverage && /*$selectedMovie*/ ctx[0].voteCount) {
+    				if (if_block4) {
+    					if_block4.p(ctx, dirty);
+    				} else {
+    					if_block4 = create_if_block_6(ctx);
+    					if_block4.c();
+    					if_block4.m(div1, t7);
+    				}
+    			} else if (if_block4) {
+    				if_block4.d(1);
+    				if_block4 = null;
+    			}
+
+    			if (/*$selectedMovie*/ ctx[0].popularity) {
+    				if (if_block5) {
+    					if_block5.p(ctx, dirty);
+    				} else {
+    					if_block5 = create_if_block_5(ctx);
+    					if_block5.c();
+    					if_block5.m(div1, t8);
+    				}
+    			} else if (if_block5) {
+    				if_block5.d(1);
+    				if_block5 = null;
+    			}
+
+    			if (/*$selectedMovie*/ ctx[0].runtime) {
+    				if (if_block6) {
+    					if_block6.p(ctx, dirty);
+    				} else {
+    					if_block6 = create_if_block_4(ctx);
+    					if_block6.c();
+    					if_block6.m(div1, t9);
+    				}
+    			} else if (if_block6) {
+    				if_block6.d(1);
+    				if_block6 = null;
+    			}
+
+    			if (/*$selectedMovie*/ ctx[0].overview) {
+    				if (if_block7) {
+    					if_block7.p(ctx, dirty);
+    				} else {
+    					if_block7 = create_if_block_3(ctx);
+    					if_block7.c();
+    					if_block7.m(div1, t10);
+    				}
+    			} else if (if_block7) {
+    				if_block7.d(1);
+    				if_block7 = null;
+    			}
+
+    			if (/*$selectedMovie*/ ctx[0].topNcast && /*$selectedMovie*/ ctx[0].topNcast.length > 0) {
+    				if (if_block8) {
+    					if_block8.p(ctx, dirty);
+    				} else {
+    					if_block8 = create_if_block_2(ctx);
+    					if_block8.c();
+    					if_block8.m(div1, t11);
+    				}
+    			} else if (if_block8) {
+    				if_block8.d(1);
+    				if_block8 = null;
+    			}
+
+    			if (/*$selectedMovie*/ ctx[0].topNcrew && /*$selectedMovie*/ ctx[0].topNcrew.length > 0) {
+    				if (if_block9) {
+    					if_block9.p(ctx, dirty);
+    				} else {
+    					if_block9 = create_if_block_1(ctx);
+    					if_block9.c();
+    					if_block9.m(div1, null);
+    				}
+    			} else if (if_block9) {
+    				if_block9.d(1);
+    				if_block9 = null;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div4);
+    			if (if_block0) if_block0.d();
+    			if (if_block1) if_block1.d();
+    			if (if_block2) if_block2.d();
+    			if (if_block3) if_block3.d();
+    			if (if_block4) if_block4.d();
+    			if (if_block5) if_block5.d();
+    			if (if_block6) if_block6.d();
+    			if (if_block7) if_block7.d();
+    			if (if_block8) if_block8.d();
+    			if (if_block9) if_block9.d();
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(33:2) {#if $selectedMovie}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (37:10) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}
+    function create_if_block_10(ctx) {
+    	let div;
+    	let img;
+    	let img_src_value;
+    	let img_alt_value;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			img = element("img");
 
     			if (!src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].posterImage
     			? /*$selectedMovie*/ ctx[0].posterImage.src
     			: /*$selectedMovie*/ ctx[0].getPosterUrl())) attr_dev(img, "src", img_src_value);
 
+    			attr_dev(img, "class", "poster img-fluid svelte-koymci");
     			attr_dev(img, "alt", img_alt_value = /*$selectedMovie*/ ctx[0].title);
-    			attr_dev(img, "class", "svelte-gii73m");
-    			add_location(img, file$1, 20, 8, 585);
-    			attr_dev(h2, "class", "link svelte-gii73m");
-    			add_location(h2, file$1, 24, 10, 765);
-    			add_location(strong0, file$1, 47, 12, 1428);
-    			add_location(p0, file$1, 46, 10, 1412);
-    			attr_dev(div0, "class", "top-detail-poster svelte-gii73m");
-    			add_location(div0, file$1, 19, 8, 545);
-    			add_location(strong1, file$1, 57, 12, 1783);
-    			add_location(p1, file$1, 56, 10, 1767);
-    			add_location(strong2, file$1, 61, 12, 1895);
-    			add_location(p2, file$1, 60, 10, 1879);
-    			add_location(strong3, file$1, 65, 12, 2012);
-    			add_location(p3, file$1, 64, 10, 1996);
-    			add_location(strong4, file$1, 69, 12, 2139);
-    			add_location(p4, file$1, 68, 10, 2123);
-    			add_location(strong5, file$1, 73, 12, 2282);
-    			add_location(p5, file$1, 72, 10, 2266);
-    			add_location(strong6, file$1, 76, 12, 2385);
-    			add_location(p6, file$1, 75, 10, 2369);
-    			add_location(strong7, file$1, 79, 13, 2495);
-    			add_location(p7, file$1, 79, 10, 2492);
-    			add_location(strong8, file$1, 81, 12, 2581);
-    			add_location(p8, file$1, 80, 10, 2565);
-    			attr_dev(div1, "class", "top-detail-text svelte-gii73m");
-    			add_location(div1, file$1, 55, 8, 1727);
-    			attr_dev(div2, "class", "top-detail svelte-gii73m");
-    			add_location(div2, file$1, 18, 6, 512);
-    			add_location(div3, file$1, 17, 4, 500);
+    			add_location(img, file$1, 38, 14, 1381);
+    			attr_dev(div, "class", "col-auto");
+    			add_location(div, file$1, 37, 12, 1344);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div3, anchor);
-    			append_dev(div3, div2);
-    			append_dev(div2, div0);
-    			append_dev(div0, img);
-    			append_dev(div0, t0);
-    			append_dev(div0, h2);
-    			append_dev(h2, t1);
-    			append_dev(div0, t2);
-    			if (if_block) if_block.m(div0, null);
-    			append_dev(div0, t3);
-    			append_dev(div0, p0);
-    			append_dev(p0, strong0);
-    			append_dev(p0, t5);
-
-    			for (let i = 0; i < each_blocks_1.length; i += 1) {
-    				if (each_blocks_1[i]) {
-    					each_blocks_1[i].m(p0, null);
-    				}
-    			}
-
-    			append_dev(div2, t6);
-    			append_dev(div2, div1);
-    			append_dev(div1, p1);
-    			append_dev(p1, strong1);
-    			append_dev(p1, t8);
-    			append_dev(p1, t9);
-    			append_dev(div1, t10);
-    			append_dev(div1, p2);
-    			append_dev(p2, strong2);
-    			append_dev(p2, t12);
-    			append_dev(p2, t13);
-    			append_dev(div1, t14);
-    			append_dev(div1, p3);
-    			append_dev(p3, strong3);
-    			append_dev(p3, t16);
-    			append_dev(p3, t17);
-    			append_dev(div1, t18);
-    			append_dev(div1, p4);
-    			append_dev(p4, strong4);
-    			append_dev(p4, t20);
-    			append_dev(div1, t21);
-    			append_dev(div1, p5);
-    			append_dev(p5, strong5);
-    			append_dev(p5, t23);
-    			append_dev(div1, t24);
-    			append_dev(div1, p6);
-    			append_dev(p6, strong6);
-    			append_dev(p6, t26);
-    			append_dev(div1, t27);
-    			append_dev(div1, p7);
-    			append_dev(p7, strong7);
-    			append_dev(p7, t29);
-    			append_dev(p7, t30);
-    			append_dev(div1, t31);
-    			append_dev(div1, p8);
-    			append_dev(p8, strong8);
-    			append_dev(p8, t33);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				if (each_blocks[i]) {
-    					each_blocks[i].m(p8, null);
-    				}
-    			}
-
-    			if (!mounted) {
-    				dispose = listen_dev(h2, "click", /*click_handler*/ ctx[1], false, false, false, false);
-    				mounted = true;
-    			}
+    			insert_dev(target, div, anchor);
+    			append_dev(div, img);
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].posterImage
@@ -8379,101 +8435,25 @@ var app = (function () {
     			if (dirty & /*$selectedMovie*/ 1 && img_alt_value !== (img_alt_value = /*$selectedMovie*/ ctx[0].title)) {
     				attr_dev(img, "alt", img_alt_value);
     			}
-
-    			if (dirty & /*$selectedMovie*/ 1 && t1_value !== (t1_value = /*$selectedMovie*/ ctx[0].title + "")) set_data_dev(t1, t1_value);
-
-    			if (/*$selectedMovie*/ ctx[0].originalLanguage !== "en") {
-    				if (if_block) {
-    					if_block.p(ctx, dirty);
-    				} else {
-    					if_block = create_if_block_1(ctx);
-    					if_block.c();
-    					if_block.m(div0, t3);
-    				}
-    			} else if (if_block) {
-    				if_block.d(1);
-    				if_block = null;
-    			}
-
-    			if (dirty & /*selectedPerson, personToPersonQuery, $selectedMovie*/ 1) {
-    				each_value_1 = /*$selectedMovie*/ ctx[0].topNcast;
-    				validate_each_argument(each_value_1);
-    				let i;
-
-    				for (i = 0; i < each_value_1.length; i += 1) {
-    					const child_ctx = get_each_context_1(ctx, each_value_1, i);
-
-    					if (each_blocks_1[i]) {
-    						each_blocks_1[i].p(child_ctx, dirty);
-    					} else {
-    						each_blocks_1[i] = create_each_block_1(child_ctx);
-    						each_blocks_1[i].c();
-    						each_blocks_1[i].m(p0, null);
-    					}
-    				}
-
-    				for (; i < each_blocks_1.length; i += 1) {
-    					each_blocks_1[i].d(1);
-    				}
-
-    				each_blocks_1.length = each_value_1.length;
-    			}
-
-    			if (dirty & /*$selectedMovie*/ 1 && t9_value !== (t9_value = /*$selectedMovie*/ ctx[0].genres.join(", ") + "")) set_data_dev(t9, t9_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t13_value !== (t13_value = /*$selectedMovie*/ ctx[0].keywords.join(", ") + "")) set_data_dev(t13, t13_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t17_value !== (t17_value = /*$selectedMovie*/ ctx[0].getFormattedReleaseDate() + "")) set_data_dev(t17, t17_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t20_value !== (t20_value = ` ${/*$selectedMovie*/ ctx[0].voteAverage} (${/*$selectedMovie*/ ctx[0].voteCount})` + "")) set_data_dev(t20, t20_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t23_value !== (t23_value = ` ${/*$selectedMovie*/ ctx[0].popularity}` + "")) set_data_dev(t23, t23_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t26_value !== (t26_value = ` ${/*$selectedMovie*/ ctx[0].generateHourString()}` + "")) set_data_dev(t26, t26_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t30_value !== (t30_value = /*$selectedMovie*/ ctx[0].overview + "")) set_data_dev(t30, t30_value);
-
-    			if (dirty & /*selectedPerson, personToPersonQuery, $selectedMovie*/ 1) {
-    				each_value = /*$selectedMovie*/ ctx[0].topNcrew;
-    				validate_each_argument(each_value);
-    				let i;
-
-    				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context(ctx, each_value, i);
-
-    					if (each_blocks[i]) {
-    						each_blocks[i].p(child_ctx, dirty);
-    					} else {
-    						each_blocks[i] = create_each_block(child_ctx);
-    						each_blocks[i].c();
-    						each_blocks[i].m(p8, null);
-    					}
-    				}
-
-    				for (; i < each_blocks.length; i += 1) {
-    					each_blocks[i].d(1);
-    				}
-
-    				each_blocks.length = each_value.length;
-    			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div3);
-    			if (if_block) if_block.d();
-    			destroy_each(each_blocks_1, detaching);
-    			destroy_each(each_blocks, detaching);
-    			mounted = false;
-    			dispose();
+    			if (detaching) detach_dev(div);
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block.name,
+    		id: create_if_block_10.name,
     		type: "if",
-    		source: "(17:2) {#if $selectedMovie}",
+    		source: "(37:10) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (35:10) {#if $selectedMovie.originalLanguage !== "en"}
-    function create_if_block_1(ctx) {
+    // (62:12) {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
+    function create_if_block_9(ctx) {
     	let h4;
     	let t_value = /*$selectedMovie*/ ctx[0].originalTitle + "";
     	let t;
@@ -8484,15 +8464,16 @@ var app = (function () {
     		c: function create() {
     			h4 = element("h4");
     			t = text(t_value);
-    			attr_dev(h4, "class", "link svelte-gii73m");
-    			add_location(h4, file$1, 35, 12, 1093);
+    			attr_dev(h4, "class", "card-subtitle mb-2 text-muted svelte-koymci");
+    			set_style(h4, "cursor", "pointer");
+    			add_location(h4, file$1, 62, 14, 2243);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h4, anchor);
     			append_dev(h4, t);
 
     			if (!mounted) {
-    				dispose = listen_dev(h4, "click", /*click_handler_1*/ ctx[2], false, false, false, false);
+    				dispose = listen_dev(h4, "click", /*click_handler_1*/ ctx[3], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -8508,60 +8489,429 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1.name,
+    		id: create_if_block_9.name,
     		type: "if",
-    		source: "(35:10) {#if $selectedMovie.originalLanguage !== \\\"en\\\"}",
+    		source: "(62:12) {#if $selectedMovie.originalLanguage !== \\\"en\\\" && $selectedMovie.originalTitle}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (49:12) {#each $selectedMovie.topNcast as cast}
-    function create_each_block_1(ctx) {
+    // (75:12) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}
+    function create_if_block_8(ctx) {
     	let p;
-    	let t0_value = /*cast*/ ctx[8].name + "";
+    	let strong;
+    	let t1;
+    	let t2_value = /*$selectedMovie*/ ctx[0].genres.join(", ") + "";
+    	let t2;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			strong = element("strong");
+    			strong.textContent = "Genre:";
+    			t1 = space();
+    			t2 = text(t2_value);
+    			add_location(strong, file$1, 76, 16, 2767);
+    			attr_dev(p, "class", "card-text");
+    			add_location(p, file$1, 75, 14, 2729);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			append_dev(p, strong);
+    			append_dev(p, t1);
+    			append_dev(p, t2);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].genres.join(", ") + "")) set_data_dev(t2, t2_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_8.name,
+    		type: "if",
+    		source: "(75:12) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (86:12) {#if $selectedMovie.releaseDate}
+    function create_if_block_7(ctx) {
+    	let p;
+    	let strong;
+    	let t1;
+    	let t2_value = /*$selectedMovie*/ ctx[0].getFormattedReleaseDate() + "";
+    	let t2;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			strong = element("strong");
+    			strong.textContent = "Release Date:";
+    			t1 = space();
+    			t2 = text(t2_value);
+    			add_location(strong, file$1, 87, 16, 3218);
+    			attr_dev(p, "class", "card-text");
+    			add_location(p, file$1, 86, 14, 3180);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			append_dev(p, strong);
+    			append_dev(p, t1);
+    			append_dev(p, t2);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].getFormattedReleaseDate() + "")) set_data_dev(t2, t2_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_7.name,
+    		type: "if",
+    		source: "(86:12) {#if $selectedMovie.releaseDate}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (92:12) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}
+    function create_if_block_6(ctx) {
+    	let p;
+    	let strong;
+    	let t1;
+    	let t2_value = /*$selectedMovie*/ ctx[0].voteAverage + "";
+    	let t2;
+    	let t3;
+    	let t4_value = /*$selectedMovie*/ ctx[0].voteCount + "";
+    	let t4;
+    	let t5;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			strong = element("strong");
+    			strong.textContent = "Rating:";
+    			t1 = space();
+    			t2 = text(t2_value);
+    			t3 = text(" (");
+    			t4 = text(t4_value);
+    			t5 = text(")");
+    			add_location(strong, file$1, 93, 16, 3470);
+    			attr_dev(p, "class", "card-text");
+    			add_location(p, file$1, 92, 14, 3432);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			append_dev(p, strong);
+    			append_dev(p, t1);
+    			append_dev(p, t2);
+    			append_dev(p, t3);
+    			append_dev(p, t4);
+    			append_dev(p, t5);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].voteAverage + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t4_value !== (t4_value = /*$selectedMovie*/ ctx[0].voteCount + "")) set_data_dev(t4, t4_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_6.name,
+    		type: "if",
+    		source: "(92:12) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (98:12) {#if $selectedMovie.popularity}
+    function create_if_block_5(ctx) {
+    	let p;
+    	let strong;
+    	let t1;
+    	let t2_value = /*$selectedMovie*/ ctx[0].popularity + "";
+    	let t2;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			strong = element("strong");
+    			strong.textContent = "Popularity:";
+    			t1 = space();
+    			t2 = text(t2_value);
+    			add_location(strong, file$1, 99, 16, 3702);
+    			attr_dev(p, "class", "card-text");
+    			add_location(p, file$1, 98, 14, 3664);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			append_dev(p, strong);
+    			append_dev(p, t1);
+    			append_dev(p, t2);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].popularity + "")) set_data_dev(t2, t2_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_5.name,
+    		type: "if",
+    		source: "(98:12) {#if $selectedMovie.popularity}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (104:12) {#if $selectedMovie.runtime}
+    function create_if_block_4(ctx) {
+    	let p;
+    	let strong;
+    	let t1;
+    	let t2_value = /*$selectedMovie*/ ctx[0].generateHourString() + "";
+    	let t2;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			strong = element("strong");
+    			strong.textContent = "Runtime:";
+    			t1 = space();
+    			t2 = text(t2_value);
+    			add_location(strong, file$1, 105, 16, 3905);
+    			attr_dev(p, "class", "card-text");
+    			add_location(p, file$1, 104, 14, 3867);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			append_dev(p, strong);
+    			append_dev(p, t1);
+    			append_dev(p, t2);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].generateHourString() + "")) set_data_dev(t2, t2_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_4.name,
+    		type: "if",
+    		source: "(104:12) {#if $selectedMovie.runtime}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (110:12) {#if $selectedMovie.overview}
+    function create_if_block_3(ctx) {
+    	let p;
+    	let strong;
+    	let t1;
+    	let t2_value = /*$selectedMovie*/ ctx[0].overview + "";
+    	let t2;
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			strong = element("strong");
+    			strong.textContent = "Description:";
+    			t1 = space();
+    			t2 = text(t2_value);
+    			add_location(strong, file$1, 111, 16, 4116);
+    			attr_dev(p, "class", "card-text");
+    			add_location(p, file$1, 110, 14, 4078);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			append_dev(p, strong);
+    			append_dev(p, t1);
+    			append_dev(p, t2);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].overview + "")) set_data_dev(t2, t2_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_3.name,
+    		type: "if",
+    		source: "(110:12) {#if $selectedMovie.overview}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (116:12) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}
+    function create_if_block_2(ctx) {
+    	let p;
+    	let strong;
+    	let t1;
+    	let ul;
+    	let each_value_1 = /*$selectedMovie*/ ctx[0].topNcast;
+    	validate_each_argument(each_value_1);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value_1.length; i += 1) {
+    		each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			strong = element("strong");
+    			strong.textContent = "Cast:";
+    			t1 = space();
+    			ul = element("ul");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			add_location(strong, file$1, 117, 16, 4357);
+    			attr_dev(p, "class", "card-text");
+    			add_location(p, file$1, 116, 14, 4319);
+    			attr_dev(ul, "class", "list-group list-group-flush");
+    			add_location(ul, file$1, 119, 14, 4413);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			append_dev(p, strong);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, ul, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				if (each_blocks[i]) {
+    					each_blocks[i].m(ul, null);
+    				}
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*personSelected, personToPersonQuery, $selectedMovie*/ 3) {
+    				each_value_1 = /*$selectedMovie*/ ctx[0].topNcast;
+    				validate_each_argument(each_value_1);
+    				let i;
+
+    				for (i = 0; i < each_value_1.length; i += 1) {
+    					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block_1(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(ul, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value_1.length;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(ul);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_2.name,
+    		type: "if",
+    		source: "(116:12) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (121:16) {#each $selectedMovie.topNcast as cast}
+    function create_each_block_1(ctx) {
+    	let li;
+    	let span;
+    	let t0_value = /*cast*/ ctx[9].name + "";
     	let t0;
     	let t1;
-    	let t2_value = /*cast*/ ctx[8].character + "";
+    	let t2_value = /*cast*/ ctx[9].character + "";
     	let t2;
     	let t3;
     	let mounted;
     	let dispose;
 
     	function click_handler_2() {
-    		return /*click_handler_2*/ ctx[3](/*cast*/ ctx[8]);
+    		return /*click_handler_2*/ ctx[4](/*cast*/ ctx[9]);
     	}
 
     	const block = {
     		c: function create() {
-    			p = element("p");
+    			li = element("li");
+    			span = element("span");
     			t0 = text(t0_value);
     			t1 = text(" as ");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr_dev(p, "class", "blue-text svelte-gii73m");
-    			add_location(p, file$1, 49, 14, 1517);
+    			attr_dev(span, "class", "text-primary svelte-koymci");
+    			add_location(span, file$1, 127, 20, 4764);
+    			attr_dev(li, "class", "list-group-item svelte-koymci");
+    			set_style(li, "cursor", "pointer");
+    			add_location(li, file$1, 121, 18, 4528);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, p, anchor);
-    			append_dev(p, t0);
-    			append_dev(p, t1);
-    			append_dev(p, t2);
-    			append_dev(p, t3);
+    			insert_dev(target, li, anchor);
+    			append_dev(li, span);
+    			append_dev(span, t0);
+    			append_dev(li, t1);
+    			append_dev(li, t2);
+    			append_dev(li, t3);
 
     			if (!mounted) {
-    				dispose = listen_dev(p, "click", click_handler_2, false, false, false, false);
+    				dispose = listen_dev(li, "click", click_handler_2, false, false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = /*cast*/ ctx[8].name + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*cast*/ ctx[8].character + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = /*cast*/ ctx[9].name + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*cast*/ ctx[9].character + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p);
+    			if (detaching) detach_dev(li);
     			mounted = false;
     			dispose();
     		}
@@ -8571,58 +8921,152 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(49:12) {#each $selectedMovie.topNcast as cast}",
+    		source: "(121:16) {#each $selectedMovie.topNcast as cast}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (83:12) {#each $selectedMovie.topNcrew as crew}
-    function create_each_block(ctx) {
+    // (133:12) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}
+    function create_if_block_1(ctx) {
     	let p;
-    	let t0_value = /*crew*/ ctx[5].name + "";
+    	let strong;
+    	let t1;
+    	let ul;
+    	let each_value = /*$selectedMovie*/ ctx[0].topNcrew;
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			p = element("p");
+    			strong = element("strong");
+    			strong.textContent = "Crew:";
+    			t1 = space();
+    			ul = element("ul");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			add_location(strong, file$1, 134, 16, 5053);
+    			attr_dev(p, "class", "card-text mt-3");
+    			add_location(p, file$1, 133, 14, 5010);
+    			attr_dev(ul, "class", "list-group list-group-flush");
+    			add_location(ul, file$1, 136, 14, 5109);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, p, anchor);
+    			append_dev(p, strong);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, ul, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				if (each_blocks[i]) {
+    					each_blocks[i].m(ul, null);
+    				}
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*personSelected, personToPersonQuery, $selectedMovie*/ 3) {
+    				each_value = /*$selectedMovie*/ ctx[0].topNcrew;
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(ul, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(p);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(ul);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1.name,
+    		type: "if",
+    		source: "(133:12) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (138:16) {#each $selectedMovie.topNcrew as crew}
+    function create_each_block(ctx) {
+    	let li;
+    	let span;
+    	let t0_value = /*crew*/ ctx[6].name + "";
     	let t0;
     	let t1;
-    	let t2_value = /*crew*/ ctx[5].job + "";
+    	let t2_value = /*crew*/ ctx[6].job + "";
     	let t2;
     	let t3;
     	let mounted;
     	let dispose;
 
     	function click_handler_3() {
-    		return /*click_handler_3*/ ctx[4](/*crew*/ ctx[5]);
+    		return /*click_handler_3*/ ctx[5](/*crew*/ ctx[6]);
     	}
 
     	const block = {
     		c: function create() {
-    			p = element("p");
+    			li = element("li");
+    			span = element("span");
     			t0 = text(t0_value);
     			t1 = text(": ");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr_dev(p, "class", "blue-text svelte-gii73m");
-    			add_location(p, file$1, 83, 14, 2670);
+    			attr_dev(span, "class", "text-primary svelte-koymci");
+    			add_location(span, file$1, 144, 20, 5460);
+    			attr_dev(li, "class", "list-group-item svelte-koymci");
+    			set_style(li, "cursor", "pointer");
+    			add_location(li, file$1, 138, 18, 5224);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, p, anchor);
-    			append_dev(p, t0);
-    			append_dev(p, t1);
-    			append_dev(p, t2);
-    			append_dev(p, t3);
+    			insert_dev(target, li, anchor);
+    			append_dev(li, span);
+    			append_dev(span, t0);
+    			append_dev(li, t1);
+    			append_dev(li, t2);
+    			append_dev(li, t3);
 
     			if (!mounted) {
-    				dispose = listen_dev(p, "click", click_handler_3, false, false, false, false);
+    				dispose = listen_dev(li, "click", click_handler_3, false, false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = /*crew*/ ctx[5].name + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*crew*/ ctx[5].job + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = /*crew*/ ctx[6].name + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*crew*/ ctx[6].job + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p);
+    			if (detaching) detach_dev(li);
     			mounted = false;
     			dispose();
     		}
@@ -8632,7 +9076,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(83:12) {#each $selectedMovie.topNcrew as crew}",
+    		source: "(138:16) {#each $selectedMovie.topNcrew as crew}",
     		ctx
     	});
 
@@ -8641,20 +9085,14 @@ var app = (function () {
 
     function create_fragment$1(ctx) {
     	let div;
-    	let t;
-    	let movieonhoverdetails;
-    	let current;
     	let if_block = /*$selectedMovie*/ ctx[0] && create_if_block(ctx);
-    	movieonhoverdetails = new MovieOnHoverDetails({ $$inline: true });
 
     	const block = {
     		c: function create() {
     			div = element("div");
     			if (if_block) if_block.c();
-    			t = space();
-    			create_component(movieonhoverdetails.$$.fragment);
-    			attr_dev(div, "class", "movie-details svelte-gii73m");
-    			add_location(div, file$1, 15, 0, 445);
+    			attr_dev(div, "class", "movie-details container-fluid svelte-koymci");
+    			add_location(div, file$1, 31, 0, 1100);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -8662,9 +9100,6 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
     			if (if_block) if_block.m(div, null);
-    			append_dev(div, t);
-    			mount_component(movieonhoverdetails, div, null);
-    			current = true;
     		},
     		p: function update(ctx, [dirty]) {
     			if (/*$selectedMovie*/ ctx[0]) {
@@ -8673,26 +9108,18 @@ var app = (function () {
     				} else {
     					if_block = create_if_block(ctx);
     					if_block.c();
-    					if_block.m(div, t);
+    					if_block.m(div, null);
     				}
     			} else if (if_block) {
     				if_block.d(1);
     				if_block = null;
     			}
     		},
-    		i: function intro(local) {
-    			if (current) return;
-    			transition_in(movieonhoverdetails.$$.fragment, local);
-    			current = true;
-    		},
-    		o: function outro(local) {
-    			transition_out(movieonhoverdetails.$$.fragment, local);
-    			current = false;
-    		},
+    		i: noop$1,
+    		o: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
     			if (if_block) if_block.d();
-    			destroy_component(movieonhoverdetails);
     		}
     	};
 
@@ -8715,7 +9142,7 @@ var app = (function () {
     	return {
     		id: person.id,
     		name: person.name,
-    		castOrCrew: person.character ? 'cast' : 'crew'
+    		castOrCrew: person.character ? "cast" : "crew"
     	};
     }
 
@@ -8725,6 +9152,19 @@ var app = (function () {
     	component_subscribe($$self, selectedMovie, $$value => $$invalidate(0, $selectedMovie = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('MovieDetails', slots, []);
+
+    	function personSelected(personQuery) {
+    		allowQueryMutex.set(false);
+    		selectedPerson.set(personQuery);
+    		minReviewCount.set(DEFAULT_MIN_REVIEWS);
+    		maxReviewCount.set(DEFAULT_MAX_REVIEWS);
+    		minYear.set(DEFAULT_YEAR);
+    		selectedTitle.set(DEFAULT_TITLE);
+    		selectedGenres.set(DEFAULT_SELECTED_GENRES);
+    		selectedLanguage.set(DEFAULT_LANGUAGE);
+    		allowQueryMutex.set(true);
+    	}
+
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -8733,20 +9173,42 @@ var app = (function () {
 
     	const click_handler = () => openYoutubeSearchUrl($selectedMovie.title, $selectedMovie.getReleaseYear());
     	const click_handler_1 = () => openYoutubeSearchUrl($selectedMovie.originalTitle, $selectedMovie.getReleaseYear());
-    	const click_handler_2 = cast => selectedPerson.set(personToPersonQuery(cast));
-    	const click_handler_3 = crew => selectedPerson.set(personToPersonQuery(crew));
+
+    	const click_handler_2 = cast => {
+    		personSelected(personToPersonQuery(cast));
+    	};
+
+    	const click_handler_3 = crew => {
+    		personSelected(personToPersonQuery(crew));
+    	};
 
     	$$self.$capture_state = () => ({
+    		allowQueryMutex,
+    		minYear,
     		selectedMovie,
     		selectedPerson,
+    		DEFAULT_LANGUAGE,
+    		DEFAULT_MAX_REVIEWS,
+    		DEFAULT_MIN_REVIEWS,
+    		DEFAULT_PERSON,
+    		DEFAULT_SELECTED_GENRES,
+    		DEFAULT_TITLE,
+    		DEFAULT_YEAR,
+    		selectedTitle,
+    		minReviewCount,
+    		maxReviewCount,
+    		selectedGenres,
+    		selectedLanguage,
     		MovieOnHoverDetails,
     		openYoutubeSearchUrl,
+    		personSelected,
     		personToPersonQuery,
     		$selectedMovie
     	});
 
     	return [
     		$selectedMovie,
+    		personSelected,
     		click_handler,
     		click_handler_1,
     		click_handler_2,
@@ -8769,6 +9231,8 @@ var app = (function () {
     }
 
     /* src-modular/App.svelte generated by Svelte v3.59.2 */
+
+    const { console: console_1 } = globals;
 
     const file = "src-modular/App.svelte";
 
@@ -8814,18 +9278,18 @@ var app = (function () {
     			div2 = element("div");
     			create_component(moviedetails.$$.fragment);
     			attr_dev(div0, "class", "header-container svelte-ka74mw");
-    			add_location(div0, file, 49, 6, 1970);
+    			add_location(div0, file, 55, 6, 2159);
     			attr_dev(div1, "class", "movie-list-container svelte-ka74mw");
-    			add_location(div1, file, 53, 8, 2066);
+    			add_location(div1, file, 59, 8, 2255);
     			attr_dev(div2, "class", "movie-details-container svelte-ka74mw");
-    			add_location(div2, file, 56, 8, 2187);
+    			add_location(div2, file, 62, 8, 2376);
     			attr_dev(div3, "class", "body svelte-ka74mw");
-    			add_location(div3, file, 52, 6, 2039);
+    			add_location(div3, file, 58, 6, 2228);
     			attr_dev(div4, "class", "header-body svelte-ka74mw");
-    			add_location(div4, file, 48, 4, 1938);
+    			add_location(div4, file, 54, 4, 2127);
     			attr_dev(div5, "class", "parent-div");
-    			add_location(div5, file, 47, 2, 1909);
-    			add_location(main, file, 46, 0, 1900);
+    			add_location(div5, file, 53, 2, 2098);
+    			add_location(main, file, 52, 0, 2089);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -8883,6 +9347,7 @@ var app = (function () {
     }
 
     function instance($$self, $$props, $$invalidate) {
+    	let $allowQueryMutex;
     	let $selectedTitle;
     	let $selectedGenres;
     	let $selectedLanguage;
@@ -8890,32 +9355,40 @@ var app = (function () {
     	let $maxReviewCount;
     	let $minReviewCount;
     	let $minYear;
+    	validate_store(allowQueryMutex, 'allowQueryMutex');
+    	component_subscribe($$self, allowQueryMutex, $$value => $$invalidate(1, $allowQueryMutex = $$value));
     	validate_store(selectedTitle, 'selectedTitle');
-    	component_subscribe($$self, selectedTitle, $$value => $$invalidate(1, $selectedTitle = $$value));
+    	component_subscribe($$self, selectedTitle, $$value => $$invalidate(2, $selectedTitle = $$value));
     	validate_store(selectedGenres, 'selectedGenres');
-    	component_subscribe($$self, selectedGenres, $$value => $$invalidate(2, $selectedGenres = $$value));
+    	component_subscribe($$self, selectedGenres, $$value => $$invalidate(3, $selectedGenres = $$value));
     	validate_store(selectedLanguage, 'selectedLanguage');
-    	component_subscribe($$self, selectedLanguage, $$value => $$invalidate(3, $selectedLanguage = $$value));
+    	component_subscribe($$self, selectedLanguage, $$value => $$invalidate(4, $selectedLanguage = $$value));
     	validate_store(selectedPerson, 'selectedPerson');
-    	component_subscribe($$self, selectedPerson, $$value => $$invalidate(4, $selectedPerson = $$value));
+    	component_subscribe($$self, selectedPerson, $$value => $$invalidate(5, $selectedPerson = $$value));
     	validate_store(maxReviewCount, 'maxReviewCount');
-    	component_subscribe($$self, maxReviewCount, $$value => $$invalidate(5, $maxReviewCount = $$value));
+    	component_subscribe($$self, maxReviewCount, $$value => $$invalidate(6, $maxReviewCount = $$value));
     	validate_store(minReviewCount, 'minReviewCount');
-    	component_subscribe($$self, minReviewCount, $$value => $$invalidate(6, $minReviewCount = $$value));
+    	component_subscribe($$self, minReviewCount, $$value => $$invalidate(7, $minReviewCount = $$value));
     	validate_store(minYear, 'minYear');
-    	component_subscribe($$self, minYear, $$value => $$invalidate(7, $minYear = $$value));
+    	component_subscribe($$self, minYear, $$value => $$invalidate(8, $minYear = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
     	let movies = [];
 
     	async function updateMovies() {
-    		$$invalidate(0, movies = await queryMovies(movies));
+    		if ($allowQueryMutex) {
+    			$$invalidate(0, movies = await queryMovies(movies));
 
-    		if (!movies || movies.length == 0) {
-    			$$invalidate(0, movies = await prependAfterFailure());
+    			if (!movies || movies.length == 0) {
+    				$$invalidate(0, movies = await prependAfterFailure());
+    			} else {
+    				$$invalidate(0, movies = await prepend(movies));
+    			}
+
+    			await tick(); // Wait for the DOM to update
+    		} else {
+    			console.log('query blocked by mutex');
     		}
-
-    		await tick(); // Wait for the DOM to update
     	}
 
     	onMount(async () => {
@@ -8945,7 +9418,7 @@ var app = (function () {
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<App> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<App> was created with unknown prop '${key}'`);
     	});
 
     	$$self.$capture_state = () => ({
@@ -8973,8 +9446,10 @@ var app = (function () {
     		selectedGenres,
     		selectedTitle,
     		currentMinYear,
+    		allowQueryMutex,
     		movies,
     		updateMovies,
+    		$allowQueryMutex,
     		$selectedTitle,
     		$selectedGenres,
     		$selectedLanguage,
@@ -8993,7 +9468,7 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage, $selectedGenres, $selectedTitle*/ 254) {
+    		if ($$self.$$.dirty & /*$minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage, $selectedGenres, $selectedTitle, $allowQueryMutex*/ 510) {
     			// Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
     			updateMovies();
     		}
@@ -9001,6 +9476,7 @@ var app = (function () {
 
     	return [
     		movies,
+    		$allowQueryMutex,
     		$selectedTitle,
     		$selectedGenres,
     		$selectedLanguage,

@@ -12,19 +12,19 @@
     currentMaxReviewCount,
     currentSelectedTitle,
     selectedTitle,
+    DEFAULT_LANGUAGE,
+    DEFAULT_MAX_REVIEWS,
+    DEFAULT_MIN_REVIEWS,
+    DEFAULT_PERSON,
+    DEFAULT_SELECTED_GENRES,
+    DEFAULT_TITLE,
+    DEFAULT_YEAR,
   } from "../stores.js";
 
   import { LANGUAGEINFO } from "../constants.js";
 
   import GenreMenu from "./GenreMenu.svelte";
 
-  // Default values
-  const DEFAULT_TITLE = '';
-  const DEFAULT_YEAR = null;
-  const DEFAULT_MIN_REVIEWS = null;
-  const DEFAULT_MAX_REVIEWS = null;
-  const DEFAULT_PERSON = { name: '', id: null, castOrCrew: null };
-  const DEFAULT_LANGUAGE = 'all';
 </script>
 
 <div class="sidebar bg-light p-3">
@@ -212,7 +212,6 @@
       </div>
     </div>
 
-    <!-- Genre Menu -->
     <div class="mb-2">
       <GenreMenu />
     </div>

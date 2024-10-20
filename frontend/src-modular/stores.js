@@ -15,12 +15,23 @@ export const firstVisibleIndex = derived(
   }
 );
 
-export const selectedPerson = writable({ name: '', id: null, castOrCrew: null});
-export const selectedLanguage = writable('all');
-export const selectedGenres = writable([]);
+export const allowQueryMutex = writable(true)
+
+// Default values
+export const DEFAULT_TITLE = '';
+export const DEFAULT_YEAR = null;
+export const DEFAULT_MIN_REVIEWS = null;
+export const DEFAULT_MAX_REVIEWS = null;
+export const DEFAULT_PERSON = { name: '', id: null, castOrCrew: null };
+export const DEFAULT_LANGUAGE = 'all';
+export const DEFAULT_SELECTED_GENRES = [];
+
+export const selectedPerson = writable(DEFAULT_PERSON);
+export const selectedLanguage = writable(DEFAULT_LANGUAGE);
+export const selectedGenres = writable(DEFAULT_SELECTED_GENRES);
 export const minYear = writable('2014');
 export const minReviewCount = writable(10);
-export const maxReviewCount = writable(null);
+export const maxReviewCount = writable(DEFAULT_MAX_REVIEWS);
 export const selectedTitle = writable('');
 
 export const lastAppendedID = writable(null)
