@@ -19,6 +19,7 @@
     DEFAULT_SELECTED_GENRES,
     DEFAULT_TITLE,
     DEFAULT_YEAR,
+    movieCount,
   } from "../stores.js";
 
   import { LANGUAGEINFO } from "../constants.js";
@@ -29,6 +30,22 @@
     if (event.key === "Enter") {
       event.target.blur();
     }
+  }
+
+  function resetFilters() {
+    selectedLanguage.set(DEFAULT_LANGUAGE);
+    selectedGenres.set(DEFAULT_SELECTED_GENRES);
+    minYear.set(DEFAULT_YEAR);
+    minReviewCount.set(DEFAULT_MIN_REVIEWS);
+    maxReviewCount.set(DEFAULT_MAX_REVIEWS);
+    selectedPerson.set({ name: '', id: null, castOrCrew: null });
+    currentSelectedPerson.set({ name: '', id: null, castOrCrew: null });
+    currentSelectedPerson.set({ name: '', id: null, castOrCrew: null });
+    currentMinYear.set(DEFAULT_YEAR);
+    currentMinReviewCount.set(DEFAULT_MIN_REVIEWS);
+    currentMaxReviewCount.set(DEFAULT_MAX_REVIEWS);
+    currentSelectedTitle.set(DEFAULT_TITLE);
+    selectedTitle.set(DEFAULT_TITLE);
   }
 </script>
 
@@ -53,32 +70,13 @@
           <label for="title-input">Title</label>
         </div>
         {#if $selectedTitle !== DEFAULT_TITLE}
-          <button
-            type="button"
-            class="btn btn-outline-secondary reset-button ms-2"
+          <button type="button" class="btn-close ms-1 border-4" aria-label="Close"
             on:click={() => {
               $selectedTitle = DEFAULT_TITLE;
               selectedTitle.set(DEFAULT_TITLE);
             }}
-          >
-            <!-- SVG Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-x"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293
-                6.293a1 1 0 01-1.414 1.414L8
-                9.414l-6.293
-                6.293a1 1 0 01-1.414-1.414L6.586
-                8 .293 1.707a1 1 0 010-1.414z"
-              />
-            </svg>
-          </button>
+          ></button>
+          
         {/if}
       </div>
     </div>
@@ -111,7 +109,7 @@
             id="min-review-input"
             bind:value={$currentMinReviewCount}
             on:blur={(e) => {
-              if(e.target.value) {
+              if (e.target.value) {
                 minReviewCount.set(e.target.value);
               }
             }}
@@ -121,32 +119,14 @@
           <label for="min-review-input">Min Reviews</label>
         </div>
         {#if $currentMinReviewCount !== DEFAULT_MIN_REVIEWS}
-          <button
-            type="button"
-            class="btn btn-outline-secondary reset-button ms-2"
+
+
+          <button type="button" class="btn-close ms-1 border-4" aria-label="Close"
             on:click={() => {
               $currentMinReviewCount = DEFAULT_MIN_REVIEWS;
               minReviewCount.set(DEFAULT_MIN_REVIEWS);
             }}
           >
-            <!-- SVG Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-x"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0
-                111.414 1.414L9.414 8l6.293
-                6.293a1 1 0 01-1.414 1.414L8
-                9.414l-6.293
-                6.293a1 1 0 01-1.414-1.414L6.586
-                8 .293 1.707a1 1 0 010-1.414z"
-              />
-            </svg>
           </button>
         {/if}
       </div>
@@ -162,7 +142,7 @@
             id="max-review-input"
             bind:value={$currentMaxReviewCount}
             on:blur={(e) => {
-              if(e.target.value) {
+              if (e.target.value) {
                 maxReviewCount.set(e.target.value);
               }
             }}
@@ -172,32 +152,12 @@
           <label for="max-review-input">Max Reviews</label>
         </div>
         {#if $currentMaxReviewCount !== DEFAULT_MAX_REVIEWS}
-          <button
-            type="button"
-            class="btn btn-outline-secondary reset-button ms-2"
+          <button type="button" class="btn-close ms-1 border-4" aria-label="Close"
             on:click={() => {
-              $currentMaxReviewCount = DEFAULT_MAX_REVIEWS;
-              maxReviewCount.set(DEFAULT_MAX_REVIEWS);
+              $currentMinReviewCount = DEFAULT_MAX_REVIEWS;
+              minReviewCount.set(DEFAULT_MAX_REVIEWS);
             }}
           >
-            <!-- SVG Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-x"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0
-                111.414 1.414L9.414 8l6.293
-                6.293a1 1 0 01-1.414 1.414L8
-                9.414l-6.293
-                6.293a1 1 0 01-1.414-1.414L6.586
-                8 .293 1.707a1 1 0 010-1.414z"
-              />
-            </svg>
           </button>
         {/if}
       </div>
@@ -221,7 +181,7 @@
             }}
             on:blur={() => {
               selectedPerson.set($currentSelectedPerson);
-              console.log($selectedPerson)
+              console.log($selectedPerson);
             }}
             placeholder="Person"
             on:keydown={handleKeydown}
@@ -229,35 +189,12 @@
 
           <label for="person-input">Person</label>
         </div>
-        {#if $selectedPerson.name != ''}
-
-          <button
-            type="button"
-            class="btn btn-outline-secondary reset-button ms-2"
+        {#if $selectedPerson.name != ""}
+          <button type="button" class="btn-close ms-1 border-4" aria-label="Close"
             on:click={() => {
-              console.log('log change', DEFAULT_PERSON)
-              selectedPerson.set({ name: '', id: null, castOrCrew: null });
+              selectedPerson.set({ name: "", id: null, castOrCrew: null });
             }}
-          >
-            <!-- SVG Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-x"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0
-                111.414 1.414L9.414 8l6.293
-                6.293a1 1 0 01-1.414 1.414L8
-                9.414l-6.293
-                6.293a1 1 0 01-1.414-1.414L6.586
-                8 .293 1.707a1 1 0 010-1.414z"
-              />
-            </svg>
-          </button>
+          ></button>
         {/if}
       </div>
     </div>
@@ -282,31 +219,11 @@
           <label for="language-select">Language</label>
         </div>
         {#if $selectedLanguage !== DEFAULT_LANGUAGE}
-          <button
-            type="button"
-            class="btn btn-outline-secondary reset-button ms-2"
+          <button type="button" class="btn-close ms-1 border-4" aria-label="Close"
             on:click={() => {
               selectedLanguage.set(DEFAULT_LANGUAGE);
             }}
           >
-            <!-- SVG Icon -->
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-x"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0
-                111.414 1.414L9.414 8l6.293
-                6.293a1 1 0 01-1.414 1.414L8
-                9.414l-6.293
-                6.293a1 1 0 01-1.414-1.414L6.586
-                8 .293 1.707a1 1 0 010-1.414z"
-              />
-            </svg>
           </button>
         {/if}
       </div>
@@ -315,6 +232,14 @@
     <!-- Genre Menu -->
     <div class="mb-2">
       <GenreMenu />
+    </div>
+
+    <!-- Reset Button -->
+    <div class="mb-2">
+      <h3>{$movieCount > 0 ? $movieCount : 'No'} movies! </h3>
+      <button type="button" class="btn btn-primary btn-lg " on:click={resetFilters}>
+        Reset Filters
+      </button>
     </div>
   </form>
 </div>
@@ -338,27 +263,18 @@
     -moz-appearance: textfield;
   }
 
-  /* Style for the reset button */
-  .reset-button {
-    display: flex;
-    align-items: center;
-  }
-
-  .reset-button svg {
-    pointer-events: none;
-  }
-
   /* Add transition for smooth effect */
-    input.form-control,
-    select.form-select,
-    textarea.form-control {
-      transition: box-shadow 0.2s ease;
-    }
+  input.form-control,
+  select.form-select,
+  textarea.form-control {
+    transition: box-shadow 0.2s ease;
+  }
 
-    /* Blue glow effect on hover */
-    input.form-control:hover,
-    select.form-select:hover,
-    textarea.form-control:hover {
-      box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-    }
+  /* Blue glow effect on hover */
+  input.form-control:hover,
+  select.form-select:hover,
+  textarea.form-control:hover {
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+  }
+
 </style>

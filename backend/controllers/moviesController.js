@@ -4,10 +4,17 @@ const Movie = require("../models/Movie");
 const getMovies = async (req, res) => {
   try {
     const filter = buildFilter(req.body);
+    const countFilter = {...filter}
+    delete countFilter.release_date
+    console.log('count filter', countFilter)
     const sorting = getSorting(req.body.type);
-    const movies = await Movie.find(filter).limit(75).sort(sorting);
+    const [movies, count] = await Promise.all([
+      Movie.find(filter).limit(75).sort(sorting),
+      Movie.count(countFilter)
+    ]);
+    console.log(movies[0])
     res.setHeader("Content-Type", "application/json; charset=utf-8");
-    res.json(movies);
+    res.json({movies, count});
   } catch (error) {
     const statusCode = error.isClientError ? 400 : 500;
     res.status(statusCode).json({ message: error.message });

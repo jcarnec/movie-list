@@ -4,14 +4,16 @@
     scrollY,
     itemHeight,
     selectedLanguage,
-    selectedGenres
+    selectedGenres,
   } from "../stores.js";
+  import {addMovie, movieIsPresent} from "../historyStore.js"
   import {
     getLanguageColor,
     getLanguageFlag,
     getLanguageName,
     genreEmojiDict
   } from "../constants.js";
+  import { onMount } from "svelte";
 
   export let movie;
   export let index;
@@ -32,27 +34,40 @@
     isHoveringOver = false;
   }
 
+  let movieHasBeenViewed = false;
 
   $: isEnglish = movie.originalLanguage === "en";
   $: languageColor = getLanguageColor(movie.originalLanguage);
   $: languageFlag = getLanguageFlag(movie.originalLanguage);
   $: languageName = getLanguageName(movie.originalLanguage);
   $: fontWeightDate = `font-weight: ${newYear ? '700' : '400'}`;
-  $: isSelectedMovie = $selectedMovie && $selectedMovie.id == movie.id
+  $: {
+    let isSelectedMovie = $selectedMovie && $selectedMovie.id == movie.id;
+    if(isSelectedMovie) {
+      addMovie(movie)
+      movieHasBeenViewed = true
+    }
+  }
+  
+  onMount(async () => {
+
+    if(movieIsPresent(movie)) {
+      movieHasBeenViewed = true
+    }
+
+    return () => {
+    };
+  });
     
 
 </script>
 
-<div
-  class="movie-item row align-items-center {$selectedMovie && $selectedMovie.id == movie.id ? 'selected-movie-item' : ''}"
-  on:click={handleBarClick}
-  on:mouseenter={handleMouseEnter}
-  on:mouseleave={handleMouseLeave}
-  style="transform: translateY({index * $itemHeight - ($scrollY % $itemHeight)}px); height: {$itemHeight}px; position: absolute; width: 100%;"
->
-  <!-- Date Container -->
-  <div class="col-1 text-center" style="{fontWeightDate}">
-    {movie.getReleaseDateString()}
+<div class="movie-item row align-items-center {$selectedMovie && $selectedMovie.id == movie.id ? 'selected-movie-item' : '' } {movieIsPresent(movie) ? 'viewed-movie-item' : ''}" 
+  on:click={handleBarClick} on:mouseenter={handleMouseEnter} on:mouseleave={handleMouseLeave} style="transform: translateY({index * $itemHeight - ($scrollY % $itemHeight)}px); height: {$itemHeight}px; position: absolute; width: 100%;"
+  >
+  <!-- Time Container -->
+  <div class="col-1 text-center">
+    {movie.generateHourString()}
   </div>
 
   <!-- Title-Genre Container -->
@@ -109,14 +124,14 @@
   <!-- Info Container -->
   <div class="info-container col-1 text-center">
     {#if isHoveringOver }
-      <div class="row mb-2" style="font-weight: 800; font-size: small">rating: {movie.voteAverage.toFixed(1)}</div>
-      <div class="row" style="color: {barColor}; font-weight: 800; font-size: small">popularity: {movie.popularity.toFixed(0)}</div>
+      <div class="row mb-2" style="font-weight: 800;">⭐ {movie.voteAverage.toFixed(1)}</div>
+      <div class="row" style="color: {barColor}; font-weight: 800;">👥 {movie.popularity.toFixed(0)}</div>
     {/if}
   </div>
 
-  <!-- Time Container -->
-  <div class="col-1 text-center">
-    {movie.generateHourString()}
+  <!-- Date Container -->
+  <div class="col-1 text-center" style="{fontWeightDate}">
+    {movie.getReleaseDateString()}
   </div>
 </div>
 
@@ -147,7 +162,6 @@
     background-color: white;
     position: relative;
     overflow: hidden;
-    transition: background-color 1s ease;
     border-radius: 0.5rem;
   }
 
@@ -180,7 +194,6 @@
   .info-container {
     display: block;
     opacity: 0;
-    transition: opacity 1s ease;
   }
 
   .movie-item:hover .info-container {
@@ -188,10 +201,9 @@
     opacity: 1;
   }
 
-  /* .selected-movie-item .custom-bar-container {
+  .viewed-movie-item .custom-bar-container {
     background-color: #ccc;
-    transition: background-color 0s
-  } */
+  }
 
   .movie-item:hover .custom-bar-container {
     background-color: #ccc;

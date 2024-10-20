@@ -1,5 +1,7 @@
 import { writable, derived, get } from 'svelte/store';
 
+export const movieCount = writable(null);
+
 export const selectedMovie = writable(null);
 export const scrollY = writable(0);
 export const containerHeight = writable(0);

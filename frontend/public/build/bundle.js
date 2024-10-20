@@ -85,9 +85,6 @@ var app = (function () {
     function element(name) {
         return document.createElement(name);
     }
-    function svg_element(name) {
-        return document.createElementNS('http://www.w3.org/2000/svg', name);
-    }
     function text(data) {
         return document.createTextNode(data);
     }
@@ -646,6 +643,8 @@ var app = (function () {
             };
         });
     }
+
+    const movieCount = writable(null);
 
     const selectedMovie = writable(null);
     const scrollY = writable(0);
@@ -1699,43 +1698,29 @@ var app = (function () {
 
     function get_each_context$3(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[25] = list[i];
+    	child_ctx[27] = list[i];
     	return child_ctx;
     }
 
-    // (55:8) {#if $selectedTitle !== DEFAULT_TITLE}
+    // (72:8) {#if $selectedTitle !== DEFAULT_TITLE}
     function create_if_block_4$1(ctx) {
     	let button;
-    	let svg;
-    	let path;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
     			button = element("button");
-    			svg = svg_element("svg");
-    			path = svg_element("path");
-    			attr_dev(path, "d", "M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293\n                6.293a1 1 0 01-1.414 1.414L8\n                9.414l-6.293\n                6.293a1 1 0 01-1.414-1.414L6.586\n                8 .293 1.707a1 1 0 010-1.414z");
-    			add_location(path, file$5, 72, 14, 1874);
-    			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
-    			attr_dev(svg, "width", "16");
-    			attr_dev(svg, "height", "16");
-    			attr_dev(svg, "fill", "currentColor");
-    			attr_dev(svg, "class", "bi bi-x svelte-nodthw");
-    			attr_dev(svg, "viewBox", "0 0 16 16");
-    			add_location(svg, file$5, 64, 12, 1643);
     			attr_dev(button, "type", "button");
-    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-nodthw");
-    			add_location(button, file$5, 55, 10, 1352);
+    			attr_dev(button, "class", "btn-close ms-1 border-4");
+    			attr_dev(button, "aria-label", "Close");
+    			add_location(button, file$5, 72, 10, 2052);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
-    			append_dev(button, svg);
-    			append_dev(svg, path);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler*/ ctx[10], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler*/ ctx[12], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -1751,46 +1736,32 @@ var app = (function () {
     		block,
     		id: create_if_block_4$1.name,
     		type: "if",
-    		source: "(55:8) {#if $selectedTitle !== DEFAULT_TITLE}",
+    		source: "(72:8) {#if $selectedTitle !== DEFAULT_TITLE}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (123:8) {#if $currentMinReviewCount !== DEFAULT_MIN_REVIEWS}
+    // (121:8) {#if $currentMinReviewCount !== DEFAULT_MIN_REVIEWS}
     function create_if_block_3$1(ctx) {
     	let button;
-    	let svg;
-    	let path;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
     			button = element("button");
-    			svg = svg_element("svg");
-    			path = svg_element("path");
-    			attr_dev(path, "d", "M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0\n                111.414 1.414L9.414 8l6.293\n                6.293a1 1 0 01-1.414 1.414L8\n                9.414l-6.293\n                6.293a1 1 0 01-1.414-1.414L6.586\n                8 .293 1.707a1 1 0 010-1.414z");
-    			add_location(path, file$5, 140, 14, 3920);
-    			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
-    			attr_dev(svg, "width", "16");
-    			attr_dev(svg, "height", "16");
-    			attr_dev(svg, "fill", "currentColor");
-    			attr_dev(svg, "class", "bi bi-x svelte-nodthw");
-    			attr_dev(svg, "viewBox", "0 0 16 16");
-    			add_location(svg, file$5, 132, 12, 3689);
     			attr_dev(button, "type", "button");
-    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-nodthw");
-    			add_location(button, file$5, 123, 10, 3377);
+    			attr_dev(button, "class", "btn-close ms-1 border-4");
+    			attr_dev(button, "aria-label", "Close");
+    			add_location(button, file$5, 123, 10, 3472);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
-    			append_dev(button, svg);
-    			append_dev(svg, path);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler_1*/ ctx[15], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler_1*/ ctx[17], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -1806,46 +1777,32 @@ var app = (function () {
     		block,
     		id: create_if_block_3$1.name,
     		type: "if",
-    		source: "(123:8) {#if $currentMinReviewCount !== DEFAULT_MIN_REVIEWS}",
+    		source: "(121:8) {#if $currentMinReviewCount !== DEFAULT_MIN_REVIEWS}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (174:8) {#if $currentMaxReviewCount !== DEFAULT_MAX_REVIEWS}
+    // (154:8) {#if $currentMaxReviewCount !== DEFAULT_MAX_REVIEWS}
     function create_if_block_2$1(ctx) {
     	let button;
-    	let svg;
-    	let path;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
     			button = element("button");
-    			svg = svg_element("svg");
-    			path = svg_element("path");
-    			attr_dev(path, "d", "M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0\n                111.414 1.414L9.414 8l6.293\n                6.293a1 1 0 01-1.414 1.414L8\n                9.414l-6.293\n                6.293a1 1 0 01-1.414-1.414L6.586\n                8 .293 1.707a1 1 0 010-1.414z");
-    			add_location(path, file$5, 191, 14, 5537);
-    			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
-    			attr_dev(svg, "width", "16");
-    			attr_dev(svg, "height", "16");
-    			attr_dev(svg, "fill", "currentColor");
-    			attr_dev(svg, "class", "bi bi-x svelte-nodthw");
-    			attr_dev(svg, "viewBox", "0 0 16 16");
-    			add_location(svg, file$5, 183, 12, 5306);
     			attr_dev(button, "type", "button");
-    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-nodthw");
-    			add_location(button, file$5, 174, 10, 4994);
+    			attr_dev(button, "class", "btn-close ms-1 border-4");
+    			attr_dev(button, "aria-label", "Close");
+    			add_location(button, file$5, 154, 10, 4466);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
-    			append_dev(button, svg);
-    			append_dev(svg, path);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler_2*/ ctx[18], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler_2*/ ctx[20], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -1861,46 +1818,32 @@ var app = (function () {
     		block,
     		id: create_if_block_2$1.name,
     		type: "if",
-    		source: "(174:8) {#if $currentMaxReviewCount !== DEFAULT_MAX_REVIEWS}",
+    		source: "(154:8) {#if $currentMaxReviewCount !== DEFAULT_MAX_REVIEWS}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (232:8) {#if $selectedPerson.name != ''}
+    // (192:8) {#if $selectedPerson.name != ""}
     function create_if_block_1$2(ctx) {
     	let button;
-    	let svg;
-    	let path;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
     			button = element("button");
-    			svg = svg_element("svg");
-    			path = svg_element("path");
-    			attr_dev(path, "d", "M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0\n                111.414 1.414L9.414 8l6.293\n                6.293a1 1 0 01-1.414 1.414L8\n                9.414l-6.293\n                6.293a1 1 0 01-1.414-1.414L6.586\n                8 .293 1.707a1 1 0 010-1.414z");
-    			add_location(path, file$5, 250, 14, 7336);
-    			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
-    			attr_dev(svg, "width", "16");
-    			attr_dev(svg, "height", "16");
-    			attr_dev(svg, "fill", "currentColor");
-    			attr_dev(svg, "class", "bi bi-x svelte-nodthw");
-    			attr_dev(svg, "viewBox", "0 0 16 16");
-    			add_location(svg, file$5, 242, 12, 7105);
     			attr_dev(button, "type", "button");
-    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-nodthw");
-    			add_location(button, file$5, 233, 10, 6776);
+    			attr_dev(button, "class", "btn-close ms-1 border-4");
+    			attr_dev(button, "aria-label", "Close");
+    			add_location(button, file$5, 192, 10, 5624);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
-    			append_dev(button, svg);
-    			append_dev(svg, path);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler_3*/ ctx[22], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler_3*/ ctx[24], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -1916,17 +1859,17 @@ var app = (function () {
     		block,
     		id: create_if_block_1$2.name,
     		type: "if",
-    		source: "(232:8) {#if $selectedPerson.name != ''}",
+    		source: "(192:8) {#if $selectedPerson.name != \\\"\\\"}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (275:12) {#each Object.keys(LANGUAGEINFO) as languageCode}
+    // (212:12) {#each Object.keys(LANGUAGEINFO) as languageCode}
     function create_each_block$3(ctx) {
     	let option;
-    	let t0_value = LANGUAGEINFO[/*languageCode*/ ctx[25]].name + "";
+    	let t0_value = LANGUAGEINFO[/*languageCode*/ ctx[27]].name + "";
     	let t0;
     	let t1;
 
@@ -1935,9 +1878,9 @@ var app = (function () {
     			option = element("option");
     			t0 = text(t0_value);
     			t1 = space();
-    			option.__value = /*languageCode*/ ctx[25];
+    			option.__value = /*languageCode*/ ctx[27];
     			option.value = option.__value;
-    			add_location(option, file$5, 275, 14, 8116);
+    			add_location(option, file$5, 212, 14, 6273);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, option, anchor);
@@ -1954,46 +1897,32 @@ var app = (function () {
     		block,
     		id: create_each_block$3.name,
     		type: "each",
-    		source: "(275:12) {#each Object.keys(LANGUAGEINFO) as languageCode}",
+    		source: "(212:12) {#each Object.keys(LANGUAGEINFO) as languageCode}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (284:8) {#if $selectedLanguage !== DEFAULT_LANGUAGE}
+    // (221:8) {#if $selectedLanguage !== DEFAULT_LANGUAGE}
     function create_if_block$4(ctx) {
     	let button;
-    	let svg;
-    	let path;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
     			button = element("button");
-    			svg = svg_element("svg");
-    			path = svg_element("path");
-    			attr_dev(path, "d", "M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0\n                111.414 1.414L9.414 8l6.293\n                6.293a1 1 0 01-1.414 1.414L8\n                9.414l-6.293\n                6.293a1 1 0 01-1.414-1.414L6.586\n                8 .293 1.707a1 1 0 010-1.414z");
-    			add_location(path, file$5, 300, 14, 8921);
-    			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
-    			attr_dev(svg, "width", "16");
-    			attr_dev(svg, "height", "16");
-    			attr_dev(svg, "fill", "currentColor");
-    			attr_dev(svg, "class", "bi bi-x svelte-nodthw");
-    			attr_dev(svg, "viewBox", "0 0 16 16");
-    			add_location(svg, file$5, 292, 12, 8690);
     			attr_dev(button, "type", "button");
-    			attr_dev(button, "class", "btn btn-outline-secondary reset-button ms-2 svelte-nodthw");
-    			add_location(button, file$5, 284, 10, 8439);
+    			attr_dev(button, "class", "btn-close ms-1 border-4");
+    			attr_dev(button, "aria-label", "Close");
+    			add_location(button, file$5, 221, 10, 6596);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
-    			append_dev(button, svg);
-    			append_dev(svg, path);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*click_handler_4*/ ctx[24], false, false, false, false);
+    				dispose = listen_dev(button, "click", /*click_handler_4*/ ctx[26], false, false, false, false);
     				mounted = true;
     			}
     		},
@@ -2009,7 +1938,7 @@ var app = (function () {
     		block,
     		id: create_if_block$4.name,
     		type: "if",
-    		source: "(284:8) {#if $selectedLanguage !== DEFAULT_LANGUAGE}",
+    		source: "(221:8) {#if $selectedLanguage !== DEFAULT_LANGUAGE}",
     		ctx
     	});
 
@@ -2017,7 +1946,7 @@ var app = (function () {
     }
 
     function create_fragment$5(ctx) {
-    	let div18;
+    	let div19;
     	let h5;
     	let t1;
     	let form;
@@ -2070,13 +1999,25 @@ var app = (function () {
     	let t25;
     	let div17;
     	let genremenu;
+    	let t26;
+    	let div18;
+    	let h3;
+
+    	let t27_value = (/*$movieCount*/ ctx[8] > 0
+    	? /*$movieCount*/ ctx[8]
+    	: 'No') + "";
+
+    	let t27;
+    	let t28;
+    	let t29;
+    	let button;
     	let current;
     	let mounted;
     	let dispose;
     	let if_block0 = /*$selectedTitle*/ ctx[1] !== DEFAULT_TITLE && create_if_block_4$1(ctx);
     	let if_block1 = /*$currentMinReviewCount*/ ctx[3] !== DEFAULT_MIN_REVIEWS && create_if_block_3$1(ctx);
     	let if_block2 = /*$currentMaxReviewCount*/ ctx[4] !== DEFAULT_MAX_REVIEWS && create_if_block_2$1(ctx);
-    	let if_block3 = /*$selectedPerson*/ ctx[6].name != '' && create_if_block_1$2(ctx);
+    	let if_block3 = /*$selectedPerson*/ ctx[6].name != "" && create_if_block_1$2(ctx);
     	let each_value = Object.keys(LANGUAGEINFO);
     	validate_each_argument(each_value);
     	let each_blocks = [];
@@ -2090,7 +2031,7 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
-    			div18 = element("div");
+    			div19 = element("div");
     			h5 = element("h5");
     			h5.textContent = "Filter Options";
     			t1 = space();
@@ -2161,101 +2102,115 @@ var app = (function () {
     			t25 = space();
     			div17 = element("div");
     			create_component(genremenu.$$.fragment);
+    			t26 = space();
+    			div18 = element("div");
+    			h3 = element("h3");
+    			t27 = text(t27_value);
+    			t28 = text(" movies!");
+    			t29 = space();
+    			button = element("button");
+    			button.textContent = "Reset Filters";
     			attr_dev(h5, "class", "mb-4");
-    			add_location(h5, file$5, 35, 2, 715);
+    			add_location(h5, file$5, 52, 2, 1415);
     			attr_dev(input0, "type", "text");
-    			attr_dev(input0, "class", "form-control svelte-nodthw");
+    			attr_dev(input0, "class", "form-control svelte-chm844");
     			attr_dev(input0, "id", "title-input");
     			attr_dev(input0, "placeholder", "Title");
-    			add_location(input0, file$5, 41, 10, 913);
+    			add_location(input0, file$5, 58, 10, 1613);
     			attr_dev(label0, "for", "title-input");
-    			add_location(label0, file$5, 52, 10, 1241);
+    			add_location(label0, file$5, 69, 10, 1941);
     			attr_dev(div0, "class", "form-floating flex-grow-1");
-    			add_location(div0, file$5, 40, 8, 863);
+    			add_location(div0, file$5, 57, 8, 1563);
     			attr_dev(div1, "class", "d-flex align-items-center");
-    			add_location(div1, file$5, 39, 6, 815);
+    			add_location(div1, file$5, 56, 6, 1515);
     			attr_dev(div2, "class", "mb-2");
-    			add_location(div2, file$5, 38, 4, 790);
+    			add_location(div2, file$5, 55, 4, 1490);
     			attr_dev(input1, "type", "number");
-    			attr_dev(input1, "class", "form-control svelte-nodthw");
+    			attr_dev(input1, "class", "form-control svelte-chm844");
     			attr_dev(input1, "id", "year-input");
     			attr_dev(input1, "placeholder", "Year");
-    			add_location(input1, file$5, 88, 8, 2332);
+    			add_location(input1, file$5, 86, 8, 2424);
     			attr_dev(label1, "for", "year-input");
-    			add_location(label1, file$5, 99, 8, 2626);
+    			add_location(label1, file$5, 97, 8, 2718);
     			attr_dev(div3, "class", "form-floating");
-    			add_location(div3, file$5, 87, 6, 2296);
+    			add_location(div3, file$5, 85, 6, 2388);
     			attr_dev(div4, "class", "mb-2");
-    			add_location(div4, file$5, 86, 4, 2271);
+    			add_location(div4, file$5, 84, 4, 2363);
     			attr_dev(input2, "type", "number");
-    			attr_dev(input2, "class", "form-control svelte-nodthw");
+    			attr_dev(input2, "class", "form-control svelte-chm844");
     			attr_dev(input2, "id", "min-review-input");
     			attr_dev(input2, "placeholder", "Min Reviews");
-    			add_location(input2, file$5, 107, 10, 2845);
+    			add_location(input2, file$5, 105, 10, 2937);
     			attr_dev(label2, "for", "min-review-input");
-    			add_location(label2, file$5, 120, 10, 3241);
+    			add_location(label2, file$5, 118, 10, 3334);
     			attr_dev(div5, "class", "form-floating flex-grow-1");
-    			add_location(div5, file$5, 106, 8, 2795);
+    			add_location(div5, file$5, 104, 8, 2887);
     			attr_dev(div6, "class", "d-flex align-items-center");
-    			add_location(div6, file$5, 105, 6, 2747);
+    			add_location(div6, file$5, 103, 6, 2839);
     			attr_dev(div7, "class", "mb-2");
-    			add_location(div7, file$5, 104, 4, 2722);
+    			add_location(div7, file$5, 102, 4, 2814);
     			attr_dev(input3, "type", "number");
-    			attr_dev(input3, "class", "form-control svelte-nodthw");
+    			attr_dev(input3, "class", "form-control svelte-chm844");
     			attr_dev(input3, "id", "max-review-input");
     			attr_dev(input3, "placeholder", "Max Reviews");
-    			add_location(input3, file$5, 158, 10, 4462);
+    			add_location(input3, file$5, 138, 10, 3933);
     			attr_dev(label3, "for", "max-review-input");
-    			add_location(label3, file$5, 171, 10, 4858);
+    			add_location(label3, file$5, 151, 10, 4330);
     			attr_dev(div8, "class", "form-floating flex-grow-1");
-    			add_location(div8, file$5, 157, 8, 4412);
+    			add_location(div8, file$5, 137, 8, 3883);
     			attr_dev(div9, "class", "d-flex align-items-center");
-    			add_location(div9, file$5, 156, 6, 4364);
+    			add_location(div9, file$5, 136, 6, 3835);
     			attr_dev(div10, "class", "mb-2");
-    			add_location(div10, file$5, 155, 4, 4339);
+    			add_location(div10, file$5, 135, 4, 3810);
     			attr_dev(input4, "type", "text");
-    			attr_dev(input4, "class", "form-control svelte-nodthw");
+    			attr_dev(input4, "class", "form-control svelte-chm844");
     			attr_dev(input4, "id", "person-input");
     			attr_dev(input4, "placeholder", "Person");
-    			add_location(input4, file$5, 209, 10, 6075);
+    			add_location(input4, file$5, 169, 10, 4923);
     			attr_dev(label4, "for", "person-input");
-    			add_location(label4, file$5, 229, 10, 6668);
+    			add_location(label4, file$5, 189, 10, 5517);
     			attr_dev(div11, "class", "form-floating flex-grow-1");
-    			add_location(div11, file$5, 208, 8, 6025);
+    			add_location(div11, file$5, 168, 8, 4873);
     			attr_dev(div12, "class", "d-flex align-items-center");
-    			add_location(div12, file$5, 207, 6, 5977);
+    			add_location(div12, file$5, 167, 6, 4825);
     			attr_dev(div13, "class", "mb-2");
-    			add_location(div13, file$5, 206, 4, 5952);
+    			add_location(div13, file$5, 166, 4, 4800);
     			option.__value = "all";
     			option.value = option.__value;
-    			add_location(option, file$5, 279, 12, 8252);
-    			attr_dev(select, "class", "form-select svelte-nodthw");
+    			add_location(option, file$5, 216, 12, 6409);
+    			attr_dev(select, "class", "form-select svelte-chm844");
     			attr_dev(select, "id", "language-select");
     			attr_dev(select, "placeholder", "Language");
-    			if (/*$selectedLanguage*/ ctx[7] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[23].call(select));
-    			add_location(select, file$5, 268, 10, 7877);
+    			if (/*$selectedLanguage*/ ctx[7] === void 0) add_render_callback(() => /*select_change_handler*/ ctx[25].call(select));
+    			add_location(select, file$5, 205, 10, 6034);
     			attr_dev(label5, "for", "language-select");
-    			add_location(label5, file$5, 281, 10, 8315);
+    			add_location(label5, file$5, 218, 10, 6472);
     			attr_dev(div14, "class", "form-floating flex-grow-1");
-    			add_location(div14, file$5, 267, 8, 7827);
+    			add_location(div14, file$5, 204, 8, 5984);
     			attr_dev(div15, "class", "d-flex align-items-center");
-    			add_location(div15, file$5, 266, 6, 7779);
+    			add_location(div15, file$5, 203, 6, 5936);
     			attr_dev(div16, "class", "mb-2");
-    			add_location(div16, file$5, 265, 4, 7754);
+    			add_location(div16, file$5, 202, 4, 5911);
     			attr_dev(div17, "class", "mb-2");
-    			add_location(div17, file$5, 315, 4, 9334);
-    			add_location(form, file$5, 36, 2, 754);
-    			attr_dev(div18, "class", "sidebar bg-light p-3 svelte-nodthw");
-    			add_location(div18, file$5, 34, 0, 678);
+    			add_location(div17, file$5, 232, 4, 6867);
+    			add_location(h3, file$5, 238, 6, 6973);
+    			attr_dev(button, "type", "button");
+    			attr_dev(button, "class", "btn btn-primary btn-lg ");
+    			add_location(button, file$5, 239, 6, 7036);
+    			attr_dev(div18, "class", "mb-2");
+    			add_location(div18, file$5, 237, 4, 6948);
+    			add_location(form, file$5, 53, 2, 1454);
+    			attr_dev(div19, "class", "sidebar bg-light p-3 svelte-chm844");
+    			add_location(div19, file$5, 51, 0, 1378);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div18, anchor);
-    			append_dev(div18, h5);
-    			append_dev(div18, t1);
-    			append_dev(div18, form);
+    			insert_dev(target, div19, anchor);
+    			append_dev(div19, h5);
+    			append_dev(div19, t1);
+    			append_dev(div19, form);
     			append_dev(form, div2);
     			append_dev(div2, div1);
     			append_dev(div1, div0);
@@ -2323,27 +2278,35 @@ var app = (function () {
     			append_dev(form, t25);
     			append_dev(form, div17);
     			mount_component(genremenu, div17, null);
+    			append_dev(form, t26);
+    			append_dev(form, div18);
+    			append_dev(div18, h3);
+    			append_dev(h3, t27);
+    			append_dev(h3, t28);
+    			append_dev(div18, t29);
+    			append_dev(div18, button);
     			current = true;
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[8]),
-    					listen_dev(input0, "blur", /*blur_handler*/ ctx[9], false, false, false, false),
+    					listen_dev(input0, "input", /*input0_input_handler*/ ctx[10]),
+    					listen_dev(input0, "blur", /*blur_handler*/ ctx[11], false, false, false, false),
     					listen_dev(input0, "keydown", handleKeydown, false, false, false, false),
-    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[11]),
-    					listen_dev(input1, "blur", /*blur_handler_1*/ ctx[12], false, false, false, false),
+    					listen_dev(input1, "input", /*input1_input_handler*/ ctx[13]),
+    					listen_dev(input1, "blur", /*blur_handler_1*/ ctx[14], false, false, false, false),
     					listen_dev(input1, "keydown", handleKeydown, false, false, false, false),
-    					listen_dev(input2, "input", /*input2_input_handler*/ ctx[13]),
-    					listen_dev(input2, "blur", /*blur_handler_2*/ ctx[14], false, false, false, false),
+    					listen_dev(input2, "input", /*input2_input_handler*/ ctx[15]),
+    					listen_dev(input2, "blur", /*blur_handler_2*/ ctx[16], false, false, false, false),
     					listen_dev(input2, "keydown", handleKeydown, false, false, false, false),
-    					listen_dev(input3, "input", /*input3_input_handler*/ ctx[16]),
-    					listen_dev(input3, "blur", /*blur_handler_3*/ ctx[17], false, false, false, false),
+    					listen_dev(input3, "input", /*input3_input_handler*/ ctx[18]),
+    					listen_dev(input3, "blur", /*blur_handler_3*/ ctx[19], false, false, false, false),
     					listen_dev(input3, "keydown", handleKeydown, false, false, false, false),
-    					listen_dev(input4, "input", /*input4_input_handler*/ ctx[19]),
-    					listen_dev(input4, "change", /*change_handler*/ ctx[20], false, false, false, false),
-    					listen_dev(input4, "blur", /*blur_handler_4*/ ctx[21], false, false, false, false),
+    					listen_dev(input4, "input", /*input4_input_handler*/ ctx[21]),
+    					listen_dev(input4, "change", /*change_handler*/ ctx[22], false, false, false, false),
+    					listen_dev(input4, "blur", /*blur_handler_4*/ ctx[23], false, false, false, false),
     					listen_dev(input4, "keydown", handleKeydown, false, false, false, false),
-    					listen_dev(select, "change", /*select_change_handler*/ ctx[23])
+    					listen_dev(select, "change", /*select_change_handler*/ ctx[25]),
+    					listen_dev(button, "click", /*resetFilters*/ ctx[9], false, false, false, false)
     				];
 
     				mounted = true;
@@ -2409,7 +2372,7 @@ var app = (function () {
     				set_input_value(input4, /*$currentSelectedPerson*/ ctx[5].name);
     			}
 
-    			if (/*$selectedPerson*/ ctx[6].name != '') {
+    			if (/*$selectedPerson*/ ctx[6].name != "") {
     				if (if_block3) {
     					if_block3.p(ctx, dirty);
     				} else {
@@ -2462,6 +2425,10 @@ var app = (function () {
     				if_block4.d(1);
     				if_block4 = null;
     			}
+
+    			if ((!current || dirty & /*$movieCount*/ 256) && t27_value !== (t27_value = (/*$movieCount*/ ctx[8] > 0
+    			? /*$movieCount*/ ctx[8]
+    			: 'No') + "")) set_data_dev(t27, t27_value);
     		},
     		i: function intro(local) {
     			if (current) return;
@@ -2473,7 +2440,7 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div18);
+    			if (detaching) detach_dev(div19);
     			if (if_block0) if_block0.d();
     			if (if_block1) if_block1.d();
     			if (if_block2) if_block2.d();
@@ -2512,6 +2479,7 @@ var app = (function () {
     	let $currentSelectedPerson;
     	let $selectedPerson;
     	let $selectedLanguage;
+    	let $movieCount;
     	validate_store(currentSelectedTitle, 'currentSelectedTitle');
     	component_subscribe($$self, currentSelectedTitle, $$value => $$invalidate(0, $currentSelectedTitle = $$value));
     	validate_store(selectedTitle, 'selectedTitle');
@@ -2528,8 +2496,27 @@ var app = (function () {
     	component_subscribe($$self, selectedPerson, $$value => $$invalidate(6, $selectedPerson = $$value));
     	validate_store(selectedLanguage, 'selectedLanguage');
     	component_subscribe($$self, selectedLanguage, $$value => $$invalidate(7, $selectedLanguage = $$value));
+    	validate_store(movieCount, 'movieCount');
+    	component_subscribe($$self, movieCount, $$value => $$invalidate(8, $movieCount = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Header', slots, []);
+
+    	function resetFilters() {
+    		selectedLanguage.set(DEFAULT_LANGUAGE);
+    		selectedGenres.set(DEFAULT_SELECTED_GENRES);
+    		minYear.set(DEFAULT_YEAR);
+    		minReviewCount.set(DEFAULT_MIN_REVIEWS);
+    		maxReviewCount.set(DEFAULT_MAX_REVIEWS);
+    		selectedPerson.set({ name: '', id: null, castOrCrew: null });
+    		currentSelectedPerson.set({ name: '', id: null, castOrCrew: null });
+    		currentSelectedPerson.set({ name: '', id: null, castOrCrew: null });
+    		currentMinYear.set(DEFAULT_YEAR);
+    		currentMinReviewCount.set(DEFAULT_MIN_REVIEWS);
+    		currentMaxReviewCount.set(DEFAULT_MAX_REVIEWS);
+    		currentSelectedTitle.set(DEFAULT_TITLE);
+    		selectedTitle.set(DEFAULT_TITLE);
+    	}
+
     	const writable_props = [];
 
     	Object_1.keys($$props).forEach(key => {
@@ -2587,8 +2574,8 @@ var app = (function () {
     	};
 
     	const click_handler_2 = () => {
-    		set_store_value(currentMaxReviewCount, $currentMaxReviewCount = DEFAULT_MAX_REVIEWS, $currentMaxReviewCount);
-    		maxReviewCount.set(DEFAULT_MAX_REVIEWS);
+    		set_store_value(currentMinReviewCount, $currentMinReviewCount = DEFAULT_MAX_REVIEWS, $currentMinReviewCount);
+    		minReviewCount.set(DEFAULT_MAX_REVIEWS);
     	};
 
     	function input4_input_handler() {
@@ -2610,8 +2597,7 @@ var app = (function () {
     	};
 
     	const click_handler_3 = () => {
-    		console.log('log change', DEFAULT_PERSON);
-    		selectedPerson.set({ name: '', id: null, castOrCrew: null });
+    		selectedPerson.set({ name: "", id: null, castOrCrew: null });
     	};
 
     	function select_change_handler() {
@@ -2643,9 +2629,11 @@ var app = (function () {
     		DEFAULT_SELECTED_GENRES,
     		DEFAULT_TITLE,
     		DEFAULT_YEAR,
+    		movieCount,
     		LANGUAGEINFO,
     		GenreMenu,
     		handleKeydown,
+    		resetFilters,
     		$currentSelectedTitle,
     		$selectedTitle,
     		$currentMinYear,
@@ -2653,7 +2641,8 @@ var app = (function () {
     		$currentMaxReviewCount,
     		$currentSelectedPerson,
     		$selectedPerson,
-    		$selectedLanguage
+    		$selectedLanguage,
+    		$movieCount
     	});
 
     	return [
@@ -2665,6 +2654,8 @@ var app = (function () {
     		$currentSelectedPerson,
     		$selectedPerson,
     		$selectedLanguage,
+    		$movieCount,
+    		resetFilters,
     		input0_input_handler,
     		blur_handler,
     		click_handler,
@@ -2699,8 +2690,49 @@ var app = (function () {
     	}
     }
 
-    /* src-modular/components/MovieItem.svelte generated by Svelte v3.59.2 */
+    // src/stores/persistentStore.js
 
+    function persistentStore(key, initialValue) {
+        if (typeof localStorage === 'undefined') {
+            return writable(initialValue);
+        }
+
+        const storedValue = localStorage.getItem(key);
+        const data = storedValue ? JSON.parse(storedValue) : initialValue;
+
+        const store = writable(data);
+
+        store.subscribe((value) => {
+            try {
+                localStorage.setItem(key, JSON.stringify(value));
+            } catch (e) {
+                console.error(`Error setting localStorage key "${key}":`, e);
+            }
+        });
+
+        return store;
+    }
+
+    const settings = persistentStore('history', {
+        viewedMoviesDict: {},
+    });
+
+    settings.subscribe((n) => {
+        console.log('history store',n);
+    });
+
+    function addMovie(movie) {
+        settings.update(n => {
+            const updatedDict = { ...n.viewedMoviesDict, [movie.id]: true };
+            return { ...n, viewedMoviesDict: updatedDict };
+        });
+    }
+
+    function movieIsPresent(movie) {
+        return get_store_value(settings).viewedMoviesDict[movie.id] || false;
+    }
+
+    /* src-modular/components/MovieItem.svelte generated by Svelte v3.59.2 */
     const file$4 = "src-modular/components/MovieItem.svelte";
 
     function get_each_context$2(ctx, list, i) {
@@ -2709,7 +2741,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (67:6) {:else}
+    // (82:6) {:else}
     function create_else_block$1(ctx) {
     	let div;
     	let span;
@@ -2722,10 +2754,10 @@ var app = (function () {
     			div = element("div");
     			span = element("span");
     			t = text(/*languageFlag*/ ctx[6]);
-    			attr_dev(span, "class", "flag svelte-9384qo");
-    			add_location(span, file$4, 68, 10, 1883);
+    			attr_dev(span, "class", "flag svelte-w4zrw4");
+    			add_location(span, file$4, 83, 10, 2268);
     			attr_dev(div, "class", "d-flex align-items-center");
-    			add_location(div, file$4, 67, 8, 1833);
+    			add_location(div, file$4, 82, 8, 2218);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2751,14 +2783,14 @@ var app = (function () {
     		block,
     		id: create_else_block$1.name,
     		type: "else",
-    		source: "(67:6) {:else}",
+    		source: "(82:6) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (62:6) {#if !isEnglish}
+    // (77:6) {#if !isEnglish}
     function create_if_block_1$1(ctx) {
     	let div;
     	let span;
@@ -2776,10 +2808,10 @@ var app = (function () {
     			t0 = text(/*languageFlag*/ ctx[6]);
     			t1 = space();
     			t2 = text(t2_value);
-    			attr_dev(span, "class", "flag svelte-9384qo");
-    			add_location(span, file$4, 63, 10, 1661);
+    			attr_dev(span, "class", "flag svelte-w4zrw4");
+    			add_location(span, file$4, 78, 10, 2046);
     			attr_dev(div, "class", "d-flex align-items-center");
-    			add_location(div, file$4, 62, 8, 1611);
+    			add_location(div, file$4, 77, 8, 1996);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2808,14 +2840,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$1.name,
     		type: "if",
-    		source: "(62:6) {#if !isEnglish}",
+    		source: "(77:6) {#if !isEnglish}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (82:6) {#each movie.genres as genre }
+    // (97:6) {#each movie.genres as genre }
     function create_each_block$2(ctx) {
     	let div;
     	let t0_value = genreEmojiDict[/*genre*/ ctx[21]] + "";
@@ -2833,8 +2865,8 @@ var app = (function () {
     			div = element("div");
     			t0 = text(t0_value);
     			t1 = space();
-    			attr_dev(div, "class", "emoji svelte-9384qo");
-    			add_location(div, file$4, 82, 8, 2299);
+    			attr_dev(div, "class", "emoji svelte-w4zrw4");
+    			add_location(div, file$4, 97, 8, 2684);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2861,14 +2893,14 @@ var app = (function () {
     		block,
     		id: create_each_block$2.name,
     		type: "each",
-    		source: "(82:6) {#each movie.genres as genre }",
+    		source: "(97:6) {#each movie.genres as genre }",
     		ctx
     	});
 
     	return block;
     }
 
-    // (111:4) {#if isHoveringOver }
+    // (126:4) {#if isHoveringOver }
     function create_if_block$3(ctx) {
     	let div0;
     	let t0;
@@ -2883,21 +2915,19 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			div0 = element("div");
-    			t0 = text("rating: ");
+    			t0 = text("⭐ ");
     			t1 = text(t1_value);
     			t2 = space();
     			div1 = element("div");
-    			t3 = text("popularity: ");
+    			t3 = text("👥 ");
     			t4 = text(t4_value);
     			attr_dev(div0, "class", "row mb-2");
     			set_style(div0, "font-weight", "800");
-    			set_style(div0, "font-size", "small");
-    			add_location(div0, file$4, 111, 6, 3048);
+    			add_location(div0, file$4, 126, 6, 3433);
     			attr_dev(div1, "class", "row");
     			set_style(div1, "color", /*barColor*/ ctx[2]);
     			set_style(div1, "font-weight", "800");
-    			set_style(div1, "font-size", "small");
-    			add_location(div1, file$4, 112, 6, 3164);
+    			add_location(div1, file$4, 127, 6, 3526);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -2927,7 +2957,7 @@ var app = (function () {
     		block,
     		id: create_if_block$3.name,
     		type: "if",
-    		source: "(111:4) {#if isHoveringOver }",
+    		source: "(126:4) {#if isHoveringOver }",
     		ctx
     	});
 
@@ -2937,7 +2967,7 @@ var app = (function () {
     function create_fragment$4(ctx) {
     	let div11;
     	let div0;
-    	let t0_value = /*movie*/ ctx[0].getReleaseDateString() + "";
+    	let t0_value = /*movie*/ ctx[0].generateHourString() + "";
     	let t0;
     	let t1;
     	let div3;
@@ -2957,7 +2987,7 @@ var app = (function () {
     	let div9;
     	let t7;
     	let div10;
-    	let t8_value = /*movie*/ ctx[0].generateHourString() + "";
+    	let t8_value = /*movie*/ ctx[0].getReleaseDateString() + "";
     	let t8;
     	let div11_class_value;
     	let mounted;
@@ -3011,41 +3041,43 @@ var app = (function () {
     			div10 = element("div");
     			t8 = text(t8_value);
     			attr_dev(div0, "class", "col-1 text-center");
-    			attr_dev(div0, "style", /*fontWeightDate*/ ctx[5]);
-    			add_location(div0, file$4, 53, 2, 1356);
+    			add_location(div0, file$4, 68, 2, 1768);
     			attr_dev(div1, "class", "d-flex align-items-center");
     			set_style(div1, "font-size", "1.5rem");
-    			add_location(div1, file$4, 72, 6, 2048);
+    			add_location(div1, file$4, 87, 6, 2433);
     			attr_dev(div2, "class", "d-flex flex-column");
-    			add_location(div2, file$4, 59, 4, 1517);
+    			add_location(div2, file$4, 74, 4, 1902);
     			attr_dev(div3, "class", "col-4");
-    			add_location(div3, file$4, 58, 2, 1493);
-    			attr_dev(div4, "class", "emoji-list svelte-9384qo");
-    			add_location(div4, file$4, 80, 4, 2229);
+    			add_location(div3, file$4, 73, 2, 1878);
+    			attr_dev(div4, "class", "emoji-list svelte-w4zrw4");
+    			add_location(div4, file$4, 95, 4, 2614);
     			attr_dev(div5, "class", "col-1");
-    			add_location(div5, file$4, 79, 2, 2205);
-    			attr_dev(div6, "class", "custom-bar svelte-9384qo");
+    			add_location(div5, file$4, 94, 2, 2590);
+    			attr_dev(div6, "class", "custom-bar svelte-w4zrw4");
     			set_style(div6, "width", /*movie*/ ctx[0].voteAverage * 10 + "%");
     			set_style(div6, "background-color", /*barColor*/ ctx[2]);
-    			add_location(div6, file$4, 101, 6, 2794);
-    			attr_dev(div7, "class", "custom-bar-container svelte-9384qo");
-    			add_location(div7, file$4, 100, 4, 2753);
+    			add_location(div6, file$4, 116, 6, 3179);
+    			attr_dev(div7, "class", "custom-bar-container svelte-w4zrw4");
+    			add_location(div7, file$4, 115, 4, 3138);
     			attr_dev(div8, "class", "col-4");
-    			add_location(div8, file$4, 99, 2, 2729);
-    			attr_dev(div9, "class", "info-container col-1 text-center svelte-9384qo");
-    			add_location(div9, file$4, 109, 2, 2969);
+    			add_location(div8, file$4, 114, 2, 3114);
+    			attr_dev(div9, "class", "info-container col-1 text-center svelte-w4zrw4");
+    			add_location(div9, file$4, 124, 2, 3354);
     			attr_dev(div10, "class", "col-1 text-center");
-    			add_location(div10, file$4, 117, 2, 3339);
+    			attr_dev(div10, "style", /*fontWeightDate*/ ctx[5]);
+    			add_location(div10, file$4, 132, 2, 3675);
 
     			attr_dev(div11, "class", div11_class_value = "movie-item row align-items-center " + (/*$selectedMovie*/ ctx[3] && /*$selectedMovie*/ ctx[3].id == /*movie*/ ctx[0].id
     			? 'selected-movie-item'
-    			: '') + " svelte-9384qo");
+    			: '') + " " + (movieIsPresent(/*movie*/ ctx[0])
+    			? 'viewed-movie-item'
+    			: '') + " svelte-w4zrw4");
 
     			set_style(div11, "transform", "translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[8] - /*$scrollY*/ ctx[9] % /*$itemHeight*/ ctx[8]) + "px)");
     			set_style(div11, "height", /*$itemHeight*/ ctx[8] + "px");
     			set_style(div11, "position", "absolute");
     			set_style(div11, "width", "100%");
-    			add_location(div11, file$4, 45, 0, 957);
+    			add_location(div11, file$4, 64, 0, 1322);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -3093,11 +3125,7 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*movie*/ 1 && t0_value !== (t0_value = /*movie*/ ctx[0].getReleaseDateString() + "")) set_data_dev(t0, t0_value);
-
-    			if (dirty & /*fontWeightDate*/ 32) {
-    				attr_dev(div0, "style", /*fontWeightDate*/ ctx[5]);
-    			}
+    			if (dirty & /*movie*/ 1 && t0_value !== (t0_value = /*movie*/ ctx[0].generateHourString() + "")) set_data_dev(t0, t0_value);
 
     			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block0) {
     				if_block0.p(ctx, dirty);
@@ -3158,11 +3186,17 @@ var app = (function () {
     				if_block1 = null;
     			}
 
-    			if (dirty & /*movie*/ 1 && t8_value !== (t8_value = /*movie*/ ctx[0].generateHourString() + "")) set_data_dev(t8, t8_value);
+    			if (dirty & /*movie*/ 1 && t8_value !== (t8_value = /*movie*/ ctx[0].getReleaseDateString() + "")) set_data_dev(t8, t8_value);
+
+    			if (dirty & /*fontWeightDate*/ 32) {
+    				attr_dev(div10, "style", /*fontWeightDate*/ ctx[5]);
+    			}
 
     			if (dirty & /*$selectedMovie, movie*/ 9 && div11_class_value !== (div11_class_value = "movie-item row align-items-center " + (/*$selectedMovie*/ ctx[3] && /*$selectedMovie*/ ctx[3].id == /*movie*/ ctx[0].id
     			? 'selected-movie-item'
-    			: '') + " svelte-9384qo")) {
+    			: '') + " " + (movieIsPresent(/*movie*/ ctx[0])
+    			? 'viewed-movie-item'
+    			: '') + " svelte-w4zrw4")) {
     				attr_dev(div11, "class", div11_class_value);
     			}
 
@@ -3203,7 +3237,6 @@ var app = (function () {
     	let languageFlag;
     	let languageName;
     	let fontWeightDate;
-    	let isSelectedMovie;
     	let $selectedMovie;
     	let $itemHeight;
     	let $scrollY;
@@ -3236,6 +3269,18 @@ var app = (function () {
     	function handleMouseLeave() {
     		$$invalidate(4, isHoveringOver = false);
     	}
+
+    	let movieHasBeenViewed = false;
+
+    	onMount(async () => {
+    		if (movieIsPresent(movie)) {
+    			movieHasBeenViewed = true;
+    		}
+
+    		return () => {
+    			
+    		};
+    	});
 
     	$$self.$$.on_mount.push(function () {
     		if (movie === undefined && !('movie' in $$props || $$self.$$.bound[$$self.$$.props['movie']])) {
@@ -3285,10 +3330,13 @@ var app = (function () {
     		itemHeight,
     		selectedLanguage,
     		selectedGenres,
+    		addMovie,
+    		movieIsPresent,
     		getLanguageColor,
     		getLanguageFlag,
     		getLanguageName,
     		genreEmojiDict,
+    		onMount,
     		movie,
     		index,
     		barColor,
@@ -3297,7 +3345,7 @@ var app = (function () {
     		isHoveringOver,
     		handleMouseEnter,
     		handleMouseLeave,
-    		isSelectedMovie,
+    		movieHasBeenViewed,
     		fontWeightDate,
     		languageName,
     		languageFlag,
@@ -3315,7 +3363,7 @@ var app = (function () {
     		if ('barColor' in $$props) $$invalidate(2, barColor = $$props.barColor);
     		if ('newYear' in $$props) $$invalidate(14, newYear = $$props.newYear);
     		if ('isHoveringOver' in $$props) $$invalidate(4, isHoveringOver = $$props.isHoveringOver);
-    		if ('isSelectedMovie' in $$props) isSelectedMovie = $$props.isSelectedMovie;
+    		if ('movieHasBeenViewed' in $$props) movieHasBeenViewed = $$props.movieHasBeenViewed;
     		if ('fontWeightDate' in $$props) $$invalidate(5, fontWeightDate = $$props.fontWeightDate);
     		if ('languageName' in $$props) languageName = $$props.languageName;
     		if ('languageFlag' in $$props) $$invalidate(6, languageFlag = $$props.languageFlag);
@@ -3349,7 +3397,14 @@ var app = (function () {
     		}
 
     		if ($$self.$$.dirty & /*$selectedMovie, movie*/ 9) {
-    			isSelectedMovie = $selectedMovie && $selectedMovie.id == movie.id;
+    			{
+    				let isSelectedMovie = $selectedMovie && $selectedMovie.id == movie.id;
+
+    				if (isSelectedMovie) {
+    					addMovie(movie);
+    					movieHasBeenViewed = true;
+    				}
+    			}
     		}
     	};
 
@@ -7333,7 +7388,11 @@ var app = (function () {
         },
       });
 
-      let movieResponse = res.data;
+      let movieResponse = res.data.movies;
+
+      if(append == 'new') {
+        movieCount.set(res.data.count);
+      }
 
       let newMovies = movieResponse.map((movie) => new Movie(movie));
 

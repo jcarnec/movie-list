@@ -19,6 +19,7 @@ import {
   selectedTitle,
   lastAppendedID,
   lastPrependedID,
+  movieCount
 } from "./stores";
 import axios from "axios";
 import Movie from "./Movie.js";
@@ -96,7 +97,11 @@ export async function queryDatabase(movies, append = "new", date = null) {
     },
   });
 
-  let movieResponse = res.data;
+  let movieResponse = res.data.movies;
+
+  if(append == 'new') {
+    movieCount.set(res.data.count);
+  }
 
   let newMovies = movieResponse.map((movie) => new Movie(movie));
 
