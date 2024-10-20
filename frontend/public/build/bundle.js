@@ -3093,20 +3093,17 @@ var app = (function () {
     	let t2;
     	let div2;
     	let t3;
-    	let emojilist;
-    	let t4;
     	let div6;
     	let div5;
-    	let t5;
+    	let t4;
     	let div8;
     	let div7;
-    	let t6_value = /*movie*/ ctx[0].generateHourString() + "";
+    	let t5_value = /*movie*/ ctx[0].generateHourString() + "";
+    	let t5;
     	let t6;
-    	let t7;
     	let div9;
-    	let t8_value = /*movie*/ ctx[0].title + "";
-    	let t8;
-    	let current;
+    	let t7_value = /*movie*/ ctx[0].title + "";
+    	let t7;
     	let mounted;
     	let dispose;
 
@@ -3126,11 +3123,6 @@ var app = (function () {
     	let current_block_type_1 = select_block_type_1(ctx);
     	let if_block1 = current_block_type_1(ctx);
 
-    	emojilist = new EmojiList({
-    			props: { movie: /*movie*/ ctx[0] },
-    			$$inline: true
-    		});
-
     	const block = {
     		c: function create() {
     			div12 = element("div");
@@ -3147,17 +3139,15 @@ var app = (function () {
     			div2 = element("div");
     			if_block1.c();
     			t3 = space();
-    			create_component(emojilist.$$.fragment);
-    			t4 = space();
     			div6 = element("div");
     			div5 = element("div");
-    			t5 = space();
+    			t4 = space();
     			div8 = element("div");
     			div7 = element("div");
-    			t6 = text(t6_value);
-    			t7 = space();
+    			t5 = text(t5_value);
+    			t6 = space();
     			div9 = element("div");
-    			t8 = text(t8_value);
+    			t7 = text(t7_value);
     			attr_dev(div0, "class", "date svelte-j9chy0");
     			attr_dev(div0, "style", /*fontWeightDate*/ ctx[3]);
     			add_location(div0, file$4, 42, 8, 1026);
@@ -3172,15 +3162,15 @@ var app = (function () {
     			attr_dev(div5, "class", "movie-bar svelte-j9chy0");
     			set_style(div5, "width", /*movie*/ ctx[0].voteAverage * 10 + "%");
     			set_style(div5, "background-color", /*barColor*/ ctx[2]);
-    			add_location(div5, file$4, 66, 8, 1943);
+    			add_location(div5, file$4, 66, 8, 1952);
     			attr_dev(div6, "class", "bar-container svelte-j9chy0");
-    			add_location(div6, file$4, 65, 6, 1907);
+    			add_location(div6, file$4, 65, 6, 1916);
     			attr_dev(div7, "class", "time svelte-j9chy0");
-    			add_location(div7, file$4, 72, 8, 2129);
+    			add_location(div7, file$4, 72, 8, 2138);
     			attr_dev(div8, "class", "time-container svelte-j9chy0");
-    			add_location(div8, file$4, 71, 6, 2092);
+    			add_location(div8, file$4, 71, 6, 2101);
     			attr_dev(div9, "class", "movie-name svelte-j9chy0");
-    			add_location(div9, file$4, 74, 6, 2201);
+    			add_location(div9, file$4, 74, 6, 2210);
     			attr_dev(div10, "class", "border bc-parent svelte-j9chy0");
     			add_location(div10, file$4, 40, 4, 952);
     			attr_dev(div11, "class", "movie-item svelte-j9chy0");
@@ -3206,19 +3196,16 @@ var app = (function () {
     			append_dev(div3, t2);
     			append_dev(div3, div2);
     			if_block1.m(div2, null);
-    			append_dev(div4, t3);
-    			mount_component(emojilist, div4, null);
-    			append_dev(div10, t4);
+    			append_dev(div10, t3);
     			append_dev(div10, div6);
     			append_dev(div6, div5);
-    			append_dev(div10, t5);
+    			append_dev(div10, t4);
     			append_dev(div10, div8);
     			append_dev(div8, div7);
-    			append_dev(div7, t6);
-    			append_dev(div10, t7);
+    			append_dev(div7, t5);
+    			append_dev(div10, t6);
     			append_dev(div10, div9);
-    			append_dev(div9, t8);
-    			current = true;
+    			append_dev(div9, t7);
 
     			if (!mounted) {
     				dispose = listen_dev(div12, "click", /*handleBarClick*/ ctx[8], false, false, false, false);
@@ -3226,9 +3213,9 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if ((!current || dirty & /*movie*/ 1) && t0_value !== (t0_value = /*movie*/ ctx[0].getReleaseDateString() + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*movie*/ 1 && t0_value !== (t0_value = /*movie*/ ctx[0].getReleaseDateString() + "")) set_data_dev(t0, t0_value);
 
-    			if (!current || dirty & /*fontWeightDate*/ 8) {
+    			if (dirty & /*fontWeightDate*/ 8) {
     				attr_dev(div0, "style", /*fontWeightDate*/ ctx[3]);
     			}
 
@@ -3256,43 +3243,31 @@ var app = (function () {
     				}
     			}
 
-    			const emojilist_changes = {};
-    			if (dirty & /*movie*/ 1) emojilist_changes.movie = /*movie*/ ctx[0];
-    			emojilist.$set(emojilist_changes);
-
-    			if (!current || dirty & /*movie*/ 1) {
+    			if (dirty & /*movie*/ 1) {
     				set_style(div5, "width", /*movie*/ ctx[0].voteAverage * 10 + "%");
     			}
 
-    			if (!current || dirty & /*barColor*/ 4) {
+    			if (dirty & /*barColor*/ 4) {
     				set_style(div5, "background-color", /*barColor*/ ctx[2]);
     			}
 
-    			if ((!current || dirty & /*movie*/ 1) && t6_value !== (t6_value = /*movie*/ ctx[0].generateHourString() + "")) set_data_dev(t6, t6_value);
-    			if ((!current || dirty & /*movie*/ 1) && t8_value !== (t8_value = /*movie*/ ctx[0].title + "")) set_data_dev(t8, t8_value);
+    			if (dirty & /*movie*/ 1 && t5_value !== (t5_value = /*movie*/ ctx[0].generateHourString() + "")) set_data_dev(t5, t5_value);
+    			if (dirty & /*movie*/ 1 && t7_value !== (t7_value = /*movie*/ ctx[0].title + "")) set_data_dev(t7, t7_value);
 
-    			if (!current || dirty & /*index, $itemHeight, $scrollY*/ 194) {
+    			if (dirty & /*index, $itemHeight, $scrollY*/ 194) {
     				set_style(div11, "transform", "translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[6] - /*$scrollY*/ ctx[7] % /*$itemHeight*/ ctx[6]) + "px)");
     			}
 
-    			if (!current || dirty & /*$itemHeight*/ 64) {
+    			if (dirty & /*$itemHeight*/ 64) {
     				set_style(div11, "height", /*$itemHeight*/ ctx[6] + "px");
     			}
     		},
-    		i: function intro(local) {
-    			if (current) return;
-    			transition_in(emojilist.$$.fragment, local);
-    			current = true;
-    		},
-    		o: function outro(local) {
-    			transition_out(emojilist.$$.fragment, local);
-    			current = false;
-    		},
+    		i: noop$1,
+    		o: noop$1,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div12);
     			if_block0.d();
     			if_block1.d();
-    			destroy_component(emojilist);
     			mounted = false;
     			dispose();
     		}
@@ -8154,7 +8129,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (63:2) {#if $selectedMovie}
+    // (64:2) {#if $selectedMovie}
     function create_if_block_1(ctx) {
     	let div4;
     	let div3;
@@ -8222,20 +8197,20 @@ var app = (function () {
     			t11 = space();
     			if (if_block9) if_block9.c();
     			attr_dev(div0, "class", "row");
-    			add_location(div0, file$1, 65, 8, 1547);
-    			attr_dev(i, "class", "fab fa-youtube youtube-icon svelte-5vq2fk");
-    			add_location(i, file$1, 96, 37, 2669);
-    			attr_dev(h2, "class", "card-title text-primary svelte-5vq2fk");
+    			add_location(div0, file$1, 66, 8, 1597);
+    			attr_dev(i, "class", "fab fa-youtube youtube-icon svelte-4aciit");
+    			add_location(i, file$1, 97, 37, 2719);
+    			attr_dev(h2, "class", "card-title text-primary svelte-4aciit");
     			set_style(h2, "cursor", "pointer");
-    			add_location(h2, file$1, 87, 12, 2352);
+    			add_location(h2, file$1, 88, 12, 2402);
     			attr_dev(div1, "class", "card-body");
-    			add_location(div1, file$1, 86, 10, 2316);
+    			add_location(div1, file$1, 87, 10, 2366);
     			attr_dev(div2, "class", "col");
-    			add_location(div2, file$1, 85, 8, 2288);
+    			add_location(div2, file$1, 86, 8, 2338);
     			attr_dev(div3, "class", "row no-gutters");
-    			add_location(div3, file$1, 64, 6, 1510);
+    			add_location(div3, file$1, 65, 6, 1560);
     			attr_dev(div4, "class", "card mb-3");
-    			add_location(div4, file$1, 63, 4, 1480);
+    			add_location(div4, file$1, 64, 4, 1530);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div4, anchor);
@@ -8429,14 +8404,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(63:2) {#if $selectedMovie}",
+    		source: "(64:2) {#if $selectedMovie}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (67:10) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}
+    // (68:10) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}
     function create_if_block_11(ctx) {
     	let div;
     	let img;
@@ -8454,12 +8429,12 @@ var app = (function () {
     			? /*$selectedMovie*/ ctx[2].posterImage.src
     			: /*$selectedMovie*/ ctx[2].getPosterUrl())) attr_dev(img, "src", img_src_value);
 
-    			attr_dev(img, "class", "poster img-fluid svelte-5vq2fk");
+    			attr_dev(img, "class", "poster img-fluid svelte-4aciit");
     			attr_dev(img, "alt", img_alt_value = /*$selectedMovie*/ ctx[2].title);
     			set_style(img, "cursor", "pointer");
-    			add_location(img, file$1, 68, 14, 1690);
+    			add_location(img, file$1, 69, 14, 1740);
     			attr_dev(div, "class", "col-auto");
-    			add_location(div, file$1, 67, 12, 1653);
+    			add_location(div, file$1, 68, 12, 1703);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -8492,32 +8467,43 @@ var app = (function () {
     		block,
     		id: create_if_block_11.name,
     		type: "if",
-    		source: "(67:10) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}",
+    		source: "(68:10) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (99:12) {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
+    // (100:12) {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
     function create_if_block_10(ctx) {
     	let h4;
-    	let t_value = /*$selectedMovie*/ ctx[2].originalTitle + "";
-    	let t;
+    	let flag;
+    	let t0_value = getLanguageFlag(/*$selectedMovie*/ ctx[2].originalLanguage) + "";
+    	let t0;
+    	let t1;
+    	let t2_value = /*$selectedMovie*/ ctx[2].originalTitle + "";
+    	let t2;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
     			h4 = element("h4");
-    			t = text(t_value);
-    			attr_dev(h4, "class", "card-subtitle mb-2 text-muted svelte-5vq2fk");
+    			flag = element("flag");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			t2 = text(t2_value);
+    			add_location(flag, file$1, 109, 15, 3211);
+    			attr_dev(h4, "class", "card-subtitle mb-2 text-muted svelte-4aciit");
     			set_style(h4, "cursor", "pointer");
-    			add_location(h4, file$1, 99, 14, 2836);
+    			add_location(h4, file$1, 100, 14, 2886);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h4, anchor);
-    			append_dev(h4, t);
+    			append_dev(h4, flag);
+    			append_dev(flag, t0);
+    			append_dev(h4, t1);
+    			append_dev(h4, t2);
 
     			if (!mounted) {
     				dispose = listen_dev(h4, "click", /*click_handler_2*/ ctx[8], false, false, false, false);
@@ -8525,7 +8511,8 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 4 && t_value !== (t_value = /*$selectedMovie*/ ctx[2].originalTitle + "")) set_data_dev(t, t_value);
+    			if (dirty & /*$selectedMovie*/ 4 && t0_value !== (t0_value = getLanguageFlag(/*$selectedMovie*/ ctx[2].originalLanguage) + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*$selectedMovie*/ 4 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[2].originalTitle + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(h4);
@@ -8538,14 +8525,14 @@ var app = (function () {
     		block,
     		id: create_if_block_10.name,
     		type: "if",
-    		source: "(99:12) {#if $selectedMovie.originalLanguage !== \\\"en\\\" && $selectedMovie.originalTitle}",
+    		source: "(100:12) {#if $selectedMovie.originalLanguage !== \\\"en\\\" && $selectedMovie.originalTitle}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (112:12) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}
+    // (113:12) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}
     function create_if_block_9(ctx) {
     	let p;
     	let strong;
@@ -8560,9 +8547,9 @@ var app = (function () {
     			strong.textContent = "Genre:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$1, 113, 16, 3359);
+    			add_location(strong, file$1, 114, 16, 3473);
     			attr_dev(p, "class", "card-text");
-    			add_location(p, file$1, 112, 14, 3321);
+    			add_location(p, file$1, 113, 14, 3435);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8582,14 +8569,14 @@ var app = (function () {
     		block,
     		id: create_if_block_9.name,
     		type: "if",
-    		source: "(112:12) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}",
+    		source: "(113:12) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (123:12) {#if $selectedMovie.releaseDate}
+    // (124:12) {#if $selectedMovie.releaseDate}
     function create_if_block_8(ctx) {
     	let p;
     	let strong;
@@ -8604,9 +8591,9 @@ var app = (function () {
     			strong.textContent = "Release Date:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$1, 124, 16, 3810);
+    			add_location(strong, file$1, 125, 16, 3924);
     			attr_dev(p, "class", "card-text");
-    			add_location(p, file$1, 123, 14, 3772);
+    			add_location(p, file$1, 124, 14, 3886);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8626,14 +8613,14 @@ var app = (function () {
     		block,
     		id: create_if_block_8.name,
     		type: "if",
-    		source: "(123:12) {#if $selectedMovie.releaseDate}",
+    		source: "(124:12) {#if $selectedMovie.releaseDate}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (129:12) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}
+    // (130:12) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}
     function create_if_block_7(ctx) {
     	let p;
     	let strong;
@@ -8655,9 +8642,9 @@ var app = (function () {
     			t3 = text(" (");
     			t4 = text(t4_value);
     			t5 = text(")");
-    			add_location(strong, file$1, 130, 16, 4062);
+    			add_location(strong, file$1, 131, 16, 4176);
     			attr_dev(p, "class", "card-text");
-    			add_location(p, file$1, 129, 14, 4024);
+    			add_location(p, file$1, 130, 14, 4138);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8681,14 +8668,14 @@ var app = (function () {
     		block,
     		id: create_if_block_7.name,
     		type: "if",
-    		source: "(129:12) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}",
+    		source: "(130:12) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (135:12) {#if $selectedMovie.popularity}
+    // (136:12) {#if $selectedMovie.popularity}
     function create_if_block_6(ctx) {
     	let p;
     	let strong;
@@ -8703,9 +8690,9 @@ var app = (function () {
     			strong.textContent = "Popularity:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$1, 136, 16, 4294);
+    			add_location(strong, file$1, 137, 16, 4408);
     			attr_dev(p, "class", "card-text");
-    			add_location(p, file$1, 135, 14, 4256);
+    			add_location(p, file$1, 136, 14, 4370);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8725,14 +8712,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6.name,
     		type: "if",
-    		source: "(135:12) {#if $selectedMovie.popularity}",
+    		source: "(136:12) {#if $selectedMovie.popularity}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (141:12) {#if $selectedMovie.runtime}
+    // (142:12) {#if $selectedMovie.runtime}
     function create_if_block_5(ctx) {
     	let p;
     	let strong;
@@ -8747,9 +8734,9 @@ var app = (function () {
     			strong.textContent = "Runtime:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$1, 142, 16, 4497);
+    			add_location(strong, file$1, 143, 16, 4611);
     			attr_dev(p, "class", "card-text");
-    			add_location(p, file$1, 141, 14, 4459);
+    			add_location(p, file$1, 142, 14, 4573);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8769,14 +8756,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(141:12) {#if $selectedMovie.runtime}",
+    		source: "(142:12) {#if $selectedMovie.runtime}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (147:12) {#if $selectedMovie.overview}
+    // (148:12) {#if $selectedMovie.overview}
     function create_if_block_4(ctx) {
     	let p;
     	let strong;
@@ -8791,9 +8778,9 @@ var app = (function () {
     			strong.textContent = "Description:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$1, 148, 16, 4708);
+    			add_location(strong, file$1, 149, 16, 4822);
     			attr_dev(p, "class", "card-text");
-    			add_location(p, file$1, 147, 14, 4670);
+    			add_location(p, file$1, 148, 14, 4784);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8813,14 +8800,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(147:12) {#if $selectedMovie.overview}",
+    		source: "(148:12) {#if $selectedMovie.overview}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (153:12) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}
+    // (154:12) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}
     function create_if_block_3(ctx) {
     	let p;
     	let strong;
@@ -8846,11 +8833,11 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$1, 154, 16, 4949);
+    			add_location(strong, file$1, 155, 16, 5063);
     			attr_dev(p, "class", "card-text");
-    			add_location(p, file$1, 153, 14, 4911);
+    			add_location(p, file$1, 154, 14, 5025);
     			attr_dev(ul, "class", "list-group list-group-flush");
-    			add_location(ul, file$1, 156, 14, 5005);
+    			add_location(ul, file$1, 157, 14, 5119);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -8901,14 +8888,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(153:12) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}",
+    		source: "(154:12) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (158:16) {#each $selectedMovie.topNcast as cast}
+    // (159:16) {#each $selectedMovie.topNcast as cast}
     function create_each_block_1(ctx) {
     	let li;
     	let span;
@@ -8933,11 +8920,11 @@ var app = (function () {
     			t1 = text(" as ");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr_dev(span, "class", "text-primary svelte-5vq2fk");
-    			add_location(span, file$1, 165, 20, 5379);
-    			attr_dev(li, "class", "list-group-item svelte-5vq2fk");
+    			attr_dev(span, "class", "text-primary svelte-4aciit");
+    			add_location(span, file$1, 166, 20, 5493);
+    			attr_dev(li, "class", "list-group-item svelte-4aciit");
     			set_style(li, "cursor", "pointer");
-    			add_location(li, file$1, 158, 18, 5120);
+    			add_location(li, file$1, 159, 18, 5234);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -8968,14 +8955,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(158:16) {#each $selectedMovie.topNcast as cast}",
+    		source: "(159:16) {#each $selectedMovie.topNcast as cast}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (171:12) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}
+    // (172:12) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}
     function create_if_block_2(ctx) {
     	let p;
     	let strong;
@@ -9001,11 +8988,11 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$1, 172, 16, 5668);
+    			add_location(strong, file$1, 173, 16, 5782);
     			attr_dev(p, "class", "card-text mt-3");
-    			add_location(p, file$1, 171, 14, 5625);
+    			add_location(p, file$1, 172, 14, 5739);
     			attr_dev(ul, "class", "list-group list-group-flush");
-    			add_location(ul, file$1, 174, 14, 5724);
+    			add_location(ul, file$1, 175, 14, 5838);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -9056,14 +9043,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(171:12) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}",
+    		source: "(172:12) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (176:16) {#each $selectedMovie.topNcrew as crew}
+    // (177:16) {#each $selectedMovie.topNcrew as crew}
     function create_each_block(ctx) {
     	let li;
     	let span;
@@ -9088,11 +9075,11 @@ var app = (function () {
     			t1 = text(": ");
     			t2 = text(t2_value);
     			t3 = space();
-    			attr_dev(span, "class", "text-primary svelte-5vq2fk");
-    			add_location(span, file$1, 183, 20, 6098);
-    			attr_dev(li, "class", "list-group-item svelte-5vq2fk");
+    			attr_dev(span, "class", "text-primary svelte-4aciit");
+    			add_location(span, file$1, 184, 20, 6212);
+    			attr_dev(li, "class", "list-group-item svelte-4aciit");
     			set_style(li, "cursor", "pointer");
-    			add_location(li, file$1, 176, 18, 5839);
+    			add_location(li, file$1, 177, 18, 5953);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -9123,14 +9110,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(176:16) {#each $selectedMovie.topNcrew as crew}",
+    		source: "(177:16) {#each $selectedMovie.topNcrew as crew}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (195:2) {#if showModal}
+    // (196:2) {#if showModal}
     function create_if_block(ctx) {
     	let div1;
     	let div0;
@@ -9149,16 +9136,16 @@ var app = (function () {
     			span.textContent = "×";
     			t1 = space();
     			img = element("img");
-    			attr_dev(span, "class", "close svelte-5vq2fk");
-    			add_location(span, file$1, 197, 8, 6413);
+    			attr_dev(span, "class", "close svelte-4aciit");
+    			add_location(span, file$1, 198, 8, 6527);
     			if (!src_url_equal(img.src, img_src_value = /*fullImageUrl*/ ctx[1])) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "Full Image");
-    			attr_dev(img, "class", "svelte-5vq2fk");
-    			add_location(img, file$1, 198, 8, 6478);
-    			attr_dev(div0, "class", "modal-content svelte-5vq2fk");
-    			add_location(div0, file$1, 196, 6, 6377);
-    			attr_dev(div1, "class", "modal svelte-5vq2fk");
-    			add_location(div1, file$1, 195, 4, 6329);
+    			attr_dev(img, "class", "svelte-4aciit");
+    			add_location(img, file$1, 199, 8, 6592);
+    			attr_dev(div0, "class", "modal-content svelte-4aciit");
+    			add_location(div0, file$1, 197, 6, 6491);
+    			attr_dev(div1, "class", "modal svelte-4aciit");
+    			add_location(div1, file$1, 196, 4, 6443);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -9192,7 +9179,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(195:2) {#if showModal}",
+    		source: "(196:2) {#if showModal}",
     		ctx
     	});
 
@@ -9211,8 +9198,8 @@ var app = (function () {
     			if (if_block0) if_block0.c();
     			t = space();
     			if (if_block1) if_block1.c();
-    			attr_dev(div, "class", "movie-details container-fluid svelte-5vq2fk");
-    			add_location(div, file$1, 61, 0, 1409);
+    			attr_dev(div, "class", "movie-details container-fluid svelte-4aciit");
+    			add_location(div, file$1, 62, 0, 1459);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -9350,6 +9337,7 @@ var app = (function () {
     		maxReviewCount,
     		selectedGenres,
     		selectedLanguage,
+    		getLanguageFlag,
     		MovieOnHoverDetails,
     		onMount,
     		showModal,

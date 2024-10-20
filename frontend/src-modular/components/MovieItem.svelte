@@ -61,7 +61,7 @@
             {/if}
           </div>
         </div>
-        <EmojiList {movie}></EmojiList>
+        <!-- <EmojiList {movie}></EmojiList> -->
       </div>
       <div class="bar-container">
         <div

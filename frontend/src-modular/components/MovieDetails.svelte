@@ -17,6 +17,7 @@
     selectedGenres,
     selectedLanguage,
   } from "../stores.js";
+  import {getLanguageFlag} from '../constants.js'
   import MovieOnHoverDetails from "./MovieOnHoverDetails.svelte";
   import { onMount } from "svelte";
 
@@ -106,7 +107,7 @@
                   )}
                 style="cursor: pointer;"
               >
-                {$selectedMovie.originalTitle}
+               <flag>{getLanguageFlag($selectedMovie.originalLanguage)}</flag> {$selectedMovie.originalTitle} 
               </h4>
             {/if}
             {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}
@@ -283,4 +284,14 @@
     width: 100%;
     height: auto;
   }
+
+  .flag {
+    margin-right: 0.3rem
+  }
+
+  .flag:hover {
+    transform: scale(1.7); /* Scale the emoji to 1.5 times its size */
+    z-index: 1; /* Ensure the emoji appears above other elements */
+  }
+
 </style>
