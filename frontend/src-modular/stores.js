@@ -51,7 +51,7 @@ maxReviewCount.subscribe(value => currentMaxReviewCount.set(value));
 selectedTitle.subscribe(value => currentSelectedTitle.set(value) )
 
 function logChange(newValue) {
-  console.log(newValue);
+  console.log('log change', newValue);
 }
 selectedPerson.subscribe(logChange);
 selectedMovie.subscribe(logChange)
