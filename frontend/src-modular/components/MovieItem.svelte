@@ -38,12 +38,17 @@
   $: languageFlag = getLanguageFlag(movie.originalLanguage);
   $: languageName = getLanguageName(movie.originalLanguage);
   $: fontWeightDate = `font-weight: ${newYear ? '700' : '400'}`;
-  $: isSelectedMovie = ($selectedMovie && $selectedMovie.id == movie.id);
+  $: {
+    let isSelectedMovie = $selectedMovie && $selectedMovie.id == movie.id
+    if(isSelectedMovie) {
+      console.log('here123', $selectedMovie)
+    }
+  }
 
 </script>
 
 <div
-  class="movie-item row align-items-center}"
+  class="movie-item row align-items-center {$selectedMovie && $selectedMovie.id == movie.id ? 'selected-movie-item' : ''}"
   on:click={handleBarClick}
   on:mouseenter={handleMouseEnter}
   on:mouseleave={handleMouseLeave}
@@ -107,7 +112,7 @@
 
   <!-- Info Container -->
   <div class="info-container col-1 text-center">
-    {#if isHoveringOver}
+    {#if isHoveringOver }
       <div class="row mb-2" style="font-weight: 800; font-size: small">rating: {movie.voteAverage.toFixed(1)}</div>
       <div class="row" style="color: {barColor}; font-weight: 800; font-size: small">popularity: {movie.popularity.toFixed(0)}</div>
     {/if}
@@ -152,7 +157,8 @@
 
   .custom-bar {
     height: 100%;
-    border-radius: 0.5rem;
+    background-color: var(--bar-color, #007bff);
+    border-radius: 1rem;
   }
 
   /* Emoji List Styles */
@@ -186,12 +192,16 @@
     opacity: 1;
   }
 
+  /* .selected-movie-item .custom-bar-container {
+    background-color: #ccc;
+    transition: background-color 0s
+  } */
+
+  .movie-item:hover .custom-bar-container {
+    background-color: #ccc;
+  }
+
   .movie-item:hover  {
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
   }
-
-
-  /* .movie-item:hover  {
-    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
-  } */
 </style>

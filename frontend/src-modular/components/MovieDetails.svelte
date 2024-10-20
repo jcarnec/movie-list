@@ -58,6 +58,15 @@
       castOrCrew: person.character ? "cast" : "crew",
     };
   }
+
+  function handlePosterLoad() {
+    const rect = posterDiv.getBoundingClientRect();
+    const topLeft = { x: rect.left, y: rect.top };
+    const topRight = { x: rect.right, y: rect.top };
+    console.log('Top Left:', topLeft);
+    console.log('Top Right:', topRight);
+  }
+
 </script>
 
 <div class="movie-details container-fluid">
@@ -80,6 +89,7 @@
                       : $selectedMovie.getPosterUrl()
                   )}
                 style="cursor: pointer;"
+                on:load={handlePosterLoad}
               />
             </div>
           {/if}
