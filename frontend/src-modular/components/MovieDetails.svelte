@@ -17,7 +17,7 @@
     selectedGenres,
     selectedLanguage,
   } from "../stores.js";
-  import {getLanguageFlag} from '../constants.js'
+  import { genreEmojiDict, getLanguageFlag } from "../constants.js";
   import MovieOnHoverDetails from "./MovieOnHoverDetails.svelte";
   import { onMount } from "svelte";
 
@@ -98,22 +98,50 @@
               {$selectedMovie.title} <i class="fab fa-youtube youtube-icon"></i>
             </h2>
             {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
-              <h4
-                class="card-subtitle mb-2 text-muted"
-                on:click={() =>
-                  openYoutubeSearchUrl(
-                    $selectedMovie.originalTitle,
-                    $selectedMovie.getReleaseYear()
-                  )}
-                style="cursor: pointer;"
-              >
-               <flag>{getLanguageFlag($selectedMovie.originalLanguage)}</flag> {$selectedMovie.originalTitle} 
-              </h4>
+              <div class="d-flex align-items-center mb-2">
+                <span class="me-3 flag" on:click={console.log("hello")}
+                  >{getLanguageFlag($selectedMovie.originalLanguage)}</span
+                >
+                <h4
+                  class="card-subtitle text-muted my-0"
+                  on:click={() =>
+                    openYoutubeSearchUrl(
+                      $selectedMovie.originalTitle,
+                      $selectedMovie.getReleaseYear()
+                    )}
+                  style="cursor: pointer;"
+                >
+                  {$selectedMovie.originalTitle}
+                </h4>
+              </div>
             {/if}
             {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}
               <p class="card-text">
                 <strong>Genre:</strong>
-                {$selectedMovie.genres.join(", ")}
+                <span class="genre-container">
+                  {#each $selectedMovie.genres as genre}
+                    <span class="genre-item">
+                      <p
+                        class="emoji me-1"
+                        on:click={() => {
+                          if ($selectedGenres.includes(genre)) {
+                            selectedGenres.update((genres) =>
+                              genres.filter((g) => g !== genre)
+                            );
+                          } else {
+                            selectedGenres.update((genres) => [
+                              ...genres,
+                              genre,
+                            ]);
+                          }
+                        }}
+                      >
+                        {genreEmojiDict[genre]}
+                      </p>
+                      <p>{genre}</p>
+                    </span>
+                  {/each}
+                </span>
               </p>
             {/if}
             <!-- {#if $selectedMovie.keywords && $selectedMovie.keywords.length > 0}
@@ -130,13 +158,13 @@
             {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}
               <p class="card-text">
                 <strong>Rating:</strong>
-                {$selectedMovie.voteAverage} ({$selectedMovie.voteCount})
+                {$selectedMovie.voteAverage.toFixed(1)} ({$selectedMovie.voteCount})
               </p>
             {/if}
             {#if $selectedMovie.popularity}
               <p class="card-text">
                 <strong>Popularity:</strong>
-                {$selectedMovie.popularity}
+                {$selectedMovie.popularity.toFixed(0)}
               </p>
             {/if}
             {#if $selectedMovie.runtime}
@@ -206,8 +234,9 @@
 
 <style>
   .movie-details {
-    height: 100vh;
+    height: 99vh;
     overflow-y: auto;
+    padding-left: 0;
   }
 
   .poster {
@@ -247,9 +276,6 @@
     color: red;
   }
 
-
-
-
   .modal {
     display: block;
     position: fixed;
@@ -286,7 +312,8 @@
   }
 
   .flag {
-    margin-right: 0.3rem
+    cursor: pointer;
+    transition: transform 0.2s;
   }
 
   .flag:hover {
@@ -294,4 +321,30 @@
     z-index: 1; /* Ensure the emoji appears above other elements */
   }
 
+  .emoji {
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .emoji:hover {
+    transform: scale(1.7);
+    z-index: 1;
+  }
+
+  .genre-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .genre-item {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+  }
+
+  .genre-item p {
+    margin: 0;
+  }
 </style>

@@ -462,3 +462,25 @@ export function getLanguageColor(language) {
     return undefined;
   }
 }
+
+export const genreEmojiDict = {
+    Documentary: "📚",
+    Adventure: "🧗",
+    "Science Fiction": "👽",
+    Comedy: "😂",
+    Fantasy: "🧙",
+    Horror: "👻",
+    Drama: "🎭",
+    History: "🏰",
+    War: "⚔️",
+    Romance: "❤️",
+    Thriller: "😱",
+    Crime: "🔪",
+    Action: "💥",
+    Mystery: "🕵️‍♂️",
+    Music: "🎵",
+    Family: "👨‍👩‍👧‍👦",
+    Animation: "🎨",
+    Western: "🤠",
+    "TV Movie": "📺",
+  };
