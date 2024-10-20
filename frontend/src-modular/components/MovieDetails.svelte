@@ -59,14 +59,6 @@
     };
   }
 
-  function handlePosterLoad() {
-    const rect = posterDiv.getBoundingClientRect();
-    const topLeft = { x: rect.left, y: rect.top };
-    const topRight = { x: rect.right, y: rect.top };
-    console.log('Top Left:', topLeft);
-    console.log('Top Right:', topRight);
-  }
-
 </script>
 
 <div class="movie-details container-fluid">
@@ -89,7 +81,6 @@
                       : $selectedMovie.getPosterUrl()
                   )}
                 style="cursor: pointer;"
-                on:load={handlePosterLoad}
               />
             </div>
           {/if}
@@ -109,7 +100,7 @@
             </h2>
             {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
               <div class="d-flex align-items-center mb-2">
-                <span class="me-3 flag" on:click={console.log("hello")}
+                <span class="me-3 flag" on:click={selectedLanguage.set($selectedMovie.originalLanguage)}
                   >{getLanguageFlag($selectedMovie.originalLanguage)}</span
                 >
                 <h4

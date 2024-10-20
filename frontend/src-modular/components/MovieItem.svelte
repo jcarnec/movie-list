@@ -38,12 +38,8 @@
   $: languageFlag = getLanguageFlag(movie.originalLanguage);
   $: languageName = getLanguageName(movie.originalLanguage);
   $: fontWeightDate = `font-weight: ${newYear ? '700' : '400'}`;
-  $: {
-    let isSelectedMovie = $selectedMovie && $selectedMovie.id == movie.id
-    if(isSelectedMovie) {
-      console.log('here123', $selectedMovie)
-    }
-  }
+  $: isSelectedMovie = $selectedMovie && $selectedMovie.id == movie.id
+    
 
 </script>
 

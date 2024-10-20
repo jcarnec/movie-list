@@ -7,21 +7,6 @@
   import { checkAppendPrepend, handleScroll, handleTouchStart, prepend, prependAfterFailure, queryMovies } from "./utils";
   import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguage, selectedGenres, selectedTitle, currentMinYear, allowQueryMutex } from "./stores.js";
 
-  function disableTransitions() {
-      const elements = document.querySelectorAll('*'); // Select all elements
-      elements.forEach(element => {
-          element.style.transition = 'none'; // Disable transitions
-      });
-  }
-
-  // Function to re-enable transitions
-  function enableTransitions() {
-      const elements = document.querySelectorAll('*');
-      elements.forEach(element => {
-          element.style.transition = ''; // Reset to original transitions
-      });
-  }
-
   let movies = [];
 
 // Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
