@@ -20,9 +20,25 @@
   import { genreEmojiDict, getLanguageFlag } from "../constants.js";
   import MovieOnHoverDetails from "./MovieOnHoverDetails.svelte";
   import { onMount } from "svelte";
+  import { addMovie, getMovieViewedType, history } from "../historyStore.js";
 
   let showModal = false;
   let fullImageUrl = "";
+
+  function getOrSetMovieViewedType(movie) {
+    if(movie) {
+      let type = null
+      type = getMovieViewedType(movie)
+      if(!type) {
+        addMovie(movie, 'ignored')
+        return 'ignored'
+      } else {
+        return type
+      }
+    }
+  }
+
+  $: selectedButton =  getOrSetMovieViewedType($selectedMovie)
 
   function openImageModal(imageUrl) {
     fullImageUrl = imageUrl;
@@ -59,10 +75,56 @@
     };
   }
 
+  function handleButtonClick(buttonType) {
+    addMovie($selectedMovie, buttonType)
+  }
+
+  history.subscribe(n => {
+    if($selectedMovie) {
+      selectedButton = getMovieViewedType($selectedMovie)
+    }
+  })
+
 </script>
 
 <div class="movie-details container-fluid">
   {#if $selectedMovie}
+  <!-- Custom Button Group -->
+    <div class="custom-btn-group my-3" role="group" aria-label="Status buttons">
+      <button
+        type="button"
+        class="custom-btn viewed"
+        class:selected={selectedButton === "viewed"}
+        on:click={() => handleButtonClick("viewed")}
+      >
+        Viewed 📑
+      </button>
+      <button
+        type="button"
+        class="custom-btn interested"
+        class:selected={selectedButton === "interested"}
+        on:click={() => handleButtonClick("interested")}
+      >
+        Interested 🧐
+      </button>
+      <button
+        type="button"
+        class="custom-btn seen"
+        class:selected={selectedButton === "seen"}
+        on:click={() => handleButtonClick("seen")}
+      >
+        Seen It 📺
+      </button>
+      <button
+        type="button "
+        class="custom-btn loved"
+        class:selected={selectedButton === "loved"}
+        on:click={() => handleButtonClick("loved")}
+      >
+        Loved It! 🫶
+      </button>
+    </div>
+
     <div class="card mb-3">
       <div class="row no-gutters">
         <div class="row">
@@ -100,8 +162,11 @@
             </h2>
             {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
               <div class="d-flex align-items-center mb-2">
-                <span class="me-3 flag" on:click={selectedLanguage.set($selectedMovie.originalLanguage)}
-                  >{getLanguageFlag($selectedMovie.originalLanguage)}</span
+                <span
+                  class="me-3 flag"
+                  on:click={selectedLanguage.set(
+                    $selectedMovie.originalLanguage
+                  )}>{getLanguageFlag($selectedMovie.originalLanguage)}</span
                 >
                 <h4
                   class="card-subtitle text-muted my-0"
@@ -159,13 +224,13 @@
             {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}
               <p class="card-text">
                 <strong>Rating:</strong>
-                {$selectedMovie.voteAverage.toFixed(1)} ({$selectedMovie.voteCount})
+               ⭐ {$selectedMovie.voteAverage.toFixed(1)} ({$selectedMovie.voteCount} reviews)
               </p>
             {/if}
             {#if $selectedMovie.popularity}
               <p class="card-text">
                 <strong>Popularity:</strong>
-                {$selectedMovie.popularity.toFixed(0)}
+               👥 {$selectedMovie.popularity.toFixed(0)}
               </p>
             {/if}
             {#if $selectedMovie.runtime}
@@ -348,4 +413,91 @@
   .genre-item p {
     margin: 0;
   }
+
+  .custom-btn-group {
+    display: flex;
+    gap: 0px;
+  }
+
+  .custom-btn {
+    padding: 10px 20px;
+    border: 1px solid black;
+    background-color: white;
+    color: grey;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: none;
+  }
+
+  .custom-btn:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-color: lightgrey;
+  }
+
+  /* Specific colors for each state */
+  .custom-btn.selected {
+    border-color: #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .custom-btn.selected.viewed {
+    background-color: grey;
+    color: white;
+  }
+
+  .custom-btn.selected.interested {
+    background-color: green;
+    color: white;
+  }
+
+  .custom-btn.selected.seen {
+    background-color: blue;
+    color: white;
+  }
+
+  .custom-btn.selected.loved {
+    background-color: red;
+    color: white;
+  }
+
+  /* Hover effects for each button type */
+  .custom-btn.viewed:hover {
+    color: white;
+    background-color: grey;
+    border-color: grey;
+  }
+
+  .custom-btn.interested:hover {
+    color: white;
+    background-color: green;
+    border-color: green;
+  }
+
+  .custom-btn.seen:hover {
+    color: white;
+    background-color: blue;
+    border-color: blue;
+  }
+
+  .custom-btn.loved:hover {
+    color: white;
+    background-color: red;
+    border-color: red;
+  }
+
+ .custom-btn:first-child {
+    border-top-left-radius: 5px; /* Add border radius to the first button */
+    border-bottom-left-radius: 5px;
+  }
+
+  .custom-btn:last-child {
+    border-top-right-radius: 5px; /* Add border radius to the last button */
+    border-bottom-right-radius: 5px;
+  }
+
+  .custom-btn:not(:last-child) {
+    border-right: none; /* Remove right border for all but the last button */
+  }
+
 </style>

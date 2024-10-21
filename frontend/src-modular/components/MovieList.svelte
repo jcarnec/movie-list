@@ -6,7 +6,7 @@
   export let movies;
 </script>
 
-<div class="movie-list" style="position: relative; margin:24px">
+<div class="movie-list" style="position: relative; margin:24px; user-select: none;">
   {#if movies.length > 0}
     {#each getVisibleMovies(movies) as movie, index}
       <MovieItem

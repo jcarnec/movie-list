@@ -1,21 +1,26 @@
 import { persistentStore } from './persistentStore.js';
 import {get} from 'svelte/store'
 
-export const settings = persistentStore('history', {
+export const history = persistentStore('history', {
     viewedMoviesDict: {},
 });
 
-settings.subscribe((n) => {
+history.subscribe((n) => {
     console.log('history store',n)
 })
 
-export function addMovie(movie) {
-    settings.update(n => {
-        const updatedDict = { ...n.viewedMoviesDict, [movie.id]: true };
+export function addMovie(movie, verb = 'seen') {
+    history.update(n => {
+        n.viewedMoviesDict[movie.id] = verb
+        const updatedDict = { ...n.viewedMoviesDict };
         return { ...n, viewedMoviesDict: updatedDict };
     });
 }
 
 export function movieIsPresent(movie) {
-    return get(settings).viewedMoviesDict[movie.id] || false;
+    return (get(history).viewedMoviesDict[movie.id] || false);
+}
+
+export function getMovieViewedType(movie) {
+    return get(history).viewedMoviesDict[movie.id] || null;
 }
