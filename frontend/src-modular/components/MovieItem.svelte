@@ -19,6 +19,7 @@
   } from "../constants.js";
   import { history } from "../historyStore.js";
   import { onMount } from "svelte";
+  import {isNarrow} from '../windowStore.js'
 
   export let movie;
   export let index;
@@ -41,6 +42,12 @@
   $: languageName = getLanguageName(movie.originalLanguage);
   $: fontWeightDate = `font-weight: ${newYear ? "700" : "400"}`;
   $: movieViewedType = getMovieViewedType(movie);
+
+
+
+  isNarrow.subscribe(n => {
+    console.log('screen-width', n)
+  })
 
   history.subscribe((n) => {
     movieViewedType = getMovieViewedType(movie);
@@ -96,16 +103,15 @@
       $itemHeight)}px); height: {$itemHeight}px; position: absolute; width: 100%;"
 >
   <!-- Time Container -->
-  <div class="col-1 text-center">
+  <div class="col-1 text-center adaptable-text">
     {movie.generateHourString()}
   </div>
 
-  <!-- Title-Genre Container -->
   <div class="col-4">
     <div class="d-flex flex-column">
       <!-- Original Title -->
       {#if !isEnglish}
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center cutoff">
           <span
             class="flag"
             on:click={() => selectedLanguage.set(movie.originalLanguage)}
@@ -123,15 +129,15 @@
         </div>
       {/if}
       <!-- English Title -->
-      <div class="d-flex align-items-center" style="font-size: 1.3rem;">
+      <div class="d-flex align-items-center" style="font-size: 0.9vw;">
         {movie.title}
       </div>
     </div>
   </div>
 
   <!-- Emoji Grid Container -->
-  <div class="col-1">
-    <div class="emoji-list">
+  <div class="col-1 g-0" >
+    <div class="emoji-list" style="font-size: 0.8vw;">
       {#each movie.genres as genre}
         <div
           on:click={() => {
@@ -152,7 +158,7 @@
   </div>
 
   <!-- Custom Bar Container -->
-  <div class="col-4">
+  <div class={$isNarrow ? "col-3 g-0" : "col-4"}>
     <div
       class="custom-bar-container"
       style={movieViewedType && movieViewedType != "ignored"
@@ -167,25 +173,28 @@
   </div>
 
   <!-- Info Container -->
-  <div class="info-container col-1 text-center">
+  <div class="info-container col-1 {$isNarrow ? 'g-0' : 'g-1'} text-center" style=" display: flex; justify-content: center; align-items: center">
     {#if movieViewedType && movieViewedType != "ignored"}
       <div
         class="status-button {movieViewedType}"
+        style="font-size: 1vw; display: flex;"
       >
         {movieViewedType ? emojiDict[movieViewedType] : ""}
       </div>
     {:else if isHoveringOver}
+    <div style="font-size: 0.7vw;">
       <div class="row mb-2" style="font-weight: 800;">
         ⭐ {movie.voteAverage.toFixed(1)}
       </div>
       <div class="row" style="color: {barColor}; font-weight: 800;">
         👥 {movie.popularity.toFixed(0)}
       </div>
+    </div>
     {/if}
   </div>
 
   <!-- Date Container -->
-  <div class="col-1 text-center" style={fontWeightDate}>
+  <div class="col-1 g-0 text-center adaptable-text" style={fontWeightDate}>
     {movie.getReleaseDateString()}
   </div>
 </div>
@@ -214,7 +223,7 @@
   .custom-bar-container {
     width: 100%;
     height: 40px;
-    background-color: white;
+    background-color: rgb(240, 240, 240);
     position: relative;
     overflow: hidden;
     border-radius:1em;
@@ -236,7 +245,6 @@
   }
 
   .emoji {
-    font-size: 1.2rem;
     cursor: pointer;
     transition: transform 0.2s;
   }
@@ -262,8 +270,8 @@
   .status-button {
     color: white; /* Always white text */
     border: 1px solid transparent; /* Default border */
-    width: 60px; /* Set width */
-    height: 50px; /* Set height */
+    width: 2vw; /* Set width */
+    height: 2vw; /* Set height */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -294,4 +302,15 @@
   .status-button.loved {
     background-color: red;
   }
+
+  .cutoff {
+    white-space: nowrap;       /* Prevent text wrapping */
+    overflow: hidden;          /* Hide overflowed content */
+    text-overflow: ellipsis;   /* Display ellipsis (...) for truncated text */
+  }
+
+  .adaptable-text {
+    font-size: 1vw;
+  }
+  
 </style>

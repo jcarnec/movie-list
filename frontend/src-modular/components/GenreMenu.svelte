@@ -39,8 +39,7 @@
   $: unselectedGenres = allGenres.filter(genre => !genres.includes(genre));
 </script>
 
-<div class="genre-menu mb-2">
-  <label class="form-label">Genre</label>
+<div class="genre-menu my-3">
 
   <!-- Selected Genres -->
   {#if genres.length > 0}
