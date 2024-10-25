@@ -25,6 +25,7 @@
   import { LANGUAGEINFO } from "../constants.js";
 
   import GenreMenu from "./GenreMenu.svelte";
+  import SaveMenu from "./SaveMenu.svelte";
 
   function handleKeydown(event) {
     if (event.key === "Enter") {
@@ -232,6 +233,11 @@
     <!-- Genre Menu -->
     <div class="mb-2">
       <GenreMenu />
+    </div>
+
+    <!-- Genre Menu -->
+    <div class="mb-2">
+      <SaveMenu />
     </div>
 
     <!-- Reset Button -->

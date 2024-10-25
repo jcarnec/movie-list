@@ -27,10 +27,12 @@ export const DEFAULT_MAX_REVIEWS = null;
 export const DEFAULT_PERSON = { name: '', id: null, castOrCrew: null };
 export const DEFAULT_LANGUAGE = 'all';
 export const DEFAULT_SELECTED_GENRES = [];
+export const DEFAULT_SELECTED_VIEW_TYPE_VERBS = [];
 
 export const selectedPerson = writable(DEFAULT_PERSON);
 export const selectedLanguage = writable(DEFAULT_LANGUAGE);
 export const selectedGenres = writable(DEFAULT_SELECTED_GENRES);
+export const selectedViewTypeVerbs = writable(DEFAULT_SELECTED_VIEW_TYPE_VERBS);
 export const minYear = writable('2014');
 export const minReviewCount = writable(10);
 export const maxReviewCount = writable(DEFAULT_MAX_REVIEWS);

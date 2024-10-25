@@ -24,3 +24,10 @@ export function movieIsPresent(movie) {
 export function getMovieViewedType(movie) {
     return get(history).viewedMoviesDict[movie.id] || null;
 }
+
+export function getAllRelevantIDs(verbs) {
+    const viewedMoviesDict = get(history).viewedMoviesDict;
+    return Object.entries(viewedMoviesDict)
+        .filter(([id, verb]) => verbs.includes(verb))
+        .map(([id]) => id);
+}

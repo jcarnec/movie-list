@@ -19,8 +19,11 @@ import {
   selectedTitle,
   lastAppendedID,
   lastPrependedID,
-  movieCount
+  movieCount,
+  selectedViewTypeVerbs
+  
 } from "./stores";
+import { getAllRelevantIDs, history } from "./historyStore.js";
 import axios from "axios";
 import Movie from "./Movie.js";
 
@@ -79,6 +82,10 @@ export async function queryDatabase(movies, append = "new", date = null) {
     type: append,
     title: get(selectedTitle),
   };
+
+  if(get(selectedViewTypeVerbs) && get(selectedViewTypeVerbs).length > 0) {
+    body['ids'] = getAllRelevantIDs(get(selectedViewTypeVerbs))
+  }
 
   if (append == "append") {
     body["date"] = date || movies[movies.length - 1].releaseDate;

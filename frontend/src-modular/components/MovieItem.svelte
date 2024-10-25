@@ -16,6 +16,7 @@
     getLanguageFlag,
     getLanguageName,
     genreEmojiDict,
+    verbEmojiDict
   } from "../constants.js";
   import { history } from "../historyStore.js";
   import { onMount } from "svelte";
@@ -85,12 +86,6 @@
     loved: "red",
   };
 
-  const emojiDict = {
-    viewed: "📑",
-    interested: "🧐",
-    seen: "📺",
-    loved: "🫶",
-  };
 </script>
 
 <div
@@ -111,7 +106,7 @@
     <div class="d-flex flex-column">
       <!-- Original Title -->
       {#if !isEnglish}
-        <div class="d-flex align-items-center cutoff">
+        <div class="d-flex align-items-center cutoff"  style="color: #706f6f;">
           <span
             class="flag"
             on:click={() => selectedLanguage.set(movie.originalLanguage)}
@@ -179,7 +174,7 @@
         class="status-button {movieViewedType}"
         style="font-size: 1vw; display: flex;"
       >
-        {movieViewedType ? emojiDict[movieViewedType] : ""}
+        {movieViewedType ? verbEmojiDict[movieViewedType] : ""}
       </div>
     {:else if isHoveringOver}
     <div style="font-size: 0.7vw;">

@@ -24,6 +24,7 @@ const getMovies = async (req, res) => {
 const buildFilter = (params) => {
   const filter = {};
 
+  if (params.ids) filter.id = {$in: params.ids}
   if (params.adult) filter.adult = params.adult;
   if (params.budget) filter.budget = { $gte: Number(params.budget) };
   if (params.title) filter.title = { $regex: params.title, $options: "i" };

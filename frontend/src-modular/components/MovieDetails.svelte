@@ -17,7 +17,7 @@
     selectedGenres,
     selectedLanguage,
   } from "../stores.js";
-  import { genreEmojiDict, getLanguageFlag } from "../constants.js";
+  import { genreEmojiDict, getLanguageFlag, verbEmojiDict } from "../constants.js";
   import MovieOnHoverDetails from "./MovieOnHoverDetails.svelte";
   import { onMount } from "svelte";
   import { addMovie, getMovieViewedType, history } from "../historyStore.js";
@@ -76,7 +76,11 @@
   }
 
   function handleButtonClick(buttonType) {
-    addMovie($selectedMovie, buttonType)
+    if(buttonType == selectedButton) {
+      addMovie($selectedMovie, 'ignore')
+    } else {
+      addMovie($selectedMovie, buttonType)
+    }
   }
 
   history.subscribe(n => {
@@ -97,7 +101,7 @@
         class:selected={selectedButton === "viewed"}
         on:click={() => handleButtonClick("viewed")}
       >
-        Viewed 📑
+        Viewed {verbEmojiDict['viewed']}
       </button>
       <button
         type="button"
@@ -105,7 +109,7 @@
         class:selected={selectedButton === "interested"}
         on:click={() => handleButtonClick("interested")}
       >
-        Interested 🧐
+        Interested {verbEmojiDict['interested']}
       </button>
       <button
         type="button"
@@ -113,7 +117,7 @@
         class:selected={selectedButton === "seen"}
         on:click={() => handleButtonClick("seen")}
       >
-        Seen It 📺
+        Seen It {verbEmojiDict['seen']}
       </button>
       <button
         type="button "
@@ -121,7 +125,7 @@
         class:selected={selectedButton === "loved"}
         on:click={() => handleButtonClick("loved")}
       >
-        Loved It! 🫶
+        Loved It! {verbEmojiDict['loved']}
       </button>
     </div>
 
@@ -163,7 +167,7 @@
             {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
               <div class="d-flex align-items-center mb-2">
                 <span
-                  class="me-3 flag"
+                  class="me-3 flag"   
                   on:click={selectedLanguage.set(
                     $selectedMovie.originalLanguage
                   )}>{getLanguageFlag($selectedMovie.originalLanguage)}</span
@@ -438,7 +442,7 @@
   /* Specific colors for each state */
   .custom-btn.selected {
     border-color: #333;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 12px 12px rgba(0, 0, 0, 0.3);
   }
 
   .custom-btn.selected.viewed {
