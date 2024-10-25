@@ -4,14 +4,15 @@
   import Header from "./components/Header.svelte";
   import MovieList from "./components/MovieList.svelte";
   import MovieDetails from "./components/MovieDetails.svelte";
+  import './styles/global.css'
   import { checkAppendPrepend, handleScroll, handleTouchStart, prepend, prependAfterFailure, queryMovies } from "./utils";
-  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguage, selectedGenres, selectedTitle, currentMinYear, allowQueryMutex, selectedViewTypeVerbs } from "./stores.js";
+  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguages, selectedGenres, selectedTitle, currentMinYear, allowQueryMutex, selectedViewTypeVerbs } from "./stores.js";
 
 
   let movies = [];
 
 // Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
-  $: updateMovies($minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguage, $selectedGenres, $selectedTitle, $allowQueryMutex, $selectedViewTypeVerbs);
+  $: updateMovies($minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguages, $selectedGenres, $selectedTitle, $allowQueryMutex, $selectedViewTypeVerbs);
 
   async function updateMovies() {
     if($allowQueryMutex) {
@@ -37,7 +38,8 @@
       movies = await handleScroll(event, movies);
     }); // Touch scroll
     document.addEventListener("touchstart", (event) => handleTouchStart(event)); // Touch start
-
+    handleResize();
+    window.addEventListener('resize', handleResize);
     return () => {
       document.addEventListener("wheel", async (event) => {
         movies = await handleScroll(event, movies);
@@ -48,57 +50,35 @@
       document.addEventListener("touchstart", (event) =>
         handleTouchStart(event)
       ); // Touch start
+      window.removeEventListener('resize', handleResize);
     };
   });
+
+  let showLeftSidebar = false;
+  let showRightSidebar = false;
+  let smallScreen = true;
+
+  function handleResize() {
+    smallScreen = window.matchMedia('(max-width: 639px)').matches;
+    if (!smallScreen) {
+      showLeftSidebar = true;
+      showRightSidebar = true;
+    } else {
+      showLeftSidebar = false;
+      showRightSidebar = false;
+    }
+  }
+
 </script>
 
-<main>
-  <div class="parent-div">
-    <div class="header-body">
-      <div class="header-container">
-        <Header />
-      </div>
-      <div class="body">
-        <div class="movie-list-container">
-          <MovieList {itemHeight} {viewportHeight} {movies} />
-        </div>
-        <div class="movie-details-container">
-          <MovieDetails />
-        </div>
-      </div>
+<main class="flex">
+    <div class="flex-shrink-0 basis-[15%]">
+      <Header />
     </div>
-  </div>
+    <div class="flex-grow basis-[70%]">
+      <MovieList {itemHeight} {viewportHeight} {movies} />
+    </div>
+    <div class="flex-shrink-0 basis-[15%]">
+      <MovieDetails />
+    </div>
 </main>
-
-<style>
-  :global(body) {
-      font-size: 90%;
-  } 
-
-  .header-container {
-    flex: 1;
-    margin-right: 1rem;
-    border: 1rem;
-  }
-
-  .header-body {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .body {
-    overflow: hidden;
-    flex: 10;
-    flex-direction: row;
-    display: flex;
-  }
-
-  .movie-list-container {
-    flex: 3;
-    padding: 0.3rem;
-  }
-
-  .movie-details-container {
-    flex: 1;
-  }
-</style>

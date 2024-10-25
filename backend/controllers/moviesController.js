@@ -28,8 +28,8 @@ const buildFilter = (params) => {
   if (params.adult) filter.adult = params.adult;
   if (params.budget) filter.budget = { $gte: Number(params.budget) };
   if (params.title) filter.title = { $regex: params.title, $options: "i" };
-  if (params.originalLanguage && params.originalLanguage !== "all")
-    filter.original_language = params.originalLanguage;
+  if (params.originalLanguages && params.originalLanguages.length > 0)
+    filter.original_language = {$in: params.originalLanguages};
   if (params.popularity)
     filter.popularity = { $gte: Number(params.popularity) };
   if (params.voteAverage)

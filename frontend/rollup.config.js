@@ -5,7 +5,8 @@ import terser from '@rollup/plugin-terser';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import css from 'rollup-plugin-css-only';
-
+import postcss from 'rollup-plugin-postcss'
+// rollup.config.js
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
@@ -30,7 +31,7 @@ function serve() {
 }
 
 export default {
-	input: 'src-modular/main.js',
+	input: 'src/main.js',
 	output: {
 		sourcemap: true,
 		format: 'iife',
@@ -44,6 +45,13 @@ export default {
 				dev: !production
 			}
 		}),
+	// Process Tailwind CSS with PostCSS
+		postcss({
+		extract: true,
+		minimize: production,
+		sourceMap: !production,
+		}),
+
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
 		css({ output: 'bundle.css' }),

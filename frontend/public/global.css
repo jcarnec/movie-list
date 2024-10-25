@@ -1,3 +1,8 @@
+/* src/global.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html, body {
 	position: relative;
 	width: 100%;

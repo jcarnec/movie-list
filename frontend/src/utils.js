@@ -5,7 +5,7 @@ import {
   startY,
   viewportHeight,
   containerHeight,
-  selectedLanguage,
+  selectedLanguages,
   selectedGenres,
   minReviewCount,
   maxReviewCount,
@@ -22,7 +22,7 @@ import {
   movieCount,
   selectedViewTypeVerbs
   
-} from "./stores";
+} from "./stores.js";
 import { getAllRelevantIDs, history } from "./historyStore.js";
 import axios from "axios";
 import Movie from "./Movie.js";
@@ -73,7 +73,7 @@ export async function queryDatabase(movies, append = "new", date = null) {
   let url = "http://localhost:3000/movies";
 
   let body = {
-    originalLanguage: get(selectedLanguage),
+    originalLanguages: get(selectedLanguages),
     genres: get(selectedGenres),
     minReviewCount: get(minReviewCount),
     maxReviewCount: get(maxReviewCount),
@@ -118,7 +118,7 @@ export async function queryDatabase(movies, append = "new", date = null) {
 }
 
 export async function handleScroll(event, movies) {
-  let movieListDiv = document.querySelector(".movie-list-container");
+  let movieListDiv = document.querySelector(".movie-list");
   let cursorPositionX = event.clientX;
   let cursorPositionY = event.clientY;
   if (movieListDiv) {
