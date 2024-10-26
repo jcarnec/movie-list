@@ -4,6 +4,7 @@ const Movie = require("../models/Movie");
 const getMovies = async (req, res) => {
   try {
     const filter = buildFilter(req.body);
+    filter.adult = false;
     const countFilter = {...filter}
     delete countFilter.release_date
     console.log('count filter', countFilter)
