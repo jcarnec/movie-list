@@ -52,19 +52,18 @@
     movieViewedType = getMovieViewedType(movie);
   });
 
-  function handleViewTypeClick() {
-    if ($selectedMovie && $selectedMovie.id == movie.id) {
-      if (movieViewedType == "viewed") {
-        addMovie($selectedMovie, "interested");
-      } else if (movieViewedType == "interested") {
-        addMovie($selectedMovie, "seen");
-      } else if (movieViewedType == "seen") {
-        addMovie($selectedMovie, "loved");
-      } else if (movieViewedType == "loved") {
-        addMovie($selectedMovie, "ignored");
-      } else if (movieViewedType == "ignored") {
-        addMovie($selectedMovie, "viewed");
-      }
+  function handleViewTypeClick(event) {
+    if (event) event.stopPropagation();
+    if (movieViewedType == "viewed") {
+      addMovie(movie, "interested");
+    } else if (movieViewedType == "interested") {
+      addMovie(movie, "seen");
+    } else if (movieViewedType == "seen") {
+      addMovie(movie, "loved");
+    } else if (movieViewedType == "loved") {
+      addMovie(movie, "ignored");
+    } else if (movieViewedType == "ignored") {
+      addMovie(movie, "viewed");
     }
   }
 
@@ -84,11 +83,12 @@
 </script>
 
 <div
-  class="movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md z-10"
+  class="movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md "
   on:click={handleBarClick}
   on:mouseenter={handleMouseEnter}
   on:mouseleave={handleMouseLeave}
   style="transform: translateX(-50%) translateY({index * $itemHeight - ($scrollY % $itemHeight)}px); height: {$itemHeight}px; position: absolute; left: 50%; width: calc(100% - 2rem);"
+  class:selected={$selectedMovie && $selectedMovie.id == movie.id}
 >
   <!-- Time Container -->
   <div class="flex-none w-1/12 text-center text-sm">
@@ -96,12 +96,12 @@
   </div>
 
   <!-- Title Container -->
-  <div class="flex flex-col flex-grow w-4/12 pl-2">
+  <div class="flex flex-col flex-grow w-4/12 py-2 pr-2">
     <!-- Original Title -->
     {#if !isEnglish}
       <div class="flex items-center text-gray-500 whitespace-nowrap overflow-hidden overflow-ellipsis">
         <span
-          class="flag mr-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10"
+          class="flag mx-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-l"
           on:click={() => selectedLanguages.set([movie.originalLanguage])}
         >
           {languageFlag}
@@ -111,7 +111,7 @@
     {:else}
       <div class="flex items-center">
         <span
-          class="flag mr-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10"
+          class="flag mx-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-l"
           on:click={() => selectedLanguages.set([movie.originalLanguage])}
         >
           {languageFlag}
@@ -163,12 +163,16 @@
   >
     {#if movieViewedType && movieViewedType != "ignored"}
       <div
-        class="status-button flex items-center justify-center w-8 h-8 text-white rounded cursor-pointer shadow-md"
-        class:bg-gray-500={movieViewedType === "viewed"}
-        class:bg-green-500={movieViewedType === "interested"}
-        class:bg-blue-500={movieViewedType === "seen"}
-        class:bg-red-500={movieViewedType === "loved"}
-        on:click={handleViewTypeClick}
+        class="status-button flex items-center justify-center w-8 h-8 text-white rounded cursor-pointer shadow-md text-xl z-10" 
+        class:bg-gray-500={movieViewedType === 'viewed'}
+        class:hover:bg-gray-700={movieViewedType === 'viewed'}
+        class:bg-green-500={movieViewedType === 'interested'}
+        class:hover:bg-green-700={movieViewedType === 'interested'}
+        class:bg-blue-500={movieViewedType === 'seen'}
+        class:hover:bg-blue-700={movieViewedType === 'seen'}
+        class:bg-red-500={movieViewedType === 'loved'}
+        class:hover:bg-red-700={movieViewedType === 'loved'}
+        on:click={(event) => handleViewTypeClick(event)}
       >
         {verbEmojiDict[movieViewedType]}
       </div>
@@ -185,7 +189,7 @@
   </div>
 
   <!-- Date Container -->
-  <div class="flex-none w-1/12 text-center text-sm {fontWeightDate}">
+  <div class="flex-none mr-3 text-center text-sm {fontWeightDate}">
     {movie.getReleaseDateString()}
   </div>
 </div>
@@ -193,5 +197,11 @@
 <style>
   .movie-item:hover  {
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
+  }
+  .selected {
+    background-color: rgba(0, 123, 255, 0.1);
+    border: 2px solid;
+    border-color: rgba(0, 123, 255, 0.5);
+    
   }
 </style>

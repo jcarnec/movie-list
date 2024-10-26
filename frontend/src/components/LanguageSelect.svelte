@@ -1,7 +1,13 @@
 <script>
   import { selectedLanguages } from "../stores.js";
-  import { LANGUAGEINFO, getLanguageFlag, getLanguageName } from "../constants.js";
+  import {
+    LANGUAGEINFO,
+    getLanguageFlag,
+    getLanguageName,
+  } from "../constants.js";
   import { writable } from "svelte/store";
+  import { onMount, onDestroy } from "svelte";
+  import { clickOutside } from '../clickOutside.js';
 
   let isDropdownOpen = false;
   let searchQuery = writable("");
@@ -16,6 +22,7 @@
     }
     setTimeout(() => {
       $searchQuery = "";
+      isDropdownOpen = false;
     }, 100);
   }
 
@@ -78,6 +85,7 @@
   </div>
 
   <button
+    type="button"
     class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
     on:click={() => (isDropdownOpen = !isDropdownOpen)}
   >
@@ -103,6 +111,7 @@
     <!-- Dropdown menu -->
     <div
       class="absolute z-10 mt-2 w-60 bg-white rounded-lg shadow dark:bg-gray-700"
+        use:clickOutside={() => (isDropdownOpen = false)}
     >
       <div class="p-3">
         <label for="input-group-search" class="sr-only">Search</label>

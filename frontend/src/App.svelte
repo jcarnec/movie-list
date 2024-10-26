@@ -6,13 +6,13 @@
   import MovieDetails from "./components/MovieDetails.svelte";
   import './styles/global.css'
   import { checkAppendPrepend, handleScroll, handleTouchStart, prepend, prependAfterFailure, queryMovies } from "./utils";
-  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, minReviewCount, maxReviewCount, selectedPerson, minYear, selectedLanguages, selectedGenres, selectedTitle, currentMinYear, allowQueryMutex, selectedViewTypeVerbs } from "./stores.js";
+  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, minReviewCount, maxReviewCount, maxRuntime, minRuntime, selectedPerson, minYear, selectedLanguages, selectedGenres, selectedTitle, currentMinYear, allowQueryMutex, selectedViewTypeVerbs, minPopularity, maxPopularity, minVoteAverage, maxVoteAverage } from "./stores.js";
 
 
   let movies = [];
 
 // Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
-  $: updateMovies($minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguages, $selectedGenres, $selectedTitle, $allowQueryMutex, $selectedViewTypeVerbs);
+  $: updateMovies($minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguages, $selectedGenres, $selectedTitle, $allowQueryMutex, $selectedViewTypeVerbs, $minRuntime, $maxRuntime, $minPopularity, $maxPopularity, $minVoteAverage, $maxVoteAverage);
 
   async function updateMovies() {
     if($allowQueryMutex) {
@@ -72,13 +72,13 @@
 </script>
 
 <main class="flex">
-    <div class="flex-shrink-0 basis-[15%]">
+    <div class="flex-shrink-0 basis-[10%]">
       <Header />
     </div>
-    <div class="flex-grow basis-[70%]">
+    <div class="flex-grow basis-[80%]">
       <MovieList {itemHeight} {viewportHeight} {movies} />
     </div>
-    <div class="flex-shrink-0 basis-[15%]">
+    <div class="flex-shrink-0 basis-[10%]">
       <MovieDetails />
     </div>
 </main>

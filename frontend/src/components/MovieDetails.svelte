@@ -81,7 +81,7 @@
 
   function handleButtonClick(buttonType) {
     if (buttonType == selectedButton) {
-      addMovie($selectedMovie, "ignore");
+      addMovie($selectedMovie, "ignored");
     } else {
       addMovie($selectedMovie, buttonType);
     }
@@ -92,9 +92,17 @@
       selectedButton = getMovieViewedType($selectedMovie);
     }
   });
+
+  // if selected movie changes scroll the movie details to the top
+  onMount(() => {
+    selectedMovie.subscribe((n) => {
+      document.getElementById("movie-details-div").scrollTo(0, 0);
+    });
+  });
+
 </script>
 
-<div class="h-screen overflow-y-auto container mx-auto p-10 custom-scrollbar">
+<div id="movie-details-div" class="h-screen overflow-y-auto container mx-auto p-6 custom-scrollbar">
   {#if $selectedMovie}
     <div class="bg-base-200 card shadow-lg mb-4">
       <!-- Custom Button Group -->
@@ -119,7 +127,7 @@
           class:border-gray-500={selectedButton === "viewed"}
           class:hover:bg-gray-600={selectedButton === "viewed"}
           class:focus:ring-gray-300={selectedButton === "viewed"}
-          class:shadow-xl={selectedButton === "viewed"}
+          class:shadow-md={selectedButton === "viewed"} 
           on:click={() => handleButtonClick("viewed")}
         >
           Viewed {verbEmojiDict["viewed"]}
@@ -141,7 +149,7 @@
           class:border-green-500={selectedButton === "interested"}
           class:hover:bg-green-600={selectedButton === "interested"}
           class:focus:ring-green-300={selectedButton === "interested"}
-          class:shadow-xl={selectedButton === "interested"}
+          class:shadow-md={selectedButton === "interested"}
           on:click={() => handleButtonClick("interested")}
         >
           Interested {verbEmojiDict["interested"]}
@@ -163,7 +171,7 @@
           class:border-blue-500={selectedButton === "seen"}
           class:hover:bg-blue-600={selectedButton === "seen"}
           class:focus:ring-blue-300={selectedButton === "seen"}
-          class:shadow-xl={selectedButton === "seen"}
+          class:shadow-md={selectedButton === "seen"}
           on:click={() => handleButtonClick("seen")}
         >
           Seen It {verbEmojiDict["seen"]}
@@ -185,7 +193,7 @@
           class:border-red-500={selectedButton === "loved"}
           class:hover:bg-red-600={selectedButton === "loved"}
           class:focus:ring-red-300={selectedButton === "loved"}
-          class:shadow-xl={selectedButton === "loved"}
+          class:shadow-md={selectedButton === "loved"}
           on:click={() => handleButtonClick("loved")}
         >
           Loved It! {verbEmojiDict["loved"]}
@@ -194,12 +202,12 @@
 
       <div class="flex flex-col items-center">
         {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}
-          <div class="flex-shrink-0">
+          <div class="flex-shrink-0 poster m-2.5 ">
             <img
               src={$selectedMovie.posterImage
                 ? $selectedMovie.posterImage.src
                 : $selectedMovie.getPosterUrl()}
-              class="w-[350px] m-2.5 transition-shadow duration-200 ease-in-out cursor-pointer blue-glow"
+              class="w-[350px] transition-shadow duration-200 ease-in-out cursor-pointer blue-glow"
               alt={$selectedMovie.title}
               on:click={() =>
                 openImageModal(
@@ -227,7 +235,7 @@
           {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
             <div class="flex items-center mb-2">
               <span
-                class="mr-3 cursor-pointer transition-transform duration-200 hover:scale-150 z-10"
+                class="mx-2 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-2xl"
                 on:click={() =>
                   selectedLanguages.set([$selectedMovie.originalLanguage])}
               >
@@ -376,5 +384,10 @@
   /* Hide scrollbar for Firefox */
   .custom-scrollbar {
     scrollbar-width: none; /* Firefox */
+  }
+
+
+  .poster:hover  {
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
   }
 </style>

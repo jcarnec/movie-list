@@ -20,7 +20,13 @@ import {
   lastAppendedID,
   lastPrependedID,
   movieCount,
-  selectedViewTypeVerbs
+  selectedViewTypeVerbs,
+  minRuntime,
+  maxRuntime,
+  minPopularity,
+  maxPopularity,
+  minVoteAverage,
+  maxVoteAverage
   
 } from "./stores.js";
 import { getAllRelevantIDs, history } from "./historyStore.js";
@@ -77,6 +83,12 @@ export async function queryDatabase(movies, append = "new", date = null) {
     genres: get(selectedGenres),
     minReviewCount: get(minReviewCount),
     maxReviewCount: get(maxReviewCount),
+    minRuntime: get(minRuntime),
+    maxRuntime: get(maxRuntime),
+    minPopularity: get(minPopularity),
+    maxPopularity: get(maxPopularity),
+    minVoteAverage: get(minVoteAverage),
+    maxVoteAverage: get(maxVoteAverage),
     minYear: get(minYear),
     person: get(selectedPerson),
     type: append,
@@ -166,7 +178,7 @@ export async function append(movies) {
 
 export async function prependAfterFailure() {
   console.log("prepending after failure");
-  let prependDate = get(currentMinYear);
+  let prependDate = get(minYear);
   let newMovies = await queryDatabase([], "prepend", prependDate);
   let movies = [...newMovies];
   scrollY.update((n) => (newMovies.length - 1) * get(itemHeight));
@@ -198,7 +210,7 @@ export async function prepend(movies) {
 export async function checkAppendPrepend(movies) {
   if (
     movies.length > 0 &&
-    movies.length - get(firstVisibleIndex) < 20 &&
+    movies.length - get(firstVisibleIndex) < 30 &&
     !get(runningQuery)
   ) {
     if (

@@ -19,7 +19,21 @@
     DEFAULT_SELECTED_GENRES,
     DEFAULT_TITLE,
     DEFAULT_YEAR,
-    movieCount,
+    DEFAULT_MIN_POPULARITY,
+    DEFAULT_MAX_POPULARITY,
+    minPopularity,
+    maxPopularity,
+    minRuntime,
+    maxRuntime,
+    minVoteAverage,
+    maxVoteAverage,
+    currentMinPopularity,
+    currentMaxPopularity,
+    currentMinRuntime,
+    currentMaxRuntime,
+    currentMinVoteAverage,
+    currentMaxVoteAverage,
+    movieCount
   } from "../stores.js";
 
   import { LANGUAGEINFO } from "../constants.js";
@@ -52,7 +66,7 @@
 </script>
 
 <div class="h-screen overflow-y-auto custom-scrollbar">
-<div class="card w-80 bg-base-200 shadow-xl m-10 ">
+<div class="card w-80 bg-base-200 shadow-xl m-6 ">
   <div class="card-body">
     <h5 class="text-xl font-bold mb-2">Filter Options</h5>
     <form class="space-y-4">
@@ -62,7 +76,7 @@
           id="title-input"
           label="Title"
           bind:bindValue={$currentSelectedTitle}
-          defaultValue={DEFAULT_TITLE}
+          defaultValue={$selectedTitle !== DEFAULT_TITLE ? 'show_clear' : null}
           onBlur={(e) => selectedTitle.set(e.target.value)}
           onKeydown={handleKeydown}
           onClear={() => {
@@ -88,7 +102,7 @@
       <!-- input with clear -->
       <div>
         <InputWithClear
-          id="title-input"
+          id="min-review-input"
           label="Min Reviews"
           bind:bindValue={$currentMinReviewCount}
           defaultValue={DEFAULT_MIN_REVIEWS}
@@ -104,7 +118,7 @@
       <!-- Max Review Count -->
       <div class="form-control">
         <InputWithClear
-          id="title-input"
+          id="max-review-input"
           label="Max Reviews"
           bind:bindValue={$currentMaxReviewCount}
           defaultValue={DEFAULT_MAX_REVIEWS}
@@ -117,10 +131,98 @@
         />
       </div>
 
+
+      <!-- min max for  popularity, vote average, runtime -->
+
+      <!-- Min Popularity -->
+      <div class="form-control">
+        <InputWithClear
+          id="min-populairty-input"
+          label="Min Popularity"
+          bind:bindValue={$currentMinPopularity}
+          defaultValue={DEFAULT_MIN_POPULARITY}
+          onBlur={(e) => minPopularity.set(e.target.value)}
+          onKeydown={handleKeydown}
+          onClear={() => {
+            $currentMinPopularity = DEFAULT_MIN_POPULARITY;
+            minPopularity.set(DEFAULT_MIN_POPULARITY);
+          }}
+        />
+      </div>
+
+      <!-- Max Popularity -->
+      <div class="form-control">
+        <InputWithClear
+          id="max-popularity-input"
+          label="Max Popularity"
+          bind:bindValue={$currentMaxPopularity}
+          defaultValue={DEFAULT_MAX_POPULARITY}
+          onBlur={(e) => maxPopularity.set(e.target.value)}
+          onKeydown={handleKeydown}
+          onClear={() => {
+            $currentMaxPopularity = DEFAULT_MAX_POPULARITY;
+            maxPopularity.set(DEFAULT_MAX_POPULARITY);
+          }}
+        />
+      </div>
+
+      <!-- Min Runtime -->
+      <div class="form-control">
+        <InputWithClear
+          id="min-runtime-input"
+          label="Min Runtime"
+          bind:bindValue={$currentMinRuntime}
+          defaultValue={null}
+          onBlur={(e) => minRuntime.set(e.target.value)}
+          onKeydown={handleKeydown}
+          onClear={null}
+        />
+      </div>
+
+      <!-- Max Runtime -->
+      <div class="form-control">
+        <InputWithClear
+          id="max-runtime-input"
+          label="Max Runtime"
+          bind:bindValue={$currentMaxRuntime}
+          defaultValue={null}
+          onBlur={(e) => maxRuntime.set(e.target.value)}
+          onKeydown={handleKeydown}
+          onClear={null}
+        />
+      </div>
+
+      <!-- Min Vote Average -->
+      <div class="form-control">
+        <InputWithClear
+          id="min-vote-average-input"
+          label="Min Vote Average"
+          bind:bindValue={$currentMinVoteAverage}
+          defaultValue={null}
+          onBlur={(e) => minVoteAverage.set(e.target.value)}
+          onKeydown={handleKeydown}
+          onClear={null}
+        />
+      </div>
+      
+      <!-- Max Vote Average -->
+      <div class="form-control">
+        <InputWithClear
+          id="max-vote-average-input"
+          label="Max Vote Average"
+          bind:bindValue={$currentMaxVoteAverage}
+          defaultValue={null}
+          onBlur={(e) => maxVoteAverage.set(e.target.value)}
+          onKeydown={handleKeydown}
+          onClear={null}
+        />
+      </div>
+      
+
       <!-- person input with clear -->
       <div>
         <InputWithClear
-          id="title-input"
+          id="person-input"
           label="Person"
           bind:bindValue={$currentSelectedPerson.name}
           defaultValue={""}

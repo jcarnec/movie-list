@@ -9,7 +9,7 @@ const getMovies = async (req, res) => {
     console.log('count filter', countFilter)
     const sorting = getSorting(req.body.type);
     const [movies, count] = await Promise.all([
-      Movie.find(filter).limit(75).sort(sorting),
+      Movie.find(filter).limit(100).sort(sorting),
       Movie.count(countFilter)
     ]);
     console.log(movies[0])
@@ -30,10 +30,29 @@ const buildFilter = (params) => {
   if (params.title) filter.title = { $regex: params.title, $options: "i" };
   if (params.originalLanguages && params.originalLanguages.length > 0)
     filter.original_language = {$in: params.originalLanguages};
-  if (params.popularity)
-    filter.popularity = { $gte: Number(params.popularity) };
-  if (params.voteAverage)
-    filter.voteAverage = { $gte: Number(params.vote_average) };
+  // popularity
+  if (params.minPopularity || params.maxPopularity) {
+    filter.popularity = {};
+    if (params.minPopularity)
+      filter.popularity.$gte = Number(params.minPopularity);
+    if (params.maxPopularity)
+      filter.popularity.$lte = Number(params.maxPopularity);
+  }
+  if (params.minRuntime || params.maxRuntime) {
+    filter.runtime = {};
+    if (params.minRuntime)
+      filter.runtime.$gte = Number(params.minRuntime);
+    if (params.maxRuntime)
+      filter.runtime.$lte = Number(params.maxRuntime);
+  }
+  // vote_average
+  if (params.minVoteAverage || params.maxVoteAverage) {
+    filter.vote_average = {};
+    if (params.minVoteAverage)
+      filter.vote_average.$gte = Number(params.minVoteAverage);
+    if (params.maxVoteAverage)
+      filter.vote_average.$lte = Number(params.maxVoteAverage);
+  }
   if (params.minReviewCount || params.maxReviewCount) {
     filter.vote_count = {};
     if (params.minReviewCount)
