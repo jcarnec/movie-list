@@ -16,6 +16,8 @@
     maxReviewCount,
     selectedGenres,
     selectedLanguages,
+    minPopularity,
+    minVoteAverage
   } from "../stores.js";
   import {
     genreEmojiDict,
@@ -99,10 +101,12 @@
       document.getElementById("movie-details-div").scrollTo(0, 0);
     });
   });
-
 </script>
 
-<div id="movie-details-div" class="h-screen overflow-y-auto container mx-auto p-6 custom-scrollbar">
+<div
+  id="movie-details-div"
+  class="h-screen overflow-y-auto container mx-auto p-6 custom-scrollbar"
+>
   {#if $selectedMovie}
     <div class="bg-base-200 card shadow-lg mb-4">
       <!-- Custom Button Group -->
@@ -127,7 +131,7 @@
           class:border-gray-500={selectedButton === "viewed"}
           class:hover:bg-gray-600={selectedButton === "viewed"}
           class:focus:ring-gray-300={selectedButton === "viewed"}
-          class:shadow-md={selectedButton === "viewed"} 
+          class:shadow-md={selectedButton === "viewed"}
           on:click={() => handleButtonClick("viewed")}
         >
           Viewed {verbEmojiDict["viewed"]}
@@ -202,7 +206,7 @@
 
       <div class="flex flex-col items-center">
         {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}
-          <div class="flex-shrink-0 poster m-2.5 ">
+          <div class="flex-shrink-0 poster m-2.5">
             <img
               src={$selectedMovie.posterImage
                 ? $selectedMovie.posterImage.src
@@ -289,17 +293,35 @@
             </p>
           {/if}
           {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}
-            <p>
+            <div class="flex flex-row">
               <strong>Rating:</strong>
-              ⭐ {$selectedMovie.voteAverage.toFixed(1)} ({$selectedMovie.voteCount}
+              <div
+                on:click={() => {
+                  minVoteAverage.set($selectedMovie.voteAverage.toFixed(1));
+                }}
+                class="emoji text-lg cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mx-1"
+              >
+                ⭐
+              </div>
+              {$selectedMovie.voteAverage.toFixed(1)} ({$selectedMovie.voteCount}
               reviews)
-            </p>
+            </div>
           {/if}
           {#if $selectedMovie.popularity}
-            <p>
+            <div class="flex flex-row">
               <strong>Popularity:</strong>
-              👥 {$selectedMovie.popularity.toFixed(0)}
-            </p>
+
+              <div
+                on:click={() => {
+                  minPopularity.set($selectedMovie.popularity.toFixed(0));
+                }}
+                class="emoji text-lg cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mx-1"
+              >
+                👥
+              </div>
+
+              {$selectedMovie.popularity.toFixed(0)}
+            </div>
           {/if}
           {#if $selectedMovie.runtime}
             <p>
@@ -386,8 +408,7 @@
     scrollbar-width: none; /* Firefox */
   }
 
-
-  .poster:hover  {
+  .poster:hover {
     box-shadow: 0 0 15px rgba(0, 123, 255, 0.5);
   }
 </style>

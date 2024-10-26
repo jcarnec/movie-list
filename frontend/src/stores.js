@@ -76,6 +76,15 @@ selectedPerson.subscribe(value => currentSelectedPerson.set(value))
 minYear.subscribe(value => currentMinYear.set(value));
 minReviewCount.subscribe(value => currentMinReviewCount.set(value));
 maxReviewCount.subscribe(value => currentMaxReviewCount.set(value));
+
+minPopularity.subscribe(value => currentMinPopularity.set(value))
+maxPopularity.subscribe(value => currentMaxPopularity.set(value))
+minVoteAverage.subscribe(value => currentMinVoteAverage.set(value));
+maxVoteAverage.subscribe(value => currentMaxVoteAverage.set(value));
+minRuntime.subscribe(value => currentMinRuntime.set(value));
+maxRuntime.subscribe(value => currentMaxRuntime.set(value));
+
+
 selectedTitle.subscribe(value => currentSelectedTitle.set(value) )
 
 function logChange(newValue) {

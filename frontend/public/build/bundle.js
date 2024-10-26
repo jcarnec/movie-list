@@ -724,6 +724,15 @@ var app = (function () {
     minYear.subscribe(value => currentMinYear.set(value));
     minReviewCount.subscribe(value => currentMinReviewCount.set(value));
     maxReviewCount.subscribe(value => currentMaxReviewCount.set(value));
+
+    minPopularity.subscribe(value => currentMinPopularity.set(value));
+    maxPopularity.subscribe(value => currentMaxPopularity.set(value));
+    minVoteAverage.subscribe(value => currentMinVoteAverage.set(value));
+    maxVoteAverage.subscribe(value => currentMaxVoteAverage.set(value));
+    minRuntime.subscribe(value => currentMinRuntime.set(value));
+    maxRuntime.subscribe(value => currentMaxRuntime.set(value));
+
+
     selectedTitle.subscribe(value => currentSelectedTitle.set(value) );
 
     function logChange(newValue) {
@@ -4504,11 +4513,11 @@ var app = (function () {
 
     function get_each_context$2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[24] = list[i];
+    	child_ctx[26] = list[i];
     	return child_ctx;
     }
 
-    // (111:4) {:else}
+    // (117:4) {:else}
     function create_else_block$1(ctx) {
     	let div;
     	let span;
@@ -4522,9 +4531,9 @@ var app = (function () {
     			span = element("span");
     			t = text(/*languageFlag*/ ctx[6]);
     			attr_dev(span, "class", "flag mx-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-l");
-    			add_location(span, file$4, 112, 8, 3223);
+    			add_location(span, file$4, 118, 8, 3286);
     			attr_dev(div, "class", "flex items-center");
-    			add_location(div, file$4, 111, 6, 3183);
+    			add_location(div, file$4, 117, 6, 3246);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -4550,14 +4559,14 @@ var app = (function () {
     		block,
     		id: create_else_block$1.name,
     		type: "else",
-    		source: "(111:4) {:else}",
+    		source: "(117:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (101:4) {#if !isEnglish}
+    // (105:4) {#if !isEnglish}
     function create_if_block_2$1(ctx) {
     	let div;
     	let span;
@@ -4576,9 +4585,9 @@ var app = (function () {
     			t1 = space();
     			t2 = text(t2_value);
     			attr_dev(span, "class", "flag mx-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-l");
-    			add_location(span, file$4, 102, 8, 2885);
+    			add_location(span, file$4, 108, 8, 2948);
     			attr_dev(div, "class", "flex items-center text-gray-500 whitespace-nowrap overflow-hidden overflow-ellipsis");
-    			add_location(div, file$4, 101, 6, 2779);
+    			add_location(div, file$4, 105, 6, 2827);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -4607,24 +4616,24 @@ var app = (function () {
     		block,
     		id: create_if_block_2$1.name,
     		type: "if",
-    		source: "(101:4) {#if !isEnglish}",
+    		source: "(105:4) {#if !isEnglish}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (130:6) {#each movie.genres as genre}
+    // (136:6) {#each movie.genres as genre}
     function create_each_block$2(ctx) {
     	let div;
-    	let t0_value = genreEmojiDict[/*genre*/ ctx[24]] + "";
+    	let t0_value = genreEmojiDict[/*genre*/ ctx[26]] + "";
     	let t0;
     	let t1;
     	let mounted;
     	let dispose;
 
     	function click_handler_2() {
-    		return /*click_handler_2*/ ctx[19](/*genre*/ ctx[24]);
+    		return /*click_handler_2*/ ctx[19](/*genre*/ ctx[26]);
     	}
 
     	const block = {
@@ -4633,7 +4642,7 @@ var app = (function () {
     			t0 = text(t0_value);
     			t1 = space();
     			attr_dev(div, "class", "emoji cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-xl");
-    			add_location(div, file$4, 130, 8, 3748);
+    			add_location(div, file$4, 136, 8, 3810);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -4647,7 +4656,7 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*movie*/ 1 && t0_value !== (t0_value = genreEmojiDict[/*genre*/ ctx[24]] + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*movie*/ 1 && t0_value !== (t0_value = genreEmojiDict[/*genre*/ ctx[26]] + "")) set_data_dev(t0, t0_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
@@ -4660,64 +4669,89 @@ var app = (function () {
     		block,
     		id: create_each_block$2.name,
     		type: "each",
-    		source: "(130:6) {#each movie.genres as genre}",
+    		source: "(136:6) {#each movie.genres as genre}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (179:29) 
+    // (185:29) 
     function create_if_block_1$1(ctx) {
-    	let div2;
-    	let div0;
-    	let t0;
-    	let t1_value = /*movie*/ ctx[0].voteAverage.toFixed(1) + "";
-    	let t1;
-    	let t2;
+    	let div4;
     	let div1;
+    	let div0;
+    	let t1;
+    	let t2_value = /*movie*/ ctx[0].voteAverage.toFixed(1) + "";
+    	let t2;
     	let t3;
-    	let t4_value = /*movie*/ ctx[0].popularity.toFixed(0) + "";
-    	let t4;
+    	let div3;
+    	let div2;
+    	let t5;
+    	let t6_value = /*movie*/ ctx[0].popularity.toFixed(0) + "";
+    	let t6;
+    	let mounted;
+    	let dispose;
 
     	const block = {
     		c: function create() {
-    			div2 = element("div");
-    			div0 = element("div");
-    			t0 = text("⭐ ");
-    			t1 = text(t1_value);
-    			t2 = space();
+    			div4 = element("div");
     			div1 = element("div");
-    			t3 = text("👥 ");
-    			t4 = text(t4_value);
-    			attr_dev(div0, "class", "font-bold mb-1");
-    			add_location(div0, file$4, 180, 8, 5645);
-    			attr_dev(div1, "class", "font-bold");
-    			set_style(div1, "color", /*barColor*/ ctx[2]);
-    			add_location(div1, file$4, 183, 8, 5740);
-    			attr_dev(div2, "class", "text-xs text-center");
-    			add_location(div2, file$4, 179, 6, 5603);
+    			div0 = element("div");
+    			div0.textContent = "⭐";
+    			t1 = space();
+    			t2 = text(t2_value);
+    			t3 = space();
+    			div3 = element("div");
+    			div2 = element("div");
+    			div2.textContent = "👥";
+    			t5 = space();
+    			t6 = text(t6_value);
+    			attr_dev(div0, "class", "emoji text-md cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mr-1 text-lg");
+    			add_location(div0, file$4, 187, 10, 5806);
+    			attr_dev(div1, "class", "font-bold mb-1 flex flex-row justify-center items-center");
+    			add_location(div1, file$4, 186, 8, 5725);
+    			attr_dev(div2, "class", "text-md cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mr-1 text-lg");
+    			add_location(div2, file$4, 204, 10, 6388);
+    			attr_dev(div3, "class", "emoji font-bold mr-1 flex flex-row justify-center items-center");
+    			set_style(div3, "color", /*barColor*/ ctx[2]);
+    			add_location(div3, file$4, 197, 8, 6144);
+    			attr_dev(div4, "class", "text-xs text-center");
+    			add_location(div4, file$4, 185, 6, 5683);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div2, anchor);
-    			append_dev(div2, div0);
-    			append_dev(div0, t0);
-    			append_dev(div0, t1);
-    			append_dev(div2, t2);
-    			append_dev(div2, div1);
-    			append_dev(div1, t3);
-    			append_dev(div1, t4);
+    			insert_dev(target, div4, anchor);
+    			append_dev(div4, div1);
+    			append_dev(div1, div0);
+    			append_dev(div1, t1);
+    			append_dev(div1, t2);
+    			append_dev(div4, t3);
+    			append_dev(div4, div3);
+    			append_dev(div3, div2);
+    			append_dev(div3, t5);
+    			append_dev(div3, t6);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen_dev(div0, "click", /*click_handler_4*/ ctx[21], false, false, false, false),
+    					listen_dev(div3, "click", /*click_handler_5*/ ctx[22], false, false, false, false)
+    				];
+
+    				mounted = true;
+    			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*movie*/ 1 && t1_value !== (t1_value = /*movie*/ ctx[0].voteAverage.toFixed(1) + "")) set_data_dev(t1, t1_value);
-    			if (dirty & /*movie*/ 1 && t4_value !== (t4_value = /*movie*/ ctx[0].popularity.toFixed(0) + "")) set_data_dev(t4, t4_value);
+    			if (dirty & /*movie*/ 1 && t2_value !== (t2_value = /*movie*/ ctx[0].voteAverage.toFixed(1) + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*movie*/ 1 && t6_value !== (t6_value = /*movie*/ ctx[0].popularity.toFixed(0) + "")) set_data_dev(t6, t6_value);
 
     			if (dirty & /*barColor*/ 4) {
-    				set_style(div1, "color", /*barColor*/ ctx[2]);
+    				set_style(div3, "color", /*barColor*/ ctx[2]);
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div2);
+    			if (detaching) detach_dev(div4);
+    			mounted = false;
+    			run_all(dispose);
     		}
     	};
 
@@ -4725,14 +4759,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$1.name,
     		type: "if",
-    		source: "(179:29) ",
+    		source: "(185:29) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (164:4) {#if movieViewedType && movieViewedType != "ignored"}
+    // (170:4) {#if movieViewedType && movieViewedType != "ignored"}
     function create_if_block$3(ctx) {
     	let div;
     	let t_value = verbEmojiDict[/*movieViewedType*/ ctx[4]] + "";
@@ -4744,16 +4778,16 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			t = text(t_value);
-    			attr_dev(div, "class", "status-button flex items-center justify-center w-8 h-8 text-white rounded cursor-pointer shadow-md text-xl z-10");
-    			toggle_class(div, "bg-gray-500", /*movieViewedType*/ ctx[4] === 'viewed');
-    			toggle_class(div, "hover:bg-gray-700", /*movieViewedType*/ ctx[4] === 'viewed');
-    			toggle_class(div, "bg-green-500", /*movieViewedType*/ ctx[4] === 'interested');
-    			toggle_class(div, "hover:bg-green-700", /*movieViewedType*/ ctx[4] === 'interested');
-    			toggle_class(div, "bg-blue-500", /*movieViewedType*/ ctx[4] === 'seen');
-    			toggle_class(div, "hover:bg-blue-700", /*movieViewedType*/ ctx[4] === 'seen');
-    			toggle_class(div, "bg-red-500", /*movieViewedType*/ ctx[4] === 'loved');
-    			toggle_class(div, "hover:bg-red-700", /*movieViewedType*/ ctx[4] === 'loved');
-    			add_location(div, file$4, 164, 6, 4832);
+    			attr_dev(div, "class", "status-button flex items-center justify-center w-8 h-8 text-white rounded cursor-pointer shadow-md text-xl");
+    			toggle_class(div, "bg-gray-500", /*movieViewedType*/ ctx[4] === "viewed");
+    			toggle_class(div, "hover:bg-gray-700", /*movieViewedType*/ ctx[4] === "viewed");
+    			toggle_class(div, "bg-green-500", /*movieViewedType*/ ctx[4] === "interested");
+    			toggle_class(div, "hover:bg-green-700", /*movieViewedType*/ ctx[4] === "interested");
+    			toggle_class(div, "bg-blue-500", /*movieViewedType*/ ctx[4] === "seen");
+    			toggle_class(div, "hover:bg-blue-700", /*movieViewedType*/ ctx[4] === "seen");
+    			toggle_class(div, "bg-red-500", /*movieViewedType*/ ctx[4] === "loved");
+    			toggle_class(div, "hover:bg-red-700", /*movieViewedType*/ ctx[4] === "loved");
+    			add_location(div, file$4, 170, 6, 4918);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -4768,35 +4802,35 @@ var app = (function () {
     			if (dirty & /*movieViewedType*/ 16 && t_value !== (t_value = verbEmojiDict[/*movieViewedType*/ ctx[4]] + "")) set_data_dev(t, t_value);
 
     			if (dirty & /*movieViewedType*/ 16) {
-    				toggle_class(div, "bg-gray-500", /*movieViewedType*/ ctx[4] === 'viewed');
+    				toggle_class(div, "bg-gray-500", /*movieViewedType*/ ctx[4] === "viewed");
     			}
 
     			if (dirty & /*movieViewedType*/ 16) {
-    				toggle_class(div, "hover:bg-gray-700", /*movieViewedType*/ ctx[4] === 'viewed');
+    				toggle_class(div, "hover:bg-gray-700", /*movieViewedType*/ ctx[4] === "viewed");
     			}
 
     			if (dirty & /*movieViewedType*/ 16) {
-    				toggle_class(div, "bg-green-500", /*movieViewedType*/ ctx[4] === 'interested');
+    				toggle_class(div, "bg-green-500", /*movieViewedType*/ ctx[4] === "interested");
     			}
 
     			if (dirty & /*movieViewedType*/ 16) {
-    				toggle_class(div, "hover:bg-green-700", /*movieViewedType*/ ctx[4] === 'interested');
+    				toggle_class(div, "hover:bg-green-700", /*movieViewedType*/ ctx[4] === "interested");
     			}
 
     			if (dirty & /*movieViewedType*/ 16) {
-    				toggle_class(div, "bg-blue-500", /*movieViewedType*/ ctx[4] === 'seen');
+    				toggle_class(div, "bg-blue-500", /*movieViewedType*/ ctx[4] === "seen");
     			}
 
     			if (dirty & /*movieViewedType*/ 16) {
-    				toggle_class(div, "hover:bg-blue-700", /*movieViewedType*/ ctx[4] === 'seen');
+    				toggle_class(div, "hover:bg-blue-700", /*movieViewedType*/ ctx[4] === "seen");
     			}
 
     			if (dirty & /*movieViewedType*/ 16) {
-    				toggle_class(div, "bg-red-500", /*movieViewedType*/ ctx[4] === 'loved');
+    				toggle_class(div, "bg-red-500", /*movieViewedType*/ ctx[4] === "loved");
     			}
 
     			if (dirty & /*movieViewedType*/ 16) {
-    				toggle_class(div, "hover:bg-red-700", /*movieViewedType*/ ctx[4] === 'loved');
+    				toggle_class(div, "hover:bg-red-700", /*movieViewedType*/ ctx[4] === "loved");
     			}
     		},
     		d: function destroy(detaching) {
@@ -4810,7 +4844,7 @@ var app = (function () {
     		block,
     		id: create_if_block$3.name,
     		type: "if",
-    		source: "(164:4) {#if movieViewedType && movieViewedType != \\\"ignored\\\"}",
+    		source: "(170:4) {#if movieViewedType && movieViewedType != \\\"ignored\\\"}",
     		ctx
     	});
 
@@ -4898,36 +4932,36 @@ var app = (function () {
     			div9 = element("div");
     			t8 = text(t8_value);
     			attr_dev(div0, "class", "flex-none w-1/12 text-center text-sm");
-    			add_location(div0, file$4, 93, 2, 2546);
+    			add_location(div0, file$4, 97, 2, 2594);
     			attr_dev(div1, "class", "flex items-center text-base");
-    			add_location(div1, file$4, 121, 4, 3514);
+    			add_location(div1, file$4, 127, 4, 3577);
     			attr_dev(div2, "class", "flex flex-col flex-grow w-4/12 py-2 pr-2");
-    			add_location(div2, file$4, 98, 2, 2669);
-    			attr_dev(div3, "class", "grid grid-cols-2 gap-x-0 ");
-    			add_location(div3, file$4, 128, 4, 3664);
+    			add_location(div2, file$4, 102, 2, 2717);
+    			attr_dev(div3, "class", "grid grid-cols-2 gap-x-0");
+    			add_location(div3, file$4, 134, 4, 3727);
     			attr_dev(div4, "class", "flex-none w-12");
-    			add_location(div4, file$4, 127, 2, 3631);
+    			add_location(div4, file$4, 133, 2, 3694);
     			attr_dev(div5, "class", "custom-bar h-full rounded-full");
     			set_style(div5, "width", /*movie*/ ctx[0].voteAverage * 10 + "%");
     			set_style(div5, "background-color", /*barColor*/ ctx[2]);
-    			add_location(div5, file$4, 152, 6, 4490);
+    			add_location(div5, file$4, 160, 6, 4583);
     			attr_dev(div6, "class", "custom-bar-container relative w-full h-8 bg-gray-200 overflow-hidden rounded-full");
     			toggle_class(div6, "bg-gray-300", /*movieViewedType*/ ctx[4] && /*movieViewedType*/ ctx[4] != "ignored");
-    			add_location(div6, file$4, 148, 4, 4303);
+    			add_location(div6, file$4, 156, 4, 4396);
     			attr_dev(div7, "class", "flex-grow w-4/12 px-2");
-    			add_location(div7, file$4, 147, 2, 4263);
+    			add_location(div7, file$4, 155, 2, 4356);
     			attr_dev(div8, "class", "flex-none w-1/12 text-center flex items-center justify-center");
-    			add_location(div8, file$4, 160, 2, 4685);
-    			attr_dev(div9, "class", div9_class_value = "flex-none mr-3 text-center text-sm " + /*fontWeightDate*/ ctx[5] + " svelte-1yv1eph");
-    			add_location(div9, file$4, 191, 2, 5910);
-    			attr_dev(div10, "class", "movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md  svelte-1yv1eph");
+    			add_location(div8, file$4, 168, 2, 4778);
+    			attr_dev(div9, "class", div9_class_value = "flex-none mr-3 text-center text-sm " + /*fontWeightDate*/ ctx[5] + " svelte-1r3vfvx");
+    			add_location(div9, file$4, 216, 2, 6664);
+    			attr_dev(div10, "class", "movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md svelte-1r3vfvx");
     			set_style(div10, "transform", "translateX(-50%) translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[9] - /*$scrollY*/ ctx[10] % /*$itemHeight*/ ctx[9]) + "px)");
     			set_style(div10, "height", /*$itemHeight*/ ctx[9] + "px");
     			set_style(div10, "position", "absolute");
     			set_style(div10, "left", "50%");
     			set_style(div10, "width", "calc(100% - 2rem)");
     			toggle_class(div10, "selected", /*$selectedMovie*/ ctx[8] && /*$selectedMovie*/ ctx[8].id == /*movie*/ ctx[0].id);
-    			add_location(div10, file$4, 84, 0, 2023);
+    			add_location(div10, file$4, 86, 0, 2062);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -5040,7 +5074,7 @@ var app = (function () {
 
     			if (dirty & /*movie*/ 1 && t8_value !== (t8_value = /*movie*/ ctx[0].getReleaseDateString() + "")) set_data_dev(t8, t8_value);
 
-    			if (dirty & /*fontWeightDate*/ 32 && div9_class_value !== (div9_class_value = "flex-none mr-3 text-center text-sm " + /*fontWeightDate*/ ctx[5] + " svelte-1yv1eph")) {
+    			if (dirty & /*fontWeightDate*/ 32 && div9_class_value !== (div9_class_value = "flex-none mr-3 text-center text-sm " + /*fontWeightDate*/ ctx[5] + " svelte-1r3vfvx")) {
     				attr_dev(div9, "class", div9_class_value);
     			}
 
@@ -5194,6 +5228,14 @@ var app = (function () {
 
     	const click_handler_3 = event => handleViewTypeClick(event);
 
+    	const click_handler_4 = () => {
+    		minVoteAverage.set(movie.voteAverage.toFixed(1));
+    	};
+
+    	const click_handler_5 = () => {
+    		minPopularity.set(movie.popularity.toFixed(0));
+    	};
+
     	$$self.$$set = $$props => {
     		if ('movie' in $$props) $$invalidate(0, movie = $$props.movie);
     		if ('index' in $$props) $$invalidate(1, index = $$props.index);
@@ -5207,6 +5249,8 @@ var app = (function () {
     		itemHeight,
     		selectedLanguages,
     		selectedGenres,
+    		minPopularity,
+    		minVoteAverage,
     		addMovie,
     		getMovieViewedType,
     		movieIsPresent,
@@ -5305,7 +5349,9 @@ var app = (function () {
     		click_handler,
     		click_handler_1,
     		click_handler_2,
-    		click_handler_3
+    		click_handler_3,
+    		click_handler_4,
+    		click_handler_5
     	];
     }
 
@@ -9215,21 +9261,44 @@ var app = (function () {
     }
 
     function getColor(popularityIndex, numberOfMovies) {
-      const ratio = popularityIndex / numberOfMovies;
+      let gradients = [
+        [200, 200, 200],  // Gold
+        [255, 0, 0],     // Red
+      ];
 
-      // get color between blue and gold
+      const numGradients = gradients.length - 1;
 
-      let c1 = [0, 0, 255];
-      let c2 = [255, 215, 0];
+      // Safely calculate the ratio
+      let ratio = 0;
+      if (numberOfMovies > 0) {
+        ratio = popularityIndex / numberOfMovies;
+      }
 
-      let color = [
-        Math.floor(c2[0] + ratio * (c1[0] - c2[0])),
-        Math.floor(c2[1] + ratio * (c1[1] - c2[1])),
-        Math.floor(c2[2] + ratio * (c1[2] - c2[2])),
+      // Clamp the ratio between 0 and 1
+      const ratioClamped = Math.min(Math.max(ratio, 0), 1);
+
+      // Determine which two colors to blend based on the ratio
+      const scaledRatio = ratioClamped * numGradients;
+      const gradientIndex = Math.min(Math.floor(scaledRatio), numGradients - 1);
+      const localRatio = scaledRatio - gradientIndex;
+
+      // Get colors for blending
+      const c1 = gradients[gradientIndex];
+      const c2 = gradients[gradientIndex + 1];
+
+      // Interpolate between c1 and c2
+      const color = [
+        Math.floor(c1[0] + localRatio * (c2[0] - c1[0])),
+        Math.floor(c1[1] + localRatio * (c2[1] - c1[1])),
+        Math.floor(c1[2] + localRatio * (c2[2] - c1[2])),
       ];
 
       return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
     }
+
+
+
+
 
     async function queryDatabase(movies, append = "new", date = null) {
       if (get_store_value(runningQuery)) {
@@ -10020,23 +10089,23 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[21] = list[i];
+    	child_ctx[23] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[24] = list[i];
+    	child_ctx[26] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[27] = list[i];
+    	child_ctx[29] = list[i];
     	return child_ctx;
     }
 
-    // (106:2) {#if $selectedMovie}
+    // (110:2) {#if $selectedMovie}
     function create_if_block_1(ctx) {
     	let div3;
     	let div0;
@@ -10136,7 +10205,7 @@ var app = (function () {
     			toggle_class(button0, "hover:bg-gray-600", /*selectedButton*/ ctx[3] === "viewed");
     			toggle_class(button0, "focus:ring-gray-300", /*selectedButton*/ ctx[3] === "viewed");
     			toggle_class(button0, "shadow-md", /*selectedButton*/ ctx[3] === "viewed");
-    			add_location(button0, file$1, 114, 8, 2804);
+    			add_location(button0, file$1, 118, 8, 2846);
     			attr_dev(button1, "type", "button");
     			attr_dev(button1, "class", "py-2.5 px-5 text-sm font-medium focus:outline-none border border-l-0 rounded-none");
     			toggle_class(button1, "border-gray-200", /*selectedButton*/ ctx[3] !== "interested");
@@ -10152,7 +10221,7 @@ var app = (function () {
     			toggle_class(button1, "hover:bg-green-600", /*selectedButton*/ ctx[3] === "interested");
     			toggle_class(button1, "focus:ring-green-300", /*selectedButton*/ ctx[3] === "interested");
     			toggle_class(button1, "shadow-md", /*selectedButton*/ ctx[3] === "interested");
-    			add_location(button1, file$1, 136, 8, 3891);
+    			add_location(button1, file$1, 140, 8, 3932);
     			attr_dev(button2, "type", "button");
     			attr_dev(button2, "class", "py-2.5 px-5 text-sm font-medium focus:outline-none border border-l-0 rounded-none");
     			toggle_class(button2, "border-gray-200", /*selectedButton*/ ctx[3] !== "seen");
@@ -10168,7 +10237,7 @@ var app = (function () {
     			toggle_class(button2, "hover:bg-blue-600", /*selectedButton*/ ctx[3] === "seen");
     			toggle_class(button2, "focus:ring-blue-300", /*selectedButton*/ ctx[3] === "seen");
     			toggle_class(button2, "shadow-md", /*selectedButton*/ ctx[3] === "seen");
-    			add_location(button2, file$1, 158, 8, 5053);
+    			add_location(button2, file$1, 162, 8, 5094);
     			attr_dev(button3, "type", "button");
     			attr_dev(button3, "class", "py-2.5 px-5 text-sm font-medium focus:outline-none border border-l-0 rounded-r-lg");
     			toggle_class(button3, "border-gray-200", /*selectedButton*/ ctx[3] !== "loved");
@@ -10184,21 +10253,21 @@ var app = (function () {
     			toggle_class(button3, "hover:bg-red-600", /*selectedButton*/ ctx[3] === "loved");
     			toggle_class(button3, "focus:ring-red-300", /*selectedButton*/ ctx[3] === "loved");
     			toggle_class(button3, "shadow-md", /*selectedButton*/ ctx[3] === "loved");
-    			add_location(button3, file$1, 180, 8, 6119);
+    			add_location(button3, file$1, 184, 8, 6160);
     			attr_dev(div0, "class", "flex justify-center p-4");
     			attr_dev(div0, "role", "group");
     			attr_dev(div0, "aria-label", "Status buttons");
-    			add_location(div0, file$1, 108, 6, 2655);
+    			add_location(div0, file$1, 112, 6, 2697);
     			attr_dev(i, "class", "fab fa-youtube youtube-icon transition-colors duration-300 group-hover:text-red-500");
-    			add_location(i, file$1, 230, 12, 8262);
+    			add_location(i, file$1, 234, 12, 8302);
     			attr_dev(h2, "class", "text-2xl font-bold text-blue-600 cursor-pointer group");
-    			add_location(h2, file$1, 221, 10, 7958);
+    			add_location(h2, file$1, 225, 10, 7998);
     			attr_dev(div1, "class", "p-6");
-    			add_location(div1, file$1, 220, 8, 7930);
+    			add_location(div1, file$1, 224, 8, 7970);
     			attr_dev(div2, "class", "flex flex-col items-center");
-    			add_location(div2, file$1, 202, 6, 7176);
+    			add_location(div2, file$1, 206, 6, 7217);
     			attr_dev(div3, "class", "bg-base-200 card shadow-lg mb-4");
-    			add_location(div3, file$1, 106, 4, 2568);
+    			add_location(div3, file$1, 110, 4, 2610);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div3, anchor);
@@ -10251,215 +10320,215 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "border-gray-200", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "text-gray-900", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "bg-white", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "hover:bg-gray-100", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "hover:text-blue-700", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "focus:ring-4", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "focus:ring-gray-100", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "bg-gray-500", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "text-white", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "border-gray-500", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "hover:bg-gray-600", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "focus:ring-gray-300", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "shadow-md", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "border-gray-200", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "text-gray-900", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "bg-white", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "hover:bg-gray-100", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "hover:text-blue-700", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "focus:ring-4", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "focus:ring-gray-100", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "bg-green-500", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "text-white", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "border-green-500", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "hover:bg-green-600", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "focus:ring-green-300", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "shadow-md", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "border-gray-200", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "text-gray-900", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "bg-white", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "hover:bg-gray-100", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "hover:text-blue-700", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "focus:ring-4", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "focus:ring-gray-100", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "bg-blue-500", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "text-white", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "border-blue-500", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "hover:bg-blue-600", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "focus:ring-blue-300", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "shadow-md", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "border-gray-200", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "text-gray-900", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "bg-white", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "hover:bg-gray-100", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "hover:text-blue-700", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "focus:ring-4", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "focus:ring-gray-100", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "bg-red-500", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "text-white", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "border-red-500", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "hover:bg-red-600", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "focus:ring-red-300", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "shadow-md", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*$selectedMovie*/ 1) show_if = /*$selectedMovie*/ ctx[0].posterImage || /*$selectedMovie*/ ctx[0].getPosterUrl();
+    			if (dirty[0] & /*$selectedMovie*/ 1) show_if = /*$selectedMovie*/ ctx[0].posterImage || /*$selectedMovie*/ ctx[0].getPosterUrl();
 
     			if (show_if) {
     				if (if_block0) {
@@ -10474,7 +10543,7 @@ var app = (function () {
     				if_block0 = null;
     			}
 
-    			if (dirty & /*$selectedMovie*/ 1 && t13_value !== (t13_value = /*$selectedMovie*/ ctx[0].title + "")) set_data_dev(t13, t13_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t13_value !== (t13_value = /*$selectedMovie*/ ctx[0].title + "")) set_data_dev(t13, t13_value);
 
     			if (/*$selectedMovie*/ ctx[0].originalLanguage !== "en" && /*$selectedMovie*/ ctx[0].originalTitle) {
     				if (if_block1) {
@@ -10614,14 +10683,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(106:2) {#if $selectedMovie}",
+    		source: "(110:2) {#if $selectedMovie}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (204:8) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}
+    // (208:8) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}
     function create_if_block_11(ctx) {
     	let div;
     	let img;
@@ -10641,9 +10710,9 @@ var app = (function () {
 
     			attr_dev(img, "class", "w-[350px] transition-shadow duration-200 ease-in-out cursor-pointer blue-glow");
     			attr_dev(img, "alt", img_alt_value = /*$selectedMovie*/ ctx[0].title);
-    			add_location(img, file$1, 205, 12, 7355);
-    			attr_dev(div, "class", "flex-shrink-0 poster m-2.5  svelte-16g9w62");
-    			add_location(div, file$1, 204, 10, 7301);
+    			add_location(img, file$1, 209, 12, 7395);
+    			attr_dev(div, "class", "flex-shrink-0 poster m-2.5 svelte-gr4476");
+    			add_location(div, file$1, 208, 10, 7342);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -10655,13 +10724,13 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].posterImage
+    			if (dirty[0] & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].posterImage
     			? /*$selectedMovie*/ ctx[0].posterImage.src
     			: /*$selectedMovie*/ ctx[0].getPosterUrl())) {
     				attr_dev(img, "src", img_src_value);
     			}
 
-    			if (dirty & /*$selectedMovie*/ 1 && img_alt_value !== (img_alt_value = /*$selectedMovie*/ ctx[0].title)) {
+    			if (dirty[0] & /*$selectedMovie*/ 1 && img_alt_value !== (img_alt_value = /*$selectedMovie*/ ctx[0].title)) {
     				attr_dev(img, "alt", img_alt_value);
     			}
     		},
@@ -10676,14 +10745,14 @@ var app = (function () {
     		block,
     		id: create_if_block_11.name,
     		type: "if",
-    		source: "(204:8) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}",
+    		source: "(208:8) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (235:10) {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
+    // (239:10) {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
     function create_if_block_10(ctx) {
     	let div;
     	let span;
@@ -10709,13 +10778,13 @@ var app = (function () {
     			t3 = space();
     			i = element("i");
     			attr_dev(span, "class", "mx-2 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-2xl");
-    			add_location(span, file$1, 236, 14, 8557);
+    			add_location(span, file$1, 240, 14, 8597);
     			attr_dev(i, "class", "fab fa-youtube youtube-icon transition-colors duration-300 group-hover:text-red-500");
-    			add_location(i, file$1, 252, 16, 9243);
+    			add_location(i, file$1, 256, 16, 9283);
     			attr_dev(h4, "class", "text-lg text-gray-500 cursor-pointer group");
-    			add_location(h4, file$1, 243, 14, 8898);
+    			add_location(h4, file$1, 247, 14, 8938);
     			attr_dev(div, "class", "flex items-center mb-2");
-    			add_location(div, file$1, 235, 12, 8506);
+    			add_location(div, file$1, 239, 12, 8546);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -10737,8 +10806,8 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = getLanguageFlag(/*$selectedMovie*/ ctx[0].originalLanguage) + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].originalTitle + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t0_value !== (t0_value = getLanguageFlag(/*$selectedMovie*/ ctx[0].originalLanguage) + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].originalTitle + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
@@ -10751,14 +10820,14 @@ var app = (function () {
     		block,
     		id: create_if_block_10.name,
     		type: "if",
-    		source: "(235:10) {#if $selectedMovie.originalLanguage !== \\\"en\\\" && $selectedMovie.originalTitle}",
+    		source: "(239:10) {#if $selectedMovie.originalLanguage !== \\\"en\\\" && $selectedMovie.originalTitle}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (259:10) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}
+    // (263:10) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}
     function create_if_block_9(ctx) {
     	let p;
     	let strong;
@@ -10784,10 +10853,10 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$1, 260, 14, 9537);
+    			add_location(strong, file$1, 264, 14, 9577);
     			attr_dev(span, "class", "flex items-center flex-wrap");
-    			add_location(span, file$1, 261, 14, 9575);
-    			add_location(p, file$1, 259, 12, 9519);
+    			add_location(span, file$1, 265, 14, 9615);
+    			add_location(p, file$1, 263, 12, 9559);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -10802,7 +10871,7 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie, $selectedGenres, selectedGenres, genreEmojiDict*/ 17) {
+    			if (dirty[0] & /*$selectedMovie, $selectedGenres*/ 17) {
     				each_value_2 = /*$selectedMovie*/ ctx[0].genres;
     				validate_each_argument(each_value_2);
     				let i;
@@ -10836,29 +10905,29 @@ var app = (function () {
     		block,
     		id: create_if_block_9.name,
     		type: "if",
-    		source: "(259:10) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}",
+    		source: "(263:10) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (263:16) {#each $selectedMovie.genres as genre}
+    // (267:16) {#each $selectedMovie.genres as genre}
     function create_each_block_2(ctx) {
     	let span;
     	let p0;
-    	let t0_value = genreEmojiDict[/*genre*/ ctx[27]] + "";
+    	let t0_value = genreEmojiDict[/*genre*/ ctx[29]] + "";
     	let t0;
     	let t1;
     	let p1;
-    	let t2_value = /*genre*/ ctx[27] + "";
+    	let t2_value = /*genre*/ ctx[29] + "";
     	let t2;
     	let t3;
     	let mounted;
     	let dispose;
 
     	function click_handler_8() {
-    		return /*click_handler_8*/ ctx[17](/*genre*/ ctx[27]);
+    		return /*click_handler_8*/ ctx[17](/*genre*/ ctx[29]);
     	}
 
     	const block = {
@@ -10871,11 +10940,11 @@ var app = (function () {
     			t2 = text(t2_value);
     			t3 = space();
     			attr_dev(p0, "class", "text-xl cursor-pointer transition-transform duration-200 mr-1 hover:scale-150 z-10");
-    			add_location(p0, file$1, 264, 20, 9749);
+    			add_location(p0, file$1, 268, 20, 9789);
     			attr_dev(p1, "class", "m-0");
-    			add_location(p1, file$1, 278, 20, 10397);
+    			add_location(p1, file$1, 282, 20, 10437);
     			attr_dev(span, "class", "flex items-center mr-4");
-    			add_location(span, file$1, 263, 18, 9691);
+    			add_location(span, file$1, 267, 18, 9731);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -10893,8 +10962,8 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = genreEmojiDict[/*genre*/ ctx[27]] + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*genre*/ ctx[27] + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t0_value !== (t0_value = genreEmojiDict[/*genre*/ ctx[29]] + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*genre*/ ctx[29] + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
@@ -10907,14 +10976,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(263:16) {#each $selectedMovie.genres as genre}",
+    		source: "(267:16) {#each $selectedMovie.genres as genre}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (285:10) {#if $selectedMovie.releaseDate}
+    // (289:10) {#if $selectedMovie.releaseDate}
     function create_if_block_8(ctx) {
     	let p;
     	let strong;
@@ -10929,8 +10998,8 @@ var app = (function () {
     			strong.textContent = "Release Date:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$1, 286, 14, 10602);
-    			add_location(p, file$1, 285, 12, 10584);
+    			add_location(strong, file$1, 290, 14, 10642);
+    			add_location(p, file$1, 289, 12, 10624);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -10939,7 +11008,7 @@ var app = (function () {
     			append_dev(p, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].getFormattedReleaseDate() + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].getFormattedReleaseDate() + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(p);
@@ -10950,53 +11019,72 @@ var app = (function () {
     		block,
     		id: create_if_block_8.name,
     		type: "if",
-    		source: "(285:10) {#if $selectedMovie.releaseDate}",
+    		source: "(289:10) {#if $selectedMovie.releaseDate}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (291:10) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}
+    // (295:10) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}
     function create_if_block_7(ctx) {
-    	let p;
+    	let div1;
     	let strong;
     	let t1;
-    	let t2_value = /*$selectedMovie*/ ctx[0].voteAverage.toFixed(1) + "";
-    	let t2;
+    	let div0;
     	let t3;
-    	let t4_value = /*$selectedMovie*/ ctx[0].voteCount + "";
+    	let t4_value = /*$selectedMovie*/ ctx[0].voteAverage.toFixed(1) + "";
     	let t4;
     	let t5;
+    	let t6_value = /*$selectedMovie*/ ctx[0].voteCount + "";
+    	let t6;
+    	let t7;
+    	let mounted;
+    	let dispose;
 
     	const block = {
     		c: function create() {
-    			p = element("p");
+    			div1 = element("div");
     			strong = element("strong");
     			strong.textContent = "Rating:";
-    			t1 = text("\n              ⭐ ");
-    			t2 = text(t2_value);
-    			t3 = text(" (");
+    			t1 = space();
+    			div0 = element("div");
+    			div0.textContent = "⭐";
+    			t3 = space();
     			t4 = text(t4_value);
-    			t5 = text("\n              reviews)");
-    			add_location(strong, file$1, 292, 14, 10824);
-    			add_location(p, file$1, 291, 12, 10806);
+    			t5 = text(" (");
+    			t6 = text(t6_value);
+    			t7 = text("\n              reviews)");
+    			add_location(strong, file$1, 296, 14, 10888);
+    			attr_dev(div0, "class", "emoji text-lg cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mx-1");
+    			add_location(div0, file$1, 297, 14, 10927);
+    			attr_dev(div1, "class", "flex flex-row");
+    			add_location(div1, file$1, 295, 12, 10846);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, p, anchor);
-    			append_dev(p, strong);
-    			append_dev(p, t1);
-    			append_dev(p, t2);
-    			append_dev(p, t3);
-    			append_dev(p, t4);
-    			append_dev(p, t5);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, strong);
+    			append_dev(div1, t1);
+    			append_dev(div1, div0);
+    			append_dev(div1, t3);
+    			append_dev(div1, t4);
+    			append_dev(div1, t5);
+    			append_dev(div1, t6);
+    			append_dev(div1, t7);
+
+    			if (!mounted) {
+    				dispose = listen_dev(div0, "click", /*click_handler_9*/ ctx[18], false, false, false, false);
+    				mounted = true;
+    			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].voteAverage.toFixed(1) + "")) set_data_dev(t2, t2_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t4_value !== (t4_value = /*$selectedMovie*/ ctx[0].voteCount + "")) set_data_dev(t4, t4_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t4_value !== (t4_value = /*$selectedMovie*/ ctx[0].voteAverage.toFixed(1) + "")) set_data_dev(t4, t4_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t6_value !== (t6_value = /*$selectedMovie*/ ctx[0].voteCount + "")) set_data_dev(t6, t6_value);
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p);
+    			if (detaching) detach_dev(div1);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
@@ -11004,42 +11092,61 @@ var app = (function () {
     		block,
     		id: create_if_block_7.name,
     		type: "if",
-    		source: "(291:10) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}",
+    		source: "(295:10) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (298:10) {#if $selectedMovie.popularity}
+    // (310:10) {#if $selectedMovie.popularity}
     function create_if_block_6(ctx) {
-    	let p;
+    	let div1;
     	let strong;
     	let t1;
-    	let t2_value = /*$selectedMovie*/ ctx[0].popularity.toFixed(0) + "";
-    	let t2;
+    	let div0;
+    	let t3;
+    	let t4_value = /*$selectedMovie*/ ctx[0].popularity.toFixed(0) + "";
+    	let t4;
+    	let mounted;
+    	let dispose;
 
     	const block = {
     		c: function create() {
-    			p = element("p");
+    			div1 = element("div");
     			strong = element("strong");
     			strong.textContent = "Popularity:";
-    			t1 = text("\n              👥 ");
-    			t2 = text(t2_value);
-    			add_location(strong, file$1, 299, 14, 11061);
-    			add_location(p, file$1, 298, 12, 11043);
+    			t1 = space();
+    			div0 = element("div");
+    			div0.textContent = "👥";
+    			t3 = space();
+    			t4 = text(t4_value);
+    			add_location(strong, file$1, 311, 14, 11466);
+    			attr_dev(div0, "class", "emoji text-lg cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mx-1");
+    			add_location(div0, file$1, 313, 14, 11510);
+    			attr_dev(div1, "class", "flex flex-row");
+    			add_location(div1, file$1, 310, 12, 11424);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, p, anchor);
-    			append_dev(p, strong);
-    			append_dev(p, t1);
-    			append_dev(p, t2);
+    			insert_dev(target, div1, anchor);
+    			append_dev(div1, strong);
+    			append_dev(div1, t1);
+    			append_dev(div1, div0);
+    			append_dev(div1, t3);
+    			append_dev(div1, t4);
+
+    			if (!mounted) {
+    				dispose = listen_dev(div0, "click", /*click_handler_10*/ ctx[19], false, false, false, false);
+    				mounted = true;
+    			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].popularity.toFixed(0) + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t4_value !== (t4_value = /*$selectedMovie*/ ctx[0].popularity.toFixed(0) + "")) set_data_dev(t4, t4_value);
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p);
+    			if (detaching) detach_dev(div1);
+    			mounted = false;
+    			dispose();
     		}
     	};
 
@@ -11047,14 +11154,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6.name,
     		type: "if",
-    		source: "(298:10) {#if $selectedMovie.popularity}",
+    		source: "(310:10) {#if $selectedMovie.popularity}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (304:10) {#if $selectedMovie.runtime}
+    // (326:10) {#if $selectedMovie.runtime}
     function create_if_block_5(ctx) {
     	let p;
     	let strong;
@@ -11069,8 +11176,8 @@ var app = (function () {
     			strong.textContent = "Runtime:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$1, 305, 14, 11248);
-    			add_location(p, file$1, 304, 12, 11230);
+    			add_location(strong, file$1, 327, 14, 11970);
+    			add_location(p, file$1, 326, 12, 11952);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -11079,7 +11186,7 @@ var app = (function () {
     			append_dev(p, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].generateHourString() + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].generateHourString() + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(p);
@@ -11090,14 +11197,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(304:10) {#if $selectedMovie.runtime}",
+    		source: "(326:10) {#if $selectedMovie.runtime}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (310:10) {#if $selectedMovie.overview}
+    // (332:10) {#if $selectedMovie.overview}
     function create_if_block_4(ctx) {
     	let p;
     	let strong;
@@ -11112,8 +11219,8 @@ var app = (function () {
     			strong.textContent = "Description:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$1, 311, 14, 11429);
-    			add_location(p, file$1, 310, 12, 11411);
+    			add_location(strong, file$1, 333, 14, 12151);
+    			add_location(p, file$1, 332, 12, 12133);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -11122,7 +11229,7 @@ var app = (function () {
     			append_dev(p, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].overview + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].overview + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(p);
@@ -11133,14 +11240,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(310:10) {#if $selectedMovie.overview}",
+    		source: "(332:10) {#if $selectedMovie.overview}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (316:10) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}
+    // (338:10) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}
     function create_if_block_3(ctx) {
     	let p;
     	let strong;
@@ -11166,10 +11273,10 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$1, 317, 14, 11653);
+    			add_location(strong, file$1, 339, 14, 12375);
     			attr_dev(p, "class", "mt-4");
-    			add_location(p, file$1, 316, 12, 11622);
-    			add_location(ul, file$1, 319, 12, 11705);
+    			add_location(p, file$1, 338, 12, 12344);
+    			add_location(ul, file$1, 341, 12, 12427);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -11184,7 +11291,7 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*personSelected, personToPersonQuery, $selectedMovie*/ 129) {
+    			if (dirty[0] & /*personSelected, $selectedMovie*/ 129) {
     				each_value_1 = /*$selectedMovie*/ ctx[0].topNcast;
     				validate_each_argument(each_value_1);
     				let i;
@@ -11220,28 +11327,28 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(316:10) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}",
+    		source: "(338:10) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (321:14) {#each $selectedMovie.topNcast as cast}
+    // (343:14) {#each $selectedMovie.topNcast as cast}
     function create_each_block_1(ctx) {
     	let li;
     	let span;
-    	let t0_value = /*cast*/ ctx[24].name + "";
+    	let t0_value = /*cast*/ ctx[26].name + "";
     	let t0;
     	let t1;
-    	let t2_value = /*cast*/ ctx[24].character + "";
+    	let t2_value = /*cast*/ ctx[26].character + "";
     	let t2;
     	let t3;
     	let mounted;
     	let dispose;
 
-    	function click_handler_9() {
-    		return /*click_handler_9*/ ctx[18](/*cast*/ ctx[24]);
+    	function click_handler_11() {
+    		return /*click_handler_11*/ ctx[20](/*cast*/ ctx[26]);
     	}
 
     	const block = {
@@ -11253,9 +11360,9 @@ var app = (function () {
     			t2 = text(t2_value);
     			t3 = space();
     			attr_dev(span, "class", "text-blue-600");
-    			add_location(span, file$1, 327, 18, 12034);
+    			add_location(span, file$1, 349, 18, 12756);
     			attr_dev(li, "class", "cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200");
-    			add_location(li, file$1, 321, 16, 11780);
+    			add_location(li, file$1, 343, 16, 12502);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -11266,14 +11373,14 @@ var app = (function () {
     			append_dev(li, t3);
 
     			if (!mounted) {
-    				dispose = listen_dev(li, "click", click_handler_9, false, false, false, false);
+    				dispose = listen_dev(li, "click", click_handler_11, false, false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = /*cast*/ ctx[24].name + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*cast*/ ctx[24].character + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t0_value !== (t0_value = /*cast*/ ctx[26].name + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*cast*/ ctx[26].character + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(li);
@@ -11286,14 +11393,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(321:14) {#each $selectedMovie.topNcast as cast}",
+    		source: "(343:14) {#each $selectedMovie.topNcast as cast}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (333:10) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}
+    // (355:10) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}
     function create_if_block_2(ctx) {
     	let p;
     	let strong;
@@ -11319,10 +11426,10 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$1, 334, 14, 12300);
+    			add_location(strong, file$1, 356, 14, 13022);
     			attr_dev(p, "class", "mt-4");
-    			add_location(p, file$1, 333, 12, 12269);
-    			add_location(ul, file$1, 336, 12, 12352);
+    			add_location(p, file$1, 355, 12, 12991);
+    			add_location(ul, file$1, 358, 12, 13074);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -11337,7 +11444,7 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*personSelected, personToPersonQuery, $selectedMovie*/ 129) {
+    			if (dirty[0] & /*personSelected, $selectedMovie*/ 129) {
     				each_value = /*$selectedMovie*/ ctx[0].topNcrew;
     				validate_each_argument(each_value);
     				let i;
@@ -11373,28 +11480,28 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(333:10) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}",
+    		source: "(355:10) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (338:14) {#each $selectedMovie.topNcrew as crew}
+    // (360:14) {#each $selectedMovie.topNcrew as crew}
     function create_each_block(ctx) {
     	let li;
     	let span;
-    	let t0_value = /*crew*/ ctx[21].name + "";
+    	let t0_value = /*crew*/ ctx[23].name + "";
     	let t0;
     	let t1;
-    	let t2_value = /*crew*/ ctx[21].job + "";
+    	let t2_value = /*crew*/ ctx[23].job + "";
     	let t2;
     	let t3;
     	let mounted;
     	let dispose;
 
-    	function click_handler_10() {
-    		return /*click_handler_10*/ ctx[19](/*crew*/ ctx[21]);
+    	function click_handler_12() {
+    		return /*click_handler_12*/ ctx[21](/*crew*/ ctx[23]);
     	}
 
     	const block = {
@@ -11406,9 +11513,9 @@ var app = (function () {
     			t2 = text(t2_value);
     			t3 = space();
     			attr_dev(span, "class", "text-blue-600");
-    			add_location(span, file$1, 344, 18, 12681);
+    			add_location(span, file$1, 366, 18, 13403);
     			attr_dev(li, "class", "cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200");
-    			add_location(li, file$1, 338, 16, 12427);
+    			add_location(li, file$1, 360, 16, 13149);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -11419,14 +11526,14 @@ var app = (function () {
     			append_dev(li, t3);
 
     			if (!mounted) {
-    				dispose = listen_dev(li, "click", click_handler_10, false, false, false, false);
+    				dispose = listen_dev(li, "click", click_handler_12, false, false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = /*crew*/ ctx[21].name + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*crew*/ ctx[21].job + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t0_value !== (t0_value = /*crew*/ ctx[23].name + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*crew*/ ctx[23].job + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(li);
@@ -11439,14 +11546,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(338:14) {#each $selectedMovie.topNcrew as crew}",
+    		source: "(360:14) {#each $selectedMovie.topNcrew as crew}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (355:2) {#if showModal}
+    // (377:2) {#if showModal}
     function create_if_block(ctx) {
     	let div1;
     	let div0;
@@ -11466,15 +11573,15 @@ var app = (function () {
     			t1 = space();
     			img = element("img");
     			attr_dev(span, "class", "absolute top-2 right-6 text-white text-3xl font-bold cursor-pointer");
-    			add_location(span, file$1, 360, 8, 13084);
+    			add_location(span, file$1, 382, 8, 13806);
     			if (!src_url_equal(img.src, img_src_value = /*fullImageUrl*/ ctx[2])) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "Full Image");
     			attr_dev(img, "class", "w-full h-auto");
-    			add_location(img, file$1, 364, 8, 13240);
+    			add_location(img, file$1, 386, 8, 13962);
     			attr_dev(div0, "class", "relative w-4/5 max-w-xl");
-    			add_location(div0, file$1, 359, 6, 13038);
+    			add_location(div0, file$1, 381, 6, 13760);
     			attr_dev(div1, "class", "fixed inset-0 z-50 overflow-hidden bg-black bg-opacity-50 flex items-center justify-center");
-    			add_location(div1, file$1, 355, 4, 12888);
+    			add_location(div1, file$1, 377, 4, 13610);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -11493,7 +11600,7 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*fullImageUrl*/ 4 && !src_url_equal(img.src, img_src_value = /*fullImageUrl*/ ctx[2])) {
+    			if (dirty[0] & /*fullImageUrl*/ 4 && !src_url_equal(img.src, img_src_value = /*fullImageUrl*/ ctx[2])) {
     				attr_dev(img, "src", img_src_value);
     			}
     		},
@@ -11508,7 +11615,7 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(355:2) {#if showModal}",
+    		source: "(377:2) {#if showModal}",
     		ctx
     	});
 
@@ -11528,8 +11635,8 @@ var app = (function () {
     			t = space();
     			if (if_block1) if_block1.c();
     			attr_dev(div, "id", "movie-details-div");
-    			attr_dev(div, "class", "h-screen overflow-y-auto container mx-auto p-6 custom-scrollbar svelte-16g9w62");
-    			add_location(div, file$1, 104, 0, 2440);
+    			attr_dev(div, "class", "h-screen overflow-y-auto container mx-auto p-6 custom-scrollbar svelte-gr4476");
+    			add_location(div, file$1, 105, 0, 2477);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -11540,7 +11647,7 @@ var app = (function () {
     			append_dev(div, t);
     			if (if_block1) if_block1.m(div, null);
     		},
-    		p: function update(ctx, [dirty]) {
+    		p: function update(ctx, dirty) {
     			if (/*$selectedMovie*/ ctx[0]) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
@@ -11695,11 +11802,19 @@ var app = (function () {
     		}
     	};
 
-    	const click_handler_9 = cast => {
+    	const click_handler_9 = () => {
+    		minVoteAverage.set($selectedMovie.voteAverage.toFixed(1));
+    	};
+
+    	const click_handler_10 = () => {
+    		minPopularity.set($selectedMovie.popularity.toFixed(0));
+    	};
+
+    	const click_handler_11 = cast => {
     		personSelected(personToPersonQuery(cast));
     	};
 
-    	const click_handler_10 = crew => {
+    	const click_handler_12 = crew => {
     		personSelected(personToPersonQuery(crew));
     	};
 
@@ -11720,6 +11835,8 @@ var app = (function () {
     		maxReviewCount,
     		selectedGenres,
     		selectedLanguages,
+    		minPopularity,
+    		minVoteAverage,
     		genreEmojiDict,
     		getLanguageFlag,
     		verbEmojiDict,
@@ -11753,7 +11870,7 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$selectedMovie*/ 1) {
+    		if ($$self.$$.dirty[0] & /*$selectedMovie*/ 1) {
     			$$invalidate(3, selectedButton = getOrSetMovieViewedType($selectedMovie));
     		}
     	};
@@ -11778,14 +11895,16 @@ var app = (function () {
     		click_handler_7,
     		click_handler_8,
     		click_handler_9,
-    		click_handler_10
+    		click_handler_10,
+    		click_handler_11,
+    		click_handler_12
     	];
     }
 
     class MovieDetails extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {}, null, [-1, -1]);
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,

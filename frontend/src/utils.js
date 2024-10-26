@@ -54,21 +54,44 @@ export function setPopularityIndexAndColor(movies) {
 }
 
 export function getColor(popularityIndex, numberOfMovies) {
-  const ratio = popularityIndex / numberOfMovies;
+  let gradients = [
+    [200, 200, 200],  // Gold
+    [255, 0, 0],     // Red
+  ];
 
-  // get color between blue and gold
+  const numGradients = gradients.length - 1;
 
-  let c1 = [0, 0, 255];
-  let c2 = [255, 215, 0];
+  // Safely calculate the ratio
+  let ratio = 0;
+  if (numberOfMovies > 0) {
+    ratio = popularityIndex / numberOfMovies;
+  }
 
-  let color = [
-    Math.floor(c2[0] + ratio * (c1[0] - c2[0])),
-    Math.floor(c2[1] + ratio * (c1[1] - c2[1])),
-    Math.floor(c2[2] + ratio * (c1[2] - c2[2])),
+  // Clamp the ratio between 0 and 1
+  const ratioClamped = Math.min(Math.max(ratio, 0), 1);
+
+  // Determine which two colors to blend based on the ratio
+  const scaledRatio = ratioClamped * numGradients;
+  const gradientIndex = Math.min(Math.floor(scaledRatio), numGradients - 1);
+  const localRatio = scaledRatio - gradientIndex;
+
+  // Get colors for blending
+  const c1 = gradients[gradientIndex];
+  const c2 = gradients[gradientIndex + 1];
+
+  // Interpolate between c1 and c2
+  const color = [
+    Math.floor(c1[0] + localRatio * (c2[0] - c1[0])),
+    Math.floor(c1[1] + localRatio * (c2[1] - c1[1])),
+    Math.floor(c1[2] + localRatio * (c2[2] - c1[2])),
   ];
 
   return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 }
+
+
+
+
 
 export async function queryDatabase(movies, append = "new", date = null) {
   if (get(runningQuery)) {
