@@ -1,5 +1,5 @@
 .card-body.svelte-1wsx075{overflow-y:auto}.custom-scrollbar.svelte-1wsx075::-webkit-scrollbar{width:0;height:0}.custom-scrollbar.svelte-1wsx075{scrollbar-width:none}
-.movie-item.svelte-1r3vfvx:hover{box-shadow:0 0 15px rgba(0, 123, 255, 0.5)}.selected.svelte-1r3vfvx{background-color:rgba(0, 123, 255, 0.1);border:2px solid;border-color:rgba(0, 123, 255, 0.5)}
+.movie-item.svelte-1jpwzsx:hover{box-shadow:0 0 15px rgba(0, 123, 255, 0.5)}.selected.svelte-1jpwzsx{background-color:rgba(0, 123, 255, 0.1);border:2px solid;border-color:rgba(0, 123, 255, 0.5)}
 .movie-horizontal.svelte-18l4o9f.svelte-18l4o9f{background:#f4f4f4;border:0.1rem solid #ddd;overflow:auto;padding:1rem;max-height:200px}.movie-item.svelte-18l4o9f.svelte-18l4o9f{display:flex;align-items:flex-start}img.svelte-18l4o9f.svelte-18l4o9f{max-width:150px;border:0.2rem solid #333;border-radius:0.2rem}.movie-info.svelte-18l4o9f.svelte-18l4o9f{margin-left:1rem;flex:1}.movie-info.svelte-18l4o9f h2.svelte-18l4o9f{margin-top:0}
 {}.custom-scrollbar.svelte-gr4476::-webkit-scrollbar{width:0;height:0}.custom-scrollbar.svelte-gr4476{scrollbar-width:none}.poster.svelte-gr4476:hover{box-shadow:0 0 15px rgba(0, 123, 255, 0.5)}
 *, ::before, ::after {
@@ -1079,6 +1079,17 @@ html {
 :where(.menu li) .badge {
   justify-self: end;
 }
+.progress {
+  position: relative;
+  width: 100%;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  overflow: hidden;
+  height: 0.5rem;
+  border-radius: var(--rounded-box, 1rem);
+  background-color: var(--fallback-bc,oklch(var(--bc)/0.2));
+}
 .btm-nav > * .label {
   font-size: 1rem;
   line-height: 1.5rem;
@@ -1465,6 +1476,46 @@ html {
     opacity: 0;
   }
 }
+.progress::-moz-progress-bar {
+  border-radius: var(--rounded-box, 1rem);
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-bc,oklch(var(--bc)/var(--tw-bg-opacity)));
+}
+.progress:indeterminate {
+  --progress-color: var(--fallback-bc,oklch(var(--bc)/1));
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--progress-color) -1%,
+    var(--progress-color) 10%,
+    transparent 10%,
+    transparent 90%
+  );
+  background-size: 200%;
+  background-position-x: 15%;
+  animation: progress-loading 5s ease-in-out infinite;
+}
+.progress::-webkit-progress-bar {
+  border-radius: var(--rounded-box, 1rem);
+  background-color: transparent;
+}
+.progress::-webkit-progress-value {
+  border-radius: var(--rounded-box, 1rem);
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-bc,oklch(var(--bc)/var(--tw-bg-opacity)));
+}
+.progress:indeterminate::-moz-progress-bar {
+  background-color: transparent;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--progress-color) -1%,
+    var(--progress-color) 10%,
+    transparent 10%,
+    transparent 90%
+  );
+  background-size: 200%;
+  background-position-x: 15%;
+  animation: progress-loading 5s ease-in-out infinite;
+}
 @keyframes progress-loading {
 
   50% {
@@ -1653,12 +1704,6 @@ html {
 .mt-6 {
   margin-top: 1.5rem;
 }
-.mr-2 {
-  margin-right: 0.5rem;
-}
-.ml-1 {
-  margin-left: 0.25rem;
-}
 .block {
   display: block;
 }
@@ -1769,6 +1814,15 @@ html {
 }
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+@keyframes pulse {
+
+  50% {
+    opacity: .5;
+  }
+}
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 .cursor-pointer {
   cursor: pointer;
@@ -2112,6 +2166,13 @@ html {
 }
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+.transition {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 .transition-colors {
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;

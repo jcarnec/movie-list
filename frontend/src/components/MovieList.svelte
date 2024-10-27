@@ -3,7 +3,14 @@
   import MovieItem from './MovieItem.svelte';
   import { queryCount, scrollY, itemHeight } from '../stores';
   import { getVisibleMovies, getColor } from '../utils';
+  import asyncStore from '../loadMoviesAsyncStore';
   export let movies;
+
+
+  const updateMoviesAsyncRequest = asyncStore.getOperation('update-movies')
+  updateMoviesAsyncRequest.subscribe(async (n) => {
+    console.log('updateMoviesAsyncRequest', n)
+  });
 </script>
 
 <div class="movie-list relative h-screen overflow-hidden " style="user-select: none; ">
@@ -17,6 +24,6 @@
       />
     {/each}
   {:else}
-    <p>Loading...</p>
+  <div></div>
   {/if}
 </div>

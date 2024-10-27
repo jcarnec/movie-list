@@ -7,6 +7,7 @@
     selectedGenres,
     minPopularity,
     minVoteAverage,
+    transitionCount
   } from "../stores.js";
   import {
     addMovie,
@@ -23,6 +24,9 @@
   import { history } from "../historyStore.js";
   import { onMount } from "svelte";
   import { isNarrow } from "../windowStore.js";
+  import { get, writable, derived } from "svelte/store";
+  import asyncStore from "../loadMoviesAsyncStore.js";
+  import { tick } from "svelte";
 
   export let movie;
   export let index;
@@ -76,16 +80,25 @@
     selectedMovie.set(movie);
   }
 
-  const colorDict = {
-    viewed: "gray",
-    interested: "green",
-    seen: "blue",
-    loved: "red",
-  };
+  const updateMoviesAsyncRequest = asyncStore.getOperation('update-movies')
+
+  let barSize = writable(0.2);
+  let transitioning = writable(false);
+
+  setTimeout(() => {
+    barSize.set(1);
+    transitioning.set(true);
+  }, 25);
+
+  setTimeout(() => {
+    transitioning.set(false);
+  }, 50);
+
 </script>
 
 <div
-  class="movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md"
+  id={movie.id}
+  class="movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md {$updateMoviesAsyncRequest.status == 'loading' ? 'animate-pulse' : ''}"
   on:click={handleBarClick}
   on:mouseenter={handleMouseEnter}
   on:mouseleave={handleMouseLeave}
@@ -108,7 +121,10 @@
       >
         <span
           class="flag mx-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-l"
-          on:click={() => selectedLanguages.set([movie.originalLanguage])}
+          on:click={(e) => {
+            e.stopPropagation();
+            selectedLanguages.set([movie.originalLanguage])
+          }}
         >
           {languageFlag}
         </span>
@@ -159,8 +175,8 @@
       class:bg-gray-300={movieViewedType && movieViewedType != "ignored"}
     >
       <div
-        class="custom-bar h-full rounded-full"
-        style="width: {movie.voteAverage * 10}%; background-color: {barColor};"
+        class="custom-bar h-full rounded-full "
+        style="width: {movie.voteAverage * 10 * $barSize}%; background-color: {barColor}; {$transitioning ? "transition: width 1s;" : ""}"
       ></div>
     </div>
   </div>
@@ -228,4 +244,5 @@
     border: 2px solid;
     border-color: rgba(0, 123, 255, 0.5);
   }
+
 </style>

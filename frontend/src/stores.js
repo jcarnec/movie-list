@@ -8,6 +8,7 @@ export const containerHeight = writable(0);
 export const viewportHeight = writable(1500);
 export const startY = writable(0);
 export const queryCount = writable(0);
+export const transitionCount = writable(0);
 export const runningQuery = writable(false);
 export const itemHeight = writable(85);
 export const firstVisibleIndex = derived(
@@ -76,7 +77,6 @@ selectedPerson.subscribe(value => currentSelectedPerson.set(value))
 minYear.subscribe(value => currentMinYear.set(value));
 minReviewCount.subscribe(value => currentMinReviewCount.set(value));
 maxReviewCount.subscribe(value => currentMaxReviewCount.set(value));
-
 minPopularity.subscribe(value => currentMinPopularity.set(value))
 maxPopularity.subscribe(value => currentMaxPopularity.set(value))
 minVoteAverage.subscribe(value => currentMinVoteAverage.set(value));
@@ -84,12 +84,12 @@ maxVoteAverage.subscribe(value => currentMaxVoteAverage.set(value));
 minRuntime.subscribe(value => currentMinRuntime.set(value));
 maxRuntime.subscribe(value => currentMaxRuntime.set(value));
 
-
 selectedTitle.subscribe(value => currentSelectedTitle.set(value) )
 
 function logChange(newValue) {
   console.log('log change', newValue);
 }
+
 selectedPerson.subscribe(logChange);
 selectedMovie.subscribe(logChange)
 

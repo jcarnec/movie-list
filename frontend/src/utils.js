@@ -55,8 +55,8 @@ export function setPopularityIndexAndColor(movies) {
 
 export function getColor(popularityIndex, numberOfMovies) {
   let gradients = [
-    [200, 200, 200],  // Gold
-    [255, 0, 0],     // Red
+    [255, 0, 200],  // Gold
+    [255, 255, 255],     // Red
   ];
 
   const numGradients = gradients.length - 1;

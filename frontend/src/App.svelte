@@ -6,23 +6,26 @@
   import MovieDetails from "./components/MovieDetails.svelte";
   import './styles/global.css'
   import { checkAppendPrepend, handleScroll, handleTouchStart, prepend, prependAfterFailure, queryMovies } from "./utils";
-  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, minReviewCount, maxReviewCount, maxRuntime, minRuntime, selectedPerson, minYear, selectedLanguages, selectedGenres, selectedTitle, currentMinYear, allowQueryMutex, selectedViewTypeVerbs, minPopularity, maxPopularity, minVoteAverage, maxVoteAverage } from "./stores.js";
+  import { queryCount, scrollY, selectedMovie, itemHeight, viewportHeight, minReviewCount, maxReviewCount, maxRuntime, minRuntime, selectedPerson, minYear, selectedLanguages, selectedGenres, selectedTitle, currentMinYear, allowQueryMutex, selectedViewTypeVerbs, minPopularity, maxPopularity, minVoteAverage, maxVoteAverage, transitionCount } from "./stores.js";
+  import asyncStore from './loadMoviesAsyncStore'
 
 
   let movies = [];
 
 // Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
-  $: updateMovies($minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguages, $selectedGenres, $selectedTitle, $allowQueryMutex, $selectedViewTypeVerbs, $minRuntime, $maxRuntime, $minPopularity, $maxPopularity, $minVoteAverage, $maxVoteAverage);
+  $: asyncStore.load('update-movies', updateMovies, ($minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguages, $selectedGenres, $selectedTitle, $allowQueryMutex, $selectedViewTypeVerbs, $minRuntime, $maxRuntime, $minPopularity, $maxPopularity, $minVoteAverage, $maxVoteAverage));
 
   async function updateMovies() {
     if($allowQueryMutex) {
-      movies = await queryMovies(movies);
-      if(!movies || movies.length == 0) {
-        movies = await prependAfterFailure(movies)
+      transitionCount.update(n => n + 1);
+      let new_movies = await queryMovies(movies);
+      new_movies = await queryMovies(new_movies);
+      if(!new_movies || new_movies.length == 0) {
+        new_movies = await prependAfterFailure(new_movies)
       } else {
-        movies = await prepend(movies)
+        new_movies = await prepend(new_movies)
       }
-      await tick(); // Wait for the DOM to update
+      movies = [...new_movies];
     } else {
       console.log('query blocked by mutex')
     }
@@ -76,7 +79,7 @@
       <Header />
     </div>
     <div class="flex-grow basis-[80%]">
-      <MovieList {itemHeight} {viewportHeight} {movies} />
+      <MovieList {itemHeight} {viewportHeight} movies={movies} />
     </div>
     <div class="flex-shrink-0 basis-[10%]">
       <MovieDetails />
