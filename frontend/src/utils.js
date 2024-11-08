@@ -33,17 +33,18 @@ import { getAllRelevantIDs, history } from "./historyStore.js";
 import axios from "axios";
 import Movie from "./Movie.js";
 
-export function setPopularityIndexAndColor(movies) {
-  movies.sort((a, b) => b.popularity - a.popularity);
+export function setVoteCountIndexAndColor(movies) {
+
+  movies.sort((a, b) => b.voteCount - a.voteCount);
 
   movies.forEach((movie, index) => {
-    movie.popularityIndex = index + 1;
+    movie.voteCountIndex = index + 1;
   });
 
   movies.sort((a, b) => a.releaseDate - b.releaseDate);
 
   movies.forEach((movie, index) => {
-    movie.color = getColor(movie.popularityIndex, movies);
+    movie.color = getColor(movie.voteCountIndex, movies.length);
     movie.isNewYear =
       index == 0 ||
       new Date(movies[index - 1].releaseDate).getYear() !=
@@ -53,10 +54,12 @@ export function setPopularityIndexAndColor(movies) {
   return movies;
 }
 
-export function getColor(popularityIndex, numberOfMovies) {
+export function getColor(voteCountIndex, numberOfMovies) {
   let gradients = [
-    [255, 0, 200],  // Gold
-    [255, 255, 255],     // Red
+    // grey
+    [169, 169, 169],
+    // red
+    [255, 0, 0],
   ];
 
   const numGradients = gradients.length - 1;
@@ -64,7 +67,7 @@ export function getColor(popularityIndex, numberOfMovies) {
   // Safely calculate the ratio
   let ratio = 0;
   if (numberOfMovies > 0) {
-    ratio = popularityIndex / numberOfMovies;
+    ratio = voteCountIndex / numberOfMovies;
   }
 
   // Clamp the ratio between 0 and 1
@@ -78,6 +81,8 @@ export function getColor(popularityIndex, numberOfMovies) {
   // Get colors for blending
   const c1 = gradients[gradientIndex];
   const c2 = gradients[gradientIndex + 1];
+
+  
 
   // Interpolate between c1 and c2
   const color = [
@@ -179,6 +184,8 @@ export async function handleScroll(event, movies) {
 
   movies = await checkAppendPrepend(movies);
 
+  movies = setVoteCountIndexAndColor(movies);
+
   event.preventDefault();
 
   return movies;
@@ -192,7 +199,6 @@ export async function append(movies) {
   console.log("appending");
   let newMovies = await queryDatabase(movies, "append");
   movies = [...movies, ...newMovies];
-  movies = setPopularityIndexAndColor(movies);
   containerHeight.set(movies.length * get(itemHeight));
   queryCount.update((n) => n + 1);
 
@@ -205,7 +211,6 @@ export async function prependAfterFailure() {
   let newMovies = await queryDatabase([], "prepend", prependDate);
   let movies = [...newMovies];
   scrollY.update((n) => (newMovies.length - 1) * get(itemHeight));
-  movies = setPopularityIndexAndColor(movies);
   containerHeight.set(movies.length * get(itemHeight));
   queryCount.update((n) => n + 1);
 
@@ -223,7 +228,6 @@ export async function prepend(movies) {
   let newMovies = await queryDatabase(movies, "prepend", prependDate);
   movies = [...newMovies, ...movies];
   scrollY.update((n) => newMovies.length * get(itemHeight));
-  movies = setPopularityIndexAndColor(movies);
   containerHeight.set(movies.length * get(itemHeight));
   queryCount.update((n) => n + 1);
 
@@ -279,7 +283,7 @@ export async function queryMovies(movies) {
     currentMinYear.set(
       movies.length > 0 ? movies[0].getReleaseYear().toString() : ""
     );
-    movies = setPopularityIndexAndColor(movies);
+    movies = setVoteCountIndexAndColor(movies);
     containerHeight.set(movies.length * get(itemHeight));
   }
   queryCount.update((n) => n + 1);

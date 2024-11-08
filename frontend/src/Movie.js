@@ -93,10 +93,8 @@ export default class Movie {
     img.src = this.getPosterUrl();
     img.onload = () => {
       this.posterImage = img; // Store the loaded image
-      console.log('Poster image loaded successfully');
     };
     img.onerror = (error) => {
-      console.error('Error loading poster image', error);
     };
   }
 

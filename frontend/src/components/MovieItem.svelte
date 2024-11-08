@@ -7,7 +7,8 @@
     selectedGenres,
     minPopularity,
     minVoteAverage,
-    transitionCount
+    transitionCount,
+    minReviewCount,
   } from "../stores.js";
   import {
     addMovie,
@@ -58,8 +59,7 @@
     movieViewedType = getMovieViewedType(movie);
   });
 
-  function handleViewTypeClick(event) {
-    if (event) event.stopPropagation();
+  function handleViewTypeClick() {
     if (movieViewedType == "viewed") {
       addMovie(movie, "interested");
     } else if (movieViewedType == "interested") {
@@ -80,7 +80,7 @@
     selectedMovie.set(movie);
   }
 
-  const updateMoviesAsyncRequest = asyncStore.getOperation('update-movies')
+  const updateMoviesAsyncRequest = asyncStore.getOperation("update-movies");
 
   let barSize = writable(0.2);
   let transitioning = writable(false);
@@ -93,12 +93,14 @@
   setTimeout(() => {
     transitioning.set(false);
   }, 50);
-
 </script>
 
 <div
   id={movie.id}
-  class="movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md {$updateMoviesAsyncRequest.status == 'loading' ? 'animate-pulse' : ''}"
+  class="movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md {$updateMoviesAsyncRequest.status ==
+  'loading'
+    ? 'animate-pulse'
+    : ''}"
   on:click={handleBarClick}
   on:mouseenter={handleMouseEnter}
   on:mouseleave={handleMouseLeave}
@@ -123,7 +125,7 @@
           class="flag mx-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-l"
           on:click={(e) => {
             e.stopPropagation();
-            selectedLanguages.set([movie.originalLanguage])
+            selectedLanguages.set([movie.originalLanguage]);
           }}
         >
           {languageFlag}
@@ -134,7 +136,10 @@
       <div class="flex items-center">
         <span
           class="flag mx-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-l"
-          on:click={() => selectedLanguages.set([movie.originalLanguage])}
+          on:click={(e) => {
+            e.stopPropagation();
+            selectedLanguages.set([movie.originalLanguage]);
+          }}
         >
           {languageFlag}
         </span>
@@ -152,7 +157,8 @@
       {#each movie.genres as genre}
         <div
           class="emoji cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-xl"
-          on:click={() => {
+          on:click={(e) => {
+            e.stopPropagation();
             if ($selectedGenres.includes(genre)) {
               selectedGenres.update((genres) =>
                 genres.filter((g) => g !== genre)
@@ -175,8 +181,12 @@
       class:bg-gray-300={movieViewedType && movieViewedType != "ignored"}
     >
       <div
-        class="custom-bar h-full rounded-full "
-        style="width: {movie.voteAverage * 10 * $barSize}%; background-color: {barColor}; {$transitioning ? "transition: width 1s;" : ""}"
+        class="custom-bar h-full rounded-full"
+        style="width: {movie.voteAverage *
+          10 *
+          $barSize}%; background-color: {barColor}; {$transitioning
+          ? 'transition: width 1s;'
+          : ''}"
       ></div>
     </div>
   </div>
@@ -194,7 +204,11 @@
         class:hover:bg-blue-700={movieViewedType === "seen"}
         class:bg-red-500={movieViewedType === "loved"}
         class:hover:bg-red-700={movieViewedType === "loved"}
-        on:click={(event) => handleViewTypeClick(event)}
+        on:click={(e) => {
+            e.stopPropagation();
+            handleViewTypeClick()
+          }
+        }
       >
         {verbEmojiDict[movieViewedType]}
       </div>
@@ -202,7 +216,8 @@
       <div class="text-xs text-center">
         <div class="font-bold mb-1 flex flex-row justify-center items-center">
           <div
-            on:click={() => {
+            on:click={(e) => {
+              e.stopPropagation();
               minVoteAverage.set(movie.voteAverage.toFixed(1));
             }}
             class="emoji text-md cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mr-1 text-lg"
@@ -212,8 +227,9 @@
           {movie.voteAverage.toFixed(1)}
         </div>
         <div
-          on:click={() => {
-            minPopularity.set(movie.popularity.toFixed(0));
+          on:click={(e) => {
+            e.stopPropagation();
+            minReviewCount.set(movie.voteCount);
           }}
           class="emoji font-bold mr-1 flex flex-row justify-center items-center"
           style="color: {barColor};"
@@ -223,7 +239,7 @@
           >
             👥
           </div>
-          {movie.popularity.toFixed(0)}
+          {movie.voteCount}
         </div>
       </div>
     {/if}
@@ -244,5 +260,4 @@
     border: 2px solid;
     border-color: rgba(0, 123, 255, 0.5);
   }
-
 </style>

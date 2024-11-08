@@ -42,6 +42,7 @@
   import GenreMenu from "./GenreMenu.svelte";
   import SaveMenu from "./SaveMenu.svelte";
   import LanguageSelect from "./LanguageSelect.svelte";
+  import RangeInput from "./RangeInput.svelte";
 
   function handleKeydown(event) {
     if (event.key === "Enter") {
@@ -129,42 +130,18 @@
             maxReviewCount.set(DEFAULT_MAX_REVIEWS);
           }}
         />
+
+        <!-- <RangeInput
+          id="reviews-range"
+          labelStart="Min Reviews"
+          labelEnd="Max Reviews"
+          bind:bindValueStart={$currentMaxReviewCount}
+          bind:bindValueEnd={$currentMinReviewCount}
+        /> -->
       </div>
 
 
       <!-- min max for  popularity, vote average, runtime -->
-
-      <!-- Min Popularity -->
-      <div class="form-control">
-        <InputWithClear
-          id="min-populairty-input"
-          label="Min Popularity"
-          bind:bindValue={$currentMinPopularity}
-          defaultValue={DEFAULT_MIN_POPULARITY}
-          onBlur={(e) => minPopularity.set(e.target.value)}
-          onKeydown={handleKeydown}
-          onClear={() => {
-            $currentMinPopularity = DEFAULT_MIN_POPULARITY;
-            minPopularity.set(DEFAULT_MIN_POPULARITY);
-          }}
-        />
-      </div>
-
-      <!-- Max Popularity -->
-      <div class="form-control">
-        <InputWithClear
-          id="max-popularity-input"
-          label="Max Popularity"
-          bind:bindValue={$currentMaxPopularity}
-          defaultValue={DEFAULT_MAX_POPULARITY}
-          onBlur={(e) => maxPopularity.set(e.target.value)}
-          onKeydown={handleKeydown}
-          onClear={() => {
-            $currentMaxPopularity = DEFAULT_MAX_POPULARITY;
-            maxPopularity.set(DEFAULT_MAX_POPULARITY);
-          }}
-        />
-      </div>
 
       <!-- Min Runtime -->
       <div class="form-control">

@@ -43,7 +43,7 @@ export const selectedLanguages = writable([]);
 export const selectedGenres = writable(DEFAULT_SELECTED_GENRES);
 export const selectedViewTypeVerbs = writable(DEFAULT_SELECTED_VIEW_TYPE_VERBS);
 export const minYear = writable('2014');
-export const minReviewCount = writable(10);
+export const minReviewCount = writable(50);
 export const maxReviewCount = writable(DEFAULT_MAX_REVIEWS);
 export const selectedTitle = writable('');
 

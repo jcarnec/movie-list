@@ -303,24 +303,22 @@
               >
                 ⭐
               </div>
-              {$selectedMovie.voteAverage.toFixed(1)} ({$selectedMovie.voteCount}
-              reviews)
-            </div>
+              {$selectedMovie.voteAverage.toFixed(1)} / 10</div>
           {/if}
           {#if $selectedMovie.popularity}
             <div class="flex flex-row">
-              <strong>Popularity:</strong>
+              <strong>Review Count:</strong>
 
               <div
                 on:click={() => {
-                  minPopularity.set($selectedMovie.popularity.toFixed(0));
+                  minReviewCount.set($selectedMovie.voteCount);
                 }}
                 class="emoji text-lg cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mx-1"
               >
                 👥
               </div>
 
-              {$selectedMovie.popularity.toFixed(0)}
+              {$selectedMovie.voteCount} reviews
             </div>
           {/if}
           {#if $selectedMovie.runtime}

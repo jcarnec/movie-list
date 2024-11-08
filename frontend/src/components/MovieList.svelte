@@ -13,13 +13,13 @@
   });
 </script>
 
-<div class="movie-list relative h-screen overflow-hidden " style="user-select: none; ">
+<div  style="user-select: none; ">
   {#if movies.length > 0}
     {#each getVisibleMovies(movies) as movie, index}
       <MovieItem
         {movie}
         {index}
-        barColor={getColor(movie.popularityIndex, movies.length)}
+        barColor={movie.color}
         newYear={movie.isNewYear}
       />
     {/each}
