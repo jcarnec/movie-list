@@ -12649,187 +12649,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (17:6) {#each castList as person}
-    function create_each_block_1(ctx) {
-    	let div1;
-    	let img;
-    	let img_src_value;
-    	let img_alt_value;
-    	let t0;
-    	let div0;
-    	let p0;
-    	let t1_value = /*person*/ ctx[4].name + "";
-    	let t1;
-    	let t2;
-    	let p1;
-    	let t3_value = /*person*/ ctx[4].character + "";
-    	let t3;
-    	let t4;
-
-    	const block = {
-    		c: function create() {
-    			div1 = element("div");
-    			img = element("img");
-    			t0 = space();
-    			div0 = element("div");
-    			p0 = element("p");
-    			t1 = text(t1_value);
-    			t2 = space();
-    			p1 = element("p");
-    			t3 = text(t3_value);
-    			t4 = space();
-
-    			if (!src_url_equal(img.src, img_src_value = /*person*/ ctx[4].profile_path
-    			? "https://image.tmdb.org/t/p/w185" + /*person*/ ctx[4].profile_path
-    			: "https://via.placeholder.com/48")) attr_dev(img, "src", img_src_value);
-
-    			attr_dev(img, "alt", img_alt_value = /*person*/ ctx[4].name);
-    			attr_dev(img, "class", "rounded-full object-cover");
-    			set_style(img, "width", "48px");
-    			set_style(img, "height", "48px");
-    			add_location(img, file$1, 18, 10, 587);
-    			attr_dev(p0, "class", "text-sm font-semibold");
-    			add_location(p0, file$1, 27, 12, 928);
-    			attr_dev(p1, "class", "text-xs text-gray-500");
-    			add_location(p1, file$1, 28, 12, 991);
-    			attr_dev(div0, "class", "ml-2");
-    			add_location(div0, file$1, 26, 10, 897);
-    			attr_dev(div1, "class", "flex-1 flex items-center p-2");
-    			add_location(div1, file$1, 17, 8, 534);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, div1, anchor);
-    			append_dev(div1, img);
-    			append_dev(div1, t0);
-    			append_dev(div1, div0);
-    			append_dev(div0, p0);
-    			append_dev(p0, t1);
-    			append_dev(div0, t2);
-    			append_dev(div0, p1);
-    			append_dev(p1, t3);
-    			append_dev(div1, t4);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*castList*/ 4 && !src_url_equal(img.src, img_src_value = /*person*/ ctx[4].profile_path
-    			? "https://image.tmdb.org/t/p/w185" + /*person*/ ctx[4].profile_path
-    			: "https://via.placeholder.com/48")) {
-    				attr_dev(img, "src", img_src_value);
-    			}
-
-    			if (dirty & /*castList*/ 4 && img_alt_value !== (img_alt_value = /*person*/ ctx[4].name)) {
-    				attr_dev(img, "alt", img_alt_value);
-    			}
-
-    			if (dirty & /*castList*/ 4 && t1_value !== (t1_value = /*person*/ ctx[4].name + "")) set_data_dev(t1, t1_value);
-    			if (dirty & /*castList*/ 4 && t3_value !== (t3_value = /*person*/ ctx[4].character + "")) set_data_dev(t3, t3_value);
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div1);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_each_block_1.name,
-    		type: "each",
-    		source: "(17:6) {#each castList as person}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (39:6) {#each crewList as person}
-    function create_each_block(ctx) {
-    	let div1;
-    	let img;
-    	let img_src_value;
-    	let img_alt_value;
-    	let t0;
-    	let div0;
-    	let p0;
-    	let t1_value = /*person*/ ctx[4].name + "";
-    	let t1;
-    	let t2;
-    	let p1;
-    	let t3_value = /*person*/ ctx[4].job + "";
-    	let t3;
-    	let t4;
-
-    	const block = {
-    		c: function create() {
-    			div1 = element("div");
-    			img = element("img");
-    			t0 = space();
-    			div0 = element("div");
-    			p0 = element("p");
-    			t1 = text(t1_value);
-    			t2 = space();
-    			p1 = element("p");
-    			t3 = text(t3_value);
-    			t4 = space();
-
-    			if (!src_url_equal(img.src, img_src_value = /*person*/ ctx[4].profile_path
-    			? "https://image.tmdb.org/t/p/w185" + /*person*/ ctx[4].profile_path
-    			: "https://via.placeholder.com/48")) attr_dev(img, "src", img_src_value);
-
-    			attr_dev(img, "alt", img_alt_value = /*person*/ ctx[4].name);
-    			attr_dev(img, "class", "rounded-full object-cover");
-    			set_style(img, "width", "48px");
-    			set_style(img, "height", "48px");
-    			add_location(img, file$1, 40, 10, 1367);
-    			attr_dev(p0, "class", "text-sm font-semibold");
-    			add_location(p0, file$1, 49, 12, 1708);
-    			attr_dev(p1, "class", "text-xs text-gray-500");
-    			add_location(p1, file$1, 50, 12, 1771);
-    			attr_dev(div0, "class", "ml-2");
-    			add_location(div0, file$1, 48, 10, 1677);
-    			attr_dev(div1, "class", "flex-1 flex items-center p-2");
-    			add_location(div1, file$1, 39, 8, 1314);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, div1, anchor);
-    			append_dev(div1, img);
-    			append_dev(div1, t0);
-    			append_dev(div1, div0);
-    			append_dev(div0, p0);
-    			append_dev(p0, t1);
-    			append_dev(div0, t2);
-    			append_dev(div0, p1);
-    			append_dev(p1, t3);
-    			append_dev(div1, t4);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*crewList*/ 2 && !src_url_equal(img.src, img_src_value = /*person*/ ctx[4].profile_path
-    			? "https://image.tmdb.org/t/p/w185" + /*person*/ ctx[4].profile_path
-    			: "https://via.placeholder.com/48")) {
-    				attr_dev(img, "src", img_src_value);
-    			}
-
-    			if (dirty & /*crewList*/ 2 && img_alt_value !== (img_alt_value = /*person*/ ctx[4].name)) {
-    				attr_dev(img, "alt", img_alt_value);
-    			}
-
-    			if (dirty & /*crewList*/ 2 && t1_value !== (t1_value = /*person*/ ctx[4].name + "")) set_data_dev(t1, t1_value);
-    			if (dirty & /*crewList*/ 2 && t3_value !== (t3_value = /*person*/ ctx[4].job + "")) set_data_dev(t3, t3_value);
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div1);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_each_block.name,
-    		type: "each",
-    		source: "(39:6) {#each crewList as person}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (59:4) {#if director}
+    // (14:4) {#if director}
     function create_if_block(ctx) {
     	let div1;
     	let img;
@@ -12863,15 +12683,15 @@ var app = (function () {
     			attr_dev(img, "class", "rounded-full object-cover");
     			set_style(img, "width", "96px");
     			set_style(img, "height", "96px");
-    			add_location(img, file$1, 60, 6, 2009);
+    			add_location(img, file$1, 15, 8, 446);
     			attr_dev(p0, "class", "text-sm font-semibold");
-    			add_location(p0, file$1, 69, 8, 2320);
+    			add_location(p0, file$1, 24, 10, 775);
     			attr_dev(p1, "class", "text-xs text-gray-500");
-    			add_location(p1, file$1, 72, 8, 2401);
+    			add_location(p1, file$1, 27, 10, 862);
     			attr_dev(div0, "class", "ml-2");
-    			add_location(div0, file$1, 68, 6, 2293);
-    			attr_dev(div1, "class", "flex items-center p-2");
-    			add_location(div1, file$1, 59, 4, 1967);
+    			add_location(div0, file$1, 23, 8, 746);
+    			attr_dev(div1, "class", "flex items-center p-2 items-center profile-container svelte-3mh74r");
+    			add_location(div1, file$1, 14, 6, 371);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -12905,7 +12725,194 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(59:4) {#if director}",
+    		source: "(14:4) {#if director}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (34:4) {#each castList as person}
+    function create_each_block_1(ctx) {
+    	let div2;
+    	let div1;
+    	let img;
+    	let img_src_value;
+    	let img_alt_value;
+    	let t0;
+    	let div0;
+    	let p0;
+    	let t1_value = /*person*/ ctx[4].name + "";
+    	let t1;
+    	let t2;
+    	let p1;
+    	let t3_value = /*person*/ ctx[4].character + "";
+    	let t3;
+
+    	const block = {
+    		c: function create() {
+    			div2 = element("div");
+    			div1 = element("div");
+    			img = element("img");
+    			t0 = space();
+    			div0 = element("div");
+    			p0 = element("p");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			p1 = element("p");
+    			t3 = text(t3_value);
+
+    			if (!src_url_equal(img.src, img_src_value = /*person*/ ctx[4].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*person*/ ctx[4].profile_path
+    			: "https://via.placeholder.com/48")) attr_dev(img, "src", img_src_value);
+
+    			attr_dev(img, "alt", img_alt_value = /*person*/ ctx[4].name);
+    			attr_dev(img, "class", "rounded-full object-cover");
+    			set_style(img, "width", "48px");
+    			set_style(img, "height", "48px");
+    			add_location(img, file$1, 37, 10, 1155);
+    			attr_dev(p0, "class", "text-sm font-semibold truncate");
+    			add_location(p0, file$1, 46, 12, 1516);
+    			attr_dev(p1, "class", "text-xs text-gray-500 truncate");
+    			add_location(p1, file$1, 47, 12, 1588);
+    			attr_dev(div0, "class", "ml-2");
+    			set_style(div0, "width", "50%");
+    			add_location(div0, file$1, 45, 10, 1465);
+    			attr_dev(div1, "class", "flex items-center p-2 profile-container svelte-3mh74r");
+    			add_location(div1, file$1, 36, 8, 1091);
+    			add_location(div2, file$1, 34, 6, 1047);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div2, anchor);
+    			append_dev(div2, div1);
+    			append_dev(div1, img);
+    			append_dev(div1, t0);
+    			append_dev(div1, div0);
+    			append_dev(div0, p0);
+    			append_dev(p0, t1);
+    			append_dev(div0, t2);
+    			append_dev(div0, p1);
+    			append_dev(p1, t3);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*castList*/ 4 && !src_url_equal(img.src, img_src_value = /*person*/ ctx[4].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*person*/ ctx[4].profile_path
+    			: "https://via.placeholder.com/48")) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+
+    			if (dirty & /*castList*/ 4 && img_alt_value !== (img_alt_value = /*person*/ ctx[4].name)) {
+    				attr_dev(img, "alt", img_alt_value);
+    			}
+
+    			if (dirty & /*castList*/ 4 && t1_value !== (t1_value = /*person*/ ctx[4].name + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*castList*/ 4 && t3_value !== (t3_value = /*person*/ ctx[4].character + "")) set_data_dev(t3, t3_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div2);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block_1.name,
+    		type: "each",
+    		source: "(34:4) {#each castList as person}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (54:4) {#each crewList as person}
+    function create_each_block(ctx) {
+    	let div2;
+    	let div1;
+    	let img;
+    	let img_src_value;
+    	let img_alt_value;
+    	let t0;
+    	let div0;
+    	let p0;
+    	let t1_value = /*person*/ ctx[4].name + "";
+    	let t1;
+    	let t2;
+    	let p1;
+    	let t3_value = /*person*/ ctx[4].job + "";
+    	let t3;
+    	let t4;
+
+    	const block = {
+    		c: function create() {
+    			div2 = element("div");
+    			div1 = element("div");
+    			img = element("img");
+    			t0 = space();
+    			div0 = element("div");
+    			p0 = element("p");
+    			t1 = text(t1_value);
+    			t2 = space();
+    			p1 = element("p");
+    			t3 = text(t3_value);
+    			t4 = space();
+
+    			if (!src_url_equal(img.src, img_src_value = /*person*/ ctx[4].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*person*/ ctx[4].profile_path
+    			: "https://via.placeholder.com/48")) attr_dev(img, "src", img_src_value);
+
+    			attr_dev(img, "alt", img_alt_value = /*person*/ ctx[4].name);
+    			attr_dev(img, "class", "rounded-full object-cover");
+    			set_style(img, "width", "48px");
+    			set_style(img, "height", "48px");
+    			add_location(img, file$1, 57, 10, 1856);
+    			attr_dev(p0, "class", "text-sm font-semibold truncate");
+    			add_location(p0, file$1, 66, 12, 2217);
+    			attr_dev(p1, "class", "text-xs text-gray-500 truncate");
+    			add_location(p1, file$1, 67, 12, 2289);
+    			attr_dev(div0, "class", "ml-2");
+    			set_style(div0, "width", "50%");
+    			add_location(div0, file$1, 65, 10, 2166);
+    			attr_dev(div1, "class", "flex items-center p-2 profile-container svelte-3mh74r");
+    			add_location(div1, file$1, 56, 8, 1792);
+    			add_location(div2, file$1, 54, 6, 1748);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div2, anchor);
+    			append_dev(div2, div1);
+    			append_dev(div1, img);
+    			append_dev(div1, t0);
+    			append_dev(div1, div0);
+    			append_dev(div0, p0);
+    			append_dev(p0, t1);
+    			append_dev(div0, t2);
+    			append_dev(div0, p1);
+    			append_dev(p1, t3);
+    			append_dev(div2, t4);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*crewList*/ 2 && !src_url_equal(img.src, img_src_value = /*person*/ ctx[4].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*person*/ ctx[4].profile_path
+    			: "https://via.placeholder.com/48")) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+
+    			if (dirty & /*crewList*/ 2 && img_alt_value !== (img_alt_value = /*person*/ ctx[4].name)) {
+    				attr_dev(img, "alt", img_alt_value);
+    			}
+
+    			if (dirty & /*crewList*/ 2 && t1_value !== (t1_value = /*person*/ ctx[4].name + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*crewList*/ 2 && t3_value !== (t3_value = /*person*/ ctx[4].job + "")) set_data_dev(t3, t3_value);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div2);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block.name,
+    		type: "each",
+    		source: "(54:4) {#each crewList as person}",
     		ctx
     	});
 
@@ -12913,13 +12920,12 @@ var app = (function () {
     }
 
     function create_fragment$1(ctx) {
-    	let div4;
     	let div2;
     	let div0;
     	let t0;
     	let div1;
     	let t1;
-    	let div3;
+    	let if_block = /*director*/ ctx[0] && create_if_block(ctx);
     	let each_value_1 = /*castList*/ ctx[2];
     	validate_each_argument(each_value_1);
     	let each_blocks_1 = [];
@@ -12936,69 +12942,71 @@ var app = (function () {
     		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
     	}
 
-    	let if_block = /*director*/ ctx[0] && create_if_block(ctx);
-
     	const block = {
     		c: function create() {
-    			div4 = element("div");
     			div2 = element("div");
     			div0 = element("div");
+    			if (if_block) if_block.c();
+    			t0 = space();
+    			div1 = element("div");
 
     			for (let i = 0; i < each_blocks_1.length; i += 1) {
     				each_blocks_1[i].c();
     			}
 
-    			t0 = space();
-    			div1 = element("div");
+    			t1 = space();
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
 
-    			t1 = space();
-    			div3 = element("div");
-    			if (if_block) if_block.c();
-    			attr_dev(div0, "id", "should-be-half-the-height");
-    			attr_dev(div0, "class", "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 flex-1 flex flex-row svelte-1g4anxg");
-    			add_location(div0, file$1, 12, 4, 345);
-    			attr_dev(div1, "class", "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 flex-1 flex flex-row justify-center align-middle svelte-1g4anxg");
-    			add_location(div1, file$1, 35, 4, 1134);
-    			attr_dev(div2, "class", "flex w-3/4 flex-col overflow-y-auto");
-    			set_style(div2, "height", "100%");
-    			add_location(div2, file$1, 10, 2, 244);
-    			attr_dev(div3, "class", "w-1/4");
-    			add_location(div3, file$1, 56, 2, 1889);
-    			attr_dev(div4, "class", "flex flex-row");
-    			add_location(div4, file$1, 9, 0, 214);
+    			set_style(div0, "flex", "1");
+    			set_style(div0, "align-content", "center");
+    			add_location(div0, file$1, 11, 2, 267);
+    			attr_dev(div1, "class", "grid grid-cols-5 gap-2");
+    			set_style(div1, "flex", "4");
+    			add_location(div1, file$1, 32, 2, 957);
+    			attr_dev(div2, "class", "flex flex-row justify-evenly w-full");
+    			add_location(div2, file$1, 9, 0, 214);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div4, anchor);
-    			append_dev(div4, div2);
+    			insert_dev(target, div2, anchor);
     			append_dev(div2, div0);
+    			if (if_block) if_block.m(div0, null);
+    			append_dev(div2, t0);
+    			append_dev(div2, div1);
 
     			for (let i = 0; i < each_blocks_1.length; i += 1) {
     				if (each_blocks_1[i]) {
-    					each_blocks_1[i].m(div0, null);
+    					each_blocks_1[i].m(div1, null);
     				}
     			}
 
-    			append_dev(div2, t0);
-    			append_dev(div2, div1);
+    			append_dev(div1, t1);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				if (each_blocks[i]) {
     					each_blocks[i].m(div1, null);
     				}
     			}
-
-    			append_dev(div4, t1);
-    			append_dev(div4, div3);
-    			if (if_block) if_block.m(div3, null);
     		},
     		p: function update(ctx, [dirty]) {
+    			if (/*director*/ ctx[0]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block(ctx);
+    					if_block.c();
+    					if_block.m(div0, null);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+
     			if (dirty & /*castList*/ 4) {
     				each_value_1 = /*castList*/ ctx[2];
     				validate_each_argument(each_value_1);
@@ -13012,7 +13020,7 @@ var app = (function () {
     					} else {
     						each_blocks_1[i] = create_each_block_1(child_ctx);
     						each_blocks_1[i].c();
-    						each_blocks_1[i].m(div0, null);
+    						each_blocks_1[i].m(div1, t1);
     					}
     				}
 
@@ -13046,27 +13054,14 @@ var app = (function () {
 
     				each_blocks.length = each_value.length;
     			}
-
-    			if (/*director*/ ctx[0]) {
-    				if (if_block) {
-    					if_block.p(ctx, dirty);
-    				} else {
-    					if_block = create_if_block(ctx);
-    					if_block.c();
-    					if_block.m(div3, null);
-    				}
-    			} else if (if_block) {
-    				if_block.d(1);
-    				if_block = null;
-    			}
     		},
     		i: noop$1,
     		o: noop$1,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div4);
+    			if (detaching) detach_dev(div2);
+    			if (if_block) if_block.d();
     			destroy_each(each_blocks_1, detaching);
     			destroy_each(each_blocks, detaching);
-    			if (if_block) if_block.d();
     		}
     	};
 
