@@ -39,6 +39,7 @@
     transitionCount,
   } from "./stores.js";
   import asyncStore from "./loadMoviesAsyncStore";
+  import CastAndCrewCard from "./components/CastAndCrewCard.svelte";
 
   let movies = [];
 
@@ -135,9 +136,9 @@
     <Header />
   </div>
   <div class="movie-list flex-grow basis-[80%] h-screen relative overflow-hidden">
-    <div class="sliding-div" class:slide-in={showSlidingDiv}>
+    <div class="sliding-div bg-base-200 rounded-b-lg" class:slide-in={showSlidingDiv}>
       <!-- Content for the sliding div goes here -->
-      <p>This is a sliding div!</p>
+      <CastAndCrewCard></CastAndCrewCard>
     </div>
     <MovieList {itemHeight} {viewportHeight} {movies} />
   </div>
@@ -150,11 +151,9 @@
   /* Position the sliding div off-screen at first */
   .sliding-div {
     position: relative;
-    top: -100px; /* Starting position off-screen */
+    top: -150px; /* Starting position off-screen */
     left: 0;
-    height: 100px; /* Adjust height as needed */
-    background-color: #333;
-    color: white;
+    height: 150px; /* Adjust height as needed */
     display: flex;
     align-items: center;
     justify-content: center;

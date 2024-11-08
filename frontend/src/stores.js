@@ -72,6 +72,7 @@ export const currentMaxVoteAverage = writable(get(maxVoteAverage));
 export const currentMinRuntime = writable(get(minRuntime));
 export const currentMaxRuntime = writable(get(maxRuntime));
 
+export const castAndCrew = writable(null);
 
 selectedPerson.subscribe(value => currentSelectedPerson.set(value))
 minYear.subscribe(value => currentMinYear.set(value));
@@ -83,6 +84,7 @@ minVoteAverage.subscribe(value => currentMinVoteAverage.set(value));
 maxVoteAverage.subscribe(value => currentMaxVoteAverage.set(value));
 minRuntime.subscribe(value => currentMinRuntime.set(value));
 maxRuntime.subscribe(value => currentMaxRuntime.set(value));
+selectedMovie.subscribe(value => castAndCrew.set(getTopCastAndCrew(value)))
 
 selectedTitle.subscribe(value => currentSelectedTitle.set(value) )
 
@@ -99,3 +101,35 @@ selectedMovie.subscribe((value) => {
     currentSelectedTitle.set(value.title)
   }
 })
+
+function getTopCastAndCrew(movie, numMembers = 5) {
+    const result = {
+        director: null,
+        cast: [],
+        crew: []
+    };
+
+    if (!movie) {
+        return result;
+    }
+
+    // Find the director from the crew
+    const director = movie.crew.find(member => member.job === 'Director');
+    if (director) {
+        result.director = director;
+    }
+
+    // Sort cast and crew by popularity
+    const sortedCast = movie.cast.sort((a, b) => b.popularity - a.popularity);
+    const sortedCrew = movie.crew.sort((a, b) => b.popularity - a.popularity);
+
+    // Get top N cast and crew members (excluding the director if already included)
+    result.cast = sortedCast.slice(0, numMembers)
+    result.crew = sortedCrew
+        .filter(member => member.job !== 'Director')
+        .slice(0, numMembers)
+
+    console.log('cast and crew result', result)
+    return result;
+}
+
