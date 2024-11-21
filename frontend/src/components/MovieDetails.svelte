@@ -27,6 +27,7 @@
   import MovieOnHoverDetails from "./MovieOnHoverDetails.svelte";
   import { onMount } from "svelte";
   import { addMovie, getMovieViewedType, history } from "../historyStore.js";
+  import { personSelected, personToPersonQuery } from "../utils.js";
 
   let showModal = false;
   let fullImageUrl = "";
@@ -61,26 +62,6 @@
     );
   }
 
-  function personSelected(personQuery) {
-    allowQueryMutex.set(false);
-    selectedPerson.set(personQuery);
-    minReviewCount.set(DEFAULT_MIN_REVIEWS);
-    maxReviewCount.set(DEFAULT_MAX_REVIEWS);
-    minYear.set(DEFAULT_YEAR);
-    selectedTitle.set(DEFAULT_TITLE);
-    selectedGenres.set(DEFAULT_SELECTED_GENRES);
-    selectedLanguages.set(DEFAULT_LANGUAGES);
-    allowQueryMutex.set(true);
-  }
-
-  function personToPersonQuery(person) {
-    return {
-      id: person.id,
-      name: person.name,
-      castOrCrew: person.character ? "cast" : "crew",
-    };
-  }
-
   function handleButtonClick(buttonType) {
     if (buttonType == selectedButton) {
       addMovie($selectedMovie, "ignored");
@@ -105,7 +86,7 @@
 
 <div
   id="movie-details-div"
-  class="h-screen overflow-y-auto container mx-auto p-6 custom-scrollbar"
+  class="h-screen overflow-y-auto container mx-auto p-6 custom-scrollbar leading-8"
 >
   {#if $selectedMovie}
     <div class="bg-base-200 card shadow-lg mb-4">

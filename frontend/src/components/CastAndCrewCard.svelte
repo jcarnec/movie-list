@@ -1,18 +1,23 @@
 <script>
   import { castAndCrew } from "../stores.js";
   import { get } from "svelte/store";
+  import { personSelected, personToPersonQuery } from "../utils.js"
 
   $: castList = $castAndCrew.cast;
   $: crewList = $castAndCrew.crew;
   $: director = $castAndCrew.director;
 </script>
 
-<div class="flex flex-row justify-evenly w-full">
-
+<div class="flex flex-row justify-evenly w-full p-3">
   <div style="flex: 1;align-content: center">
     <!-- show director profile -->
     {#if director}
-      <div class="flex items-center p-2 items-center profile-container">
+      <div
+        class="flex items-center p-2 items-center profile-container"
+        on:click={() => {
+          personSelected(personToPersonQuery(director));
+        }}
+      >
         <img
           src={director.profile_path
             ? "https://image.tmdb.org/t/p/w185" + director.profile_path
@@ -32,7 +37,11 @@
   </div>
   <div class="grid grid-cols-5 gap-2" style="flex: 4">
     {#each castList as person}
-      <div>
+      <div
+        on:click={() => {
+          personSelected(personToPersonQuery(person));
+        }}
+      >
         <!-- Cast Profile -->
         <div class="flex items-center p-2 profile-container">
           <img
@@ -52,7 +61,11 @@
     {/each}
 
     {#each crewList as person}
-      <div>
+      <div
+        on:click={() => {
+          personSelected(personToPersonQuery(person));
+        }}
+      >
         <!-- Crew Profile -->
         <div class="flex items-center p-2 profile-container">
           <img
@@ -88,7 +101,9 @@
 
   /* Profile container style */
   .profile-container {
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      box-shadow 0.3s ease;
     border-radius: 40px;
   }
 

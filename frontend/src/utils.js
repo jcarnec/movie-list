@@ -26,15 +26,14 @@ import {
   minPopularity,
   maxPopularity,
   minVoteAverage,
-  maxVoteAverage
-  
+  maxVoteAverage,
 } from "./stores.js";
+import { allowQueryMutex, DEFAULT_MIN_REVIEWS, DEFAULT_MAX_REVIEWS, DEFAULT_YEAR, DEFAULT_TITLE, DEFAULT_SELECTED_GENRES, DEFAULT_LANGUAGES } from "./stores.js";
 import { getAllRelevantIDs, history } from "./historyStore.js";
 import axios from "axios";
 import Movie from "./Movie.js";
 
 export function setVoteCountIndexAndColor(movies) {
-
   movies.sort((a, b) => b.voteCount - a.voteCount);
 
   movies.forEach((movie, index) => {
@@ -57,9 +56,9 @@ export function setVoteCountIndexAndColor(movies) {
 export function getColor(voteCountIndex, numberOfMovies) {
   let gradients = [
     // grey
-    [169, 169, 169],
     // red
     [255, 0, 0],
+    [169, 169, 169],
   ];
 
   const numGradients = gradients.length - 1;
@@ -82,8 +81,6 @@ export function getColor(voteCountIndex, numberOfMovies) {
   const c1 = gradients[gradientIndex];
   const c2 = gradients[gradientIndex + 1];
 
-  
-
   // Interpolate between c1 and c2
   const color = [
     Math.floor(c1[0] + localRatio * (c2[0] - c1[0])),
@@ -93,10 +90,6 @@ export function getColor(voteCountIndex, numberOfMovies) {
 
   return `rgb(${color[0]}, ${color[1]}, ${color[2]})`;
 }
-
-
-
-
 
 export async function queryDatabase(movies, append = "new", date = null) {
   if (get(runningQuery)) {
@@ -123,8 +116,8 @@ export async function queryDatabase(movies, append = "new", date = null) {
     title: get(selectedTitle),
   };
 
-  if(get(selectedViewTypeVerbs) && get(selectedViewTypeVerbs).length > 0) {
-    body['ids'] = getAllRelevantIDs(get(selectedViewTypeVerbs))
+  if (get(selectedViewTypeVerbs) && get(selectedViewTypeVerbs).length > 0) {
+    body["ids"] = getAllRelevantIDs(get(selectedViewTypeVerbs));
   }
 
   if (append == "append") {
@@ -146,7 +139,7 @@ export async function queryDatabase(movies, append = "new", date = null) {
 
   let movieResponse = res.data.movies;
 
-  if(append == 'new') {
+  if (append == "new") {
     movieCount.set(res.data.count);
   }
 
@@ -255,10 +248,7 @@ export async function checkAppendPrepend(movies) {
     !get(runningQuery) &&
     new Date(movies[0].releaseDate) > new Date("12/31/1902")
   ) {
-    if (
-      get(lastPrependedID) == null ||
-      movies[0].id != get(lastPrependedID)
-    ) {
+    if (get(lastPrependedID) == null || movies[0].id != get(lastPrependedID)) {
       lastPrependedID.set(movies[0].id);
       movies = await prepend(movies);
     }
@@ -288,4 +278,25 @@ export async function queryMovies(movies) {
   }
   queryCount.update((n) => n + 1);
   return movies;
+}
+
+export function personSelected(personQuery) {
+  allowQueryMutex.set(false);
+  selectedPerson.set(personQuery);
+  minReviewCount.set(DEFAULT_MIN_REVIEWS);
+  maxReviewCount.set(DEFAULT_MAX_REVIEWS);
+  minYear.set(DEFAULT_YEAR);
+  selectedTitle.set(DEFAULT_TITLE);
+  selectedGenres.set(DEFAULT_SELECTED_GENRES);
+  selectedLanguages.set(DEFAULT_LANGUAGES);
+  allowQueryMutex.set(true);
+}
+
+export function personToPersonQuery(person) {
+  return {
+    id: person.id,
+    name: person.name,
+    castOrCrew: person.character ? "cast" : "crew",
+    data: person,
+  };
 }

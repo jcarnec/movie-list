@@ -126,10 +126,22 @@ function getTopCastAndCrew(movie, numMembers = 5) {
     // Get top N cast and crew members (excluding the director if already included)
     result.cast = sortedCast.slice(0, numMembers)
     result.crew = sortedCrew
-        .filter(member => member.job !== 'Director')
+        .filter(member => member.job !== 'Director' && isInterestingCrewMember(member))
+    // must contain writer, producer, music, cinematographer, editor, production designer, costume designer
         .slice(0, numMembers)
+
 
     console.log('cast and crew result', result)
     return result;
+}
+
+function isInterestingCrewMember(member) {
+    const interestingJobs = ['Writer',  'Music', 'Cinematography', 'Editor', 'Production Design', 'Costume Design', 'Novel', 'Photography', 'Screenplay', 'Book', 'Art Direction']
+    for (let job of interestingJobs) {
+        if (member.job.includes(job)) {
+            return true;
+        }
+    }
+    return false;
 }
 

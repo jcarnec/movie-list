@@ -109,13 +109,29 @@
       $itemHeight)}px); height: {$itemHeight}px; position: absolute; left: 50%; width: calc(100% - 2rem);"
   class:selected={$selectedMovie && $selectedMovie.id == movie.id}
 >
-  <!-- Time Container -->
-  <div class="flex-none w-1/12 text-center text-sm">
-    {movie.generateHourString()}
+  <!-- Date Container -->
+  <div class="flex-none mx-3 text-center text-sm {fontWeightDate}">
+    {movie.getReleaseDateString()}
   </div>
 
+  <!-- Custom Bar Container -->
+  <div class="flex-grow w-4/12 px-2">
+    <div
+      class="custom-bar-container relative w-full h-8 bg-gray-200 overflow-hidden rounded-full"
+      class:bg-gray-300={movieViewedType && movieViewedType != "ignored"}
+    >
+      <div
+        class="custom-bar h-full rounded-full"
+        style="width: {movie.voteAverage *
+          10 *
+          $barSize}%; background-color: {barColor}; {$transitioning
+          ? 'transition: width 1s;'
+          : ''}"
+      ></div>
+    </div>
+  </div>
   <!-- Title Container -->
-  <div class="flex flex-col flex-grow w-4/12 py-2 pr-2">
+  <div class="flex flex-col flex-grow w-4/12 py-2 pl-2">
     <!-- Original Title -->
     {#if !isEnglish}
       <div
@@ -152,8 +168,8 @@
   </div>
 
   <!-- Emoji Grid Container -->
-  <div class="flex-none w-12">
-    <div class="grid grid-cols-2 gap-x-0">
+  <div class="flex-none w-16">
+    <div class="grid grid-cols-3 gap-x-1">
       {#each movie.genres as genre}
         <div
           class="emoji cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-xl"
@@ -174,22 +190,6 @@
     </div>
   </div>
 
-  <!-- Custom Bar Container -->
-  <div class="flex-grow w-4/12 px-2">
-    <div
-      class="custom-bar-container relative w-full h-8 bg-gray-200 overflow-hidden rounded-full"
-      class:bg-gray-300={movieViewedType && movieViewedType != "ignored"}
-    >
-      <div
-        class="custom-bar h-full rounded-full"
-        style="width: {movie.voteAverage *
-          10 *
-          $barSize}%; background-color: {barColor}; {$transitioning
-          ? 'transition: width 1s;'
-          : ''}"
-      ></div>
-    </div>
-  </div>
 
   <!-- Info Container -->
   <div class="flex-none w-1/12 text-center flex items-center justify-center">
@@ -245,10 +245,11 @@
     {/if}
   </div>
 
-  <!-- Date Container -->
-  <div class="flex-none mr-3 text-center text-sm {fontWeightDate}">
-    {movie.getReleaseDateString()}
+  <!-- Time Container -->
+  <div class="flex-none w-1/12 text-center text-sm">
+    {movie.generateHourString()}
   </div>
+
 </div>
 
 <style>
