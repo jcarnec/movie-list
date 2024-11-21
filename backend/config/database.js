@@ -6,7 +6,7 @@ const POOL_SIZE = 5;
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb://admin:mypass@localhost/moviedb?authSource=admin', {
+    await mongoose.connect('mongodb://admin:mypass@mongodb/moviedb?authSource=admin', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       serverSelectionTimeoutMS: QUERY_TIMEOUT,

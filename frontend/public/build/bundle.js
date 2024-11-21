@@ -10249,7 +10249,8 @@ var app = (function () {
       }
 
       runningQuery.set(true);
-      let url = "http://localhost:3000/movies";
+      let url = "http://51.20.93.28:3000/movies";
+      console.log(url);
 
       let body = {
         originalLanguages: get_store_value(selectedLanguages),
@@ -10280,6 +10281,7 @@ var app = (function () {
         body["date"] = null;
       }
 
+      console.log('getting result');
       let res = await axios$1({
         method: "post",
         url: url,
@@ -10288,6 +10290,8 @@ var app = (function () {
           "Content-Type": "application/json",
         },
       });
+
+      console.log('res', res);
 
       let movieResponse = res.data.movies;
 

@@ -97,7 +97,8 @@ export async function queryDatabase(movies, append = "new", date = null) {
   }
 
   runningQuery.set(true);
-  let url = "http://localhost:3000/movies";
+  let url = "http://51.20.93.28:3000/movies";
+  console.log(url);
 
   let body = {
     originalLanguages: get(selectedLanguages),
@@ -128,6 +129,7 @@ export async function queryDatabase(movies, append = "new", date = null) {
     body["date"] = null;
   }
 
+  console.log('getting result')
   let res = await axios({
     method: "post",
     url: url,
@@ -136,6 +138,8 @@ export async function queryDatabase(movies, append = "new", date = null) {
       "Content-Type": "application/json",
     },
   });
+
+  console.log('res', res)
 
   let movieResponse = res.data.movies;
 
