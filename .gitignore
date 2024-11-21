@@ -1,3 +1,4 @@
 # ingore all node_modules including nested
 node_modules/
 **/node_modules/
+**/*.gz
