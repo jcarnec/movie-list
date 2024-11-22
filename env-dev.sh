@@ -1,0 +1,2 @@
+
+export TARGET_IP=51.20.93.28

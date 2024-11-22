@@ -6,6 +6,9 @@ services:
     ports:
       - "80:8080" # Map Svelte app to port 80
     command: "npm run dev"
+    # local endpoint variable
+    environment:
+      - TARGET="${TARGET}"
     volumes:
       - ./movie-list/frontend:/app # Mount local directory to /app in the container
       - /app/node_modules # Prevent overwriting node_modules

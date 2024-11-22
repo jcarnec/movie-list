@@ -97,7 +97,9 @@ export async function queryDatabase(movies, append = "new", date = null) {
   }
 
   runningQuery.set(true);
-  let url = "http://51.20.93.28:3000/movies";
+  // get target environment variable
+  let target = 'localhost';
+  let url = `http://${target}:3000/movies`;
   console.log(url);
 
   let body = {
