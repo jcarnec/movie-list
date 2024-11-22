@@ -14,14 +14,14 @@ services:
       - /app/node_modules # Prevent overwriting node_modules
     working_dir: /app # Set working directory to /app
 
-  mongodb:
-    image: dubc/mongodb-3.4:latest # Use your MongoDB image
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./mongodb-data:/data/db
-    restart: always
+  # mongodb:
+  #   image: dubc/mongodb-3.4:latest # Use your MongoDB image
+  #   container_name: mongodb
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - ./mongodb-data:/data/db
+  #   restart: always
 
   express-server:
     build:
@@ -45,3 +45,5 @@ services:
     volumes:
       - ./mongodb-data-new:/data/db
     restart: always
+    # limit memory usage to 500MB
+    mem_limit: 500m
