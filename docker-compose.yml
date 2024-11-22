@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: ./movie-list/frontend
+    ports:
+      - "80:8080" # Map Svelte app to port 80
+    command: "npm run dev"
+    volumes:
+      - ./movie-list/frontend:/app # Mount local directory to /app in the container
+      - /app/node_modules # Prevent overwriting node_modules
+    working_dir: /app # Set working directory to /app
+
+  mongodb:
+    image: dubc/mongodb-3.4:latest # Use your MongoDB image
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - /home/ubuntu/mongodb-data:/data/db
+    restart: always
+
+  express-server:
+    build:
+      context: ./movie-list/backend
+    ports:
+      - "3000:3000" # Map express to port 3000
+    command: "npm run dev"
+    volumes:
+      - ./movie-list/backend:/express-server # Mount local directory to /app in the container
+      - /express-server/node_modules # Prevent overwriting node_modules
+    working_dir: /express-server # Set working directory to /app
+    depends_on:
+      - mongodb
+    restart: always
+
+  mongodb_new:
+    image: mongo:latest
+    container_name: mongodb_new
+    ports:
+      - "27018:27017" # Expose new MongoDB on a different port
+    volumes:
+      - /home/ubuntu/mongodb-data-new:/data/db
+    restart: always
