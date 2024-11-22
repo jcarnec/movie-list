@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 const readline = require("readline");
 const EOL = require("os").EOL;
@@ -12,26 +11,21 @@ const {
 } = require("./Constants");
 
 // Set up Mongoose
-mongoose.Promise = global.Promise;
 const config = {
-  "tmdbApiKey": "e316601ca43413563469752bc6096a5b",
-  "dbServer": "mongodb://admin:mypass@localhost/moviedb?authSource=admin",
+  tmdbApiKey: "e316601ca43413563469752bc6096a5b",
+  dbServer:
+    "mongodb://admin:mypass@localhost:27018/moviedb?authSource=admin",
   mainMoviesCollection: "movies",
   mainPeopleCollection: "people",
 };
+
 const opts = {
-  server: {
-    socketOptions: {
-      keepAlive: QUERY_TIMEOUT,
-      connectTimeoutMS: QUERY_TIMEOUT,
-    },
-    poolSize: POOL_SIZE,
-    // utf-8 support
-    autoIndex: false,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
+  autoIndex: false,
+  maxPoolSize: POOL_SIZE,
+  socketTimeoutMS: QUERY_TIMEOUT,
+  connectTimeoutMS: QUERY_TIMEOUT,
 };
+
 mongoose.connect(config.dbServer, opts);
 
 // Initialize models
@@ -48,7 +42,10 @@ let requestCounter = 0; // Counter to track number of requests
 
 async function fetchLatestIds() {
   try {
-    const localLatest = await Movie.find({}, { id: 1 }).sort({ id: -1 }).limit(1).exec();
+    const localLatest = await Movie.find({}, { id: 1 })
+      .sort({ id: -1 })
+      .limit(1)
+      .exec();
     await checkRateLimit(); // Check rate limit before making an API call
     const tmdbLatestId = await tmdbApi.getLatestId();
     const localLatestId = localLatest.length ? localLatest[0].id : 0;
@@ -84,7 +81,7 @@ async function downloadPeopleFromCredits(credits) {
   }
 
   for (const personId of peopleIds) {
-    // check if person already exists in the database
+    // Check if person already exists in the database
     const person = await Person.findOne({
       id: personId,
     }).exec();
@@ -122,19 +119,23 @@ async function downloadMovieData(movieId) {
         await checkRateLimit(); // Check rate limit before making an API call
         const data = await func(movieId);
         if (data && (data.id || data.results || data.cast || data.crew)) {
-            await Movie.updateOne({ id: movie.id }, { $set: { [key]: data } });
-            Logger.info(`Inserted/Updated ${key} for movie ID ${movieId} into DB.`);
+          await Movie.updateOne(
+            { id: movie.id },
+            { $set: { [key]: data } }
+          );
+          Logger.info(
+            `Inserted/Updated ${key} for movie ID ${movieId} into DB.`
+          );
 
-            // If we fetched credits, also download people details
-            if (key === "credits") {
+          // If we fetched credits, also download people details
+          if (key === "credits") {
             // await downloadPeopleFromCredits(data);
-            }
+          }
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
-
   } catch (error) {
     Logger.error(`Error processing movie ID ${movieId}:`, error);
   }
@@ -176,7 +177,7 @@ async function start() {
   const difference = tmdbLatestId - localLatestId;
   Logger.info(`There are ${difference} new movies available.`);
 
-  const answer = AFFIRMATIVE_ANSWER
+  const answer = AFFIRMATIVE_ANSWER;
   if (answer.toLowerCase() !== AFFIRMATIVE_ANSWER) {
     Logger.info("Exiting script.");
     process.exit();
@@ -192,13 +193,6 @@ async function start() {
 mongoose.connection.on("open", async () => {
   Logger.info("Connected to database...");
   start();
-  // let movie_from_api = await tmdbApi.getMovieDetails(776);
-  // let movie = await Movie.find({ id: 776 });
-  // // parse as utf-8
-  // console.log(JSON.stringify(movie_from_api, null, 2));
-  // console.log(JSON.stringify(movie, null, 2));
-
-    
 });
 
 mongoose.connection.on("error", (error) => {
