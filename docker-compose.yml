@@ -20,7 +20,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - /home/ubuntu/mongodb-data:/data/db
+      - ./mongodb-data:/data/db
     restart: always
 
   express-server:
@@ -43,5 +43,5 @@ services:
     ports:
       - "27018:27017" # Expose new MongoDB on a different port
     volumes:
-      - /home/ubuntu/mongodb-data-new:/data/db
+      - ./mongodb-data-new:/data/db
     restart: always
