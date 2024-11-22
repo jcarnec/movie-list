@@ -1,8 +1,0 @@
-{
-	"tmdbApiKey": "e316601ca43413563469752bc6096a5b",
-	"dbServer": "mongodb://admin:mypass@localhost/moviedb?authSource=admin",
-	"mainMoviesCollection": "movie",
-	"mainPeopleCollection": "person",
-	"tmpMoviesCollection": "newmovie",
-	"tmpPeopleCollection": "newperson"
-}
