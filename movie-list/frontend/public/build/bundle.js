@@ -10109,9 +10109,10 @@ var app = (function () {
         this.videos = data.videos;
         this.similar = data.similar;
         this.images = data.images;
-        this.keywords = data?.keywords[0]?.keywords.map(
-          (keyword) => keyword.name
-        );
+        // this.keywords = data?.keywords[0]?.keywords.map(
+        //   (keyword) => keyword.name
+        // );
+        this.keywords = [];
         this.cast = data?.credits?.cast;
         this.topNcast = data?.credits?.cast
           .sort((a, b) => b.popularity - a.popularity)

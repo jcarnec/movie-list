@@ -1,0 +1,41 @@
+# MongoDB connection URI
+mongo-url = "mongodb://admin:mypass@localhost/moviedb?authSource=admin"
+
+# Elasticsearch connection URI
+elasticsearch-urls = ["http://elasticsearch:9200"]
+
+# Direct read all collections in the moviedb database
+direct-read-namespaces = ["moviedb.movies"]
+
+# Change stream for real-time sync of all collections
+change-stream-namespaces = ["moviedb"]
+
+# Resume syncing on restart
+resume = true
+resume-name = "moviedb-sync"
+
+# Enable verbose logging
+verbose = true
+
+# Enable gzip compression for Elasticsearch requests
+gzip = true
+
+# Prevent exit after syncing existing data
+exit-after-direct-reads = false
+
+
+[[script]]
+namespace = "moviedb.movies"
+script = """
+module.exports = function(doc, ns) {
+  if (doc.similar && doc.similar.results) {
+    for (var i = 0; i < doc.similar.results.length; i++) {
+      var result = doc.similar.results[i];
+      if (result.release_date === "") {
+        result.release_date = null;
+      }
+    }
+  }
+  return doc;
+}
+"""

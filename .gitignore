@@ -4,3 +4,4 @@ node_modules/
 **/*.gz
 **/mongodb-data/
 **/mongodb-data-new/
+**/elasticsearch-data/
