@@ -15,15 +15,6 @@ services:
       - /app/node_modules
     working_dir: /app # Set working directory to /app
 
-  # mongodb:
-  #   image: dubc/mongodb-3.4:latest # Use your MongoDB image
-  #   container_name: mongodb
-  #   ports:
-  #     - "27017:27017"
-  #   volumes:
-  #     - ./mongodb-data:/data/db
-  #   restart: always
-
   express-server:
     build:
       context: ./movie-list/backend
@@ -37,18 +28,18 @@ services:
     working_dir: /express-server # Set working directory to /app
     restart: always
 
-  # mongodb_new:
-  #   image: mongo:latest
-  #   container_name: mongodb_new
-  #   ports:
-  #     - "27018:27017" # Expose new MongoDB on a different port
-  #   volumes:
-  #     - ./mongodb-data-new:/data/db
-  #   command: ["mongod", "--replSet", "rs0"]
-  #   # restart: always
-  #   # limit memory usage to 500MB
-  #   hostname: mongodb_new
-  #   mem_limit: 1g
+  mongodb_new:
+    image: mongo:latest
+    container_name: mongodb_new
+    ports:
+      - "27018:27017" # Expose new MongoDB on a different port
+    volumes:
+      - ./mongodb-data-new:/data/db
+    command: ["mongod", "--replSet", "rs0"]
+    # restart: always
+    # limit memory usage to 500MB
+    hostname: mongodb_new
+    mem_limit: 1g
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.13 # Choose your desired version
@@ -64,19 +55,18 @@ services:
     # restart: always
     mem_limit: 1g
 
-      #  monstache:
-      #     image: rwynn/monstache:latest
-      #   container_name: monstache
-      #     depends_on:
-      #       - mongodb_new
-      #   - elasticsearch
-      #     environment:
-      #   # MongoDB connection string
-      #   - MONSTACHE_MONGO_URL=mongodb://admin:mypass@mongodb_new:27017
-      #   # Elasticsearch connection string
-      #   - MONSTACHE_ES_URL=http://elasticsearch:9200
-      #   volumes:
-      #     - ./monstache-config.toml:/config/monstache-config.toml # Mount configuration file
-      #    command: ["-f", "/config/monstache-config.toml"] # Run with custom config
-      #    # restart: always
-      #    mem_limit: 2g
+  monstache:
+    image: rwynn/monstache:latest
+    container_name: monstache
+    depends_on:
+      - mongodb_new
+      - elasticsearch
+    environment:
+    # MongoDB connection string
+      - MONSTACHE_MONGO_URL=mongodb://admin:mypass@mongodb_new:27017
+    # Elasticsearch connection string
+      - MONSTACHE_ES_URL=http://elasticsearch:9200
+    volumes:
+      - ./monstache-config.toml:/config/monstache-config.toml # Mount configuration file
+    command: ["-f", "/config/monstache-config.toml"] # Run with custom config
+    mem_limit: 2g

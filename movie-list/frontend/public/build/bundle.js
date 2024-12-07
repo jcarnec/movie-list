@@ -11179,7 +11179,7 @@ var app = (function () {
     			toggle_class(button0, "hover:bg-gray-600", /*selectedButton*/ ctx[3] === "viewed");
     			toggle_class(button0, "focus:ring-gray-300", /*selectedButton*/ ctx[3] === "viewed");
     			toggle_class(button0, "shadow-md", /*selectedButton*/ ctx[3] === "viewed");
-    			add_location(button0, file$2, 99, 8, 2359);
+    			add_location(button0, file$2, 99, 8, 2360);
     			attr_dev(button1, "type", "button");
     			attr_dev(button1, "class", "py-2.5 px-5 text-sm font-medium focus:outline-none border border-l-0 rounded-none");
     			toggle_class(button1, "border-gray-200", /*selectedButton*/ ctx[3] !== "interested");
@@ -11195,7 +11195,7 @@ var app = (function () {
     			toggle_class(button1, "hover:bg-green-600", /*selectedButton*/ ctx[3] === "interested");
     			toggle_class(button1, "focus:ring-green-300", /*selectedButton*/ ctx[3] === "interested");
     			toggle_class(button1, "shadow-md", /*selectedButton*/ ctx[3] === "interested");
-    			add_location(button1, file$2, 121, 8, 3445);
+    			add_location(button1, file$2, 121, 8, 3446);
     			attr_dev(button2, "type", "button");
     			attr_dev(button2, "class", "py-2.5 px-5 text-sm font-medium focus:outline-none border border-l-0 rounded-none");
     			toggle_class(button2, "border-gray-200", /*selectedButton*/ ctx[3] !== "seen");
@@ -11211,7 +11211,7 @@ var app = (function () {
     			toggle_class(button2, "hover:bg-blue-600", /*selectedButton*/ ctx[3] === "seen");
     			toggle_class(button2, "focus:ring-blue-300", /*selectedButton*/ ctx[3] === "seen");
     			toggle_class(button2, "shadow-md", /*selectedButton*/ ctx[3] === "seen");
-    			add_location(button2, file$2, 143, 8, 4607);
+    			add_location(button2, file$2, 143, 8, 4608);
     			attr_dev(button3, "type", "button");
     			attr_dev(button3, "class", "py-2.5 px-5 text-sm font-medium focus:outline-none border border-l-0 rounded-r-lg");
     			toggle_class(button3, "border-gray-200", /*selectedButton*/ ctx[3] !== "loved");
@@ -11227,21 +11227,21 @@ var app = (function () {
     			toggle_class(button3, "hover:bg-red-600", /*selectedButton*/ ctx[3] === "loved");
     			toggle_class(button3, "focus:ring-red-300", /*selectedButton*/ ctx[3] === "loved");
     			toggle_class(button3, "shadow-md", /*selectedButton*/ ctx[3] === "loved");
-    			add_location(button3, file$2, 165, 8, 5673);
+    			add_location(button3, file$2, 165, 8, 5674);
     			attr_dev(div0, "class", "flex justify-center p-4");
     			attr_dev(div0, "role", "group");
     			attr_dev(div0, "aria-label", "Status buttons");
-    			add_location(div0, file$2, 93, 6, 2210);
+    			add_location(div0, file$2, 93, 6, 2211);
     			attr_dev(i, "class", "fab fa-youtube youtube-icon transition-colors duration-300 group-hover:text-red-500");
-    			add_location(i, file$2, 215, 12, 7815);
+    			add_location(i, file$2, 215, 12, 7816);
     			attr_dev(h2, "class", "text-2xl font-bold text-blue-600 cursor-pointer group");
-    			add_location(h2, file$2, 206, 10, 7511);
+    			add_location(h2, file$2, 206, 10, 7512);
     			attr_dev(div1, "class", "p-6");
-    			add_location(div1, file$2, 205, 8, 7483);
+    			add_location(div1, file$2, 205, 8, 7484);
     			attr_dev(div2, "class", "flex flex-col items-center");
-    			add_location(div2, file$2, 187, 6, 6730);
+    			add_location(div2, file$2, 187, 6, 6731);
     			attr_dev(div3, "class", "bg-base-200 card shadow-lg mb-4");
-    			add_location(div3, file$2, 91, 4, 2123);
+    			add_location(div3, file$2, 91, 4, 2124);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div3, anchor);
@@ -11684,9 +11684,9 @@ var app = (function () {
 
     			attr_dev(img, "class", "w-[350px] transition-shadow duration-200 ease-in-out cursor-pointer blue-glow");
     			attr_dev(img, "alt", img_alt_value = /*$selectedMovie*/ ctx[0].title);
-    			add_location(img, file$2, 190, 12, 6908);
+    			add_location(img, file$2, 190, 12, 6909);
     			attr_dev(div, "class", "flex-shrink-0 poster m-2.5 svelte-gr4476");
-    			add_location(div, file$2, 189, 10, 6855);
+    			add_location(div, file$2, 189, 10, 6856);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -11752,13 +11752,13 @@ var app = (function () {
     			t3 = space();
     			i = element("i");
     			attr_dev(span, "class", "mx-2 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-2xl");
-    			add_location(span, file$2, 221, 14, 8110);
+    			add_location(span, file$2, 221, 14, 8111);
     			attr_dev(i, "class", "fab fa-youtube youtube-icon transition-colors duration-300 group-hover:text-red-500");
-    			add_location(i, file$2, 237, 16, 8796);
+    			add_location(i, file$2, 237, 16, 8797);
     			attr_dev(h4, "class", "text-lg text-gray-500 cursor-pointer group");
-    			add_location(h4, file$2, 228, 14, 8451);
+    			add_location(h4, file$2, 228, 14, 8452);
     			attr_dev(div, "class", "flex items-center mb-2");
-    			add_location(div, file$2, 220, 12, 8059);
+    			add_location(div, file$2, 220, 12, 8060);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -11827,10 +11827,10 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$2, 245, 14, 9090);
+    			add_location(strong, file$2, 245, 14, 9091);
     			attr_dev(span, "class", "flex items-center flex-wrap");
-    			add_location(span, file$2, 246, 14, 9128);
-    			add_location(p, file$2, 244, 12, 9072);
+    			add_location(span, file$2, 246, 14, 9129);
+    			add_location(p, file$2, 244, 12, 9073);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -11914,11 +11914,11 @@ var app = (function () {
     			t2 = text(t2_value);
     			t3 = space();
     			attr_dev(p0, "class", "text-xl cursor-pointer transition-transform duration-200 mr-1 hover:scale-150 z-10");
-    			add_location(p0, file$2, 249, 20, 9302);
+    			add_location(p0, file$2, 249, 20, 9303);
     			attr_dev(p1, "class", "m-0");
-    			add_location(p1, file$2, 263, 20, 9950);
+    			add_location(p1, file$2, 263, 20, 9951);
     			attr_dev(span, "class", "flex items-center mr-4");
-    			add_location(span, file$2, 248, 18, 9244);
+    			add_location(span, file$2, 248, 18, 9245);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -11972,8 +11972,8 @@ var app = (function () {
     			strong.textContent = "Release Date:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$2, 271, 14, 10155);
-    			add_location(p, file$2, 270, 12, 10137);
+    			add_location(strong, file$2, 271, 14, 10156);
+    			add_location(p, file$2, 270, 12, 10138);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -12024,11 +12024,11 @@ var app = (function () {
     			t3 = space();
     			t4 = text(t4_value);
     			t5 = text(" / 10");
-    			add_location(strong, file$2, 277, 14, 10401);
+    			add_location(strong, file$2, 277, 14, 10402);
     			attr_dev(div0, "class", "emoji text-lg cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mx-1");
-    			add_location(div0, file$2, 278, 14, 10440);
+    			add_location(div0, file$2, 278, 14, 10441);
     			attr_dev(div1, "class", "flex flex-row");
-    			add_location(div1, file$2, 276, 12, 10359);
+    			add_location(div1, file$2, 276, 12, 10360);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -12065,7 +12065,7 @@ var app = (function () {
     	return block;
     }
 
-    // (289:10) {#if $selectedMovie.popularity}
+    // (290:10) {#if $selectedMovie.popularity}
     function create_if_block_6(ctx) {
     	let div1;
     	let strong;
@@ -12089,11 +12089,11 @@ var app = (function () {
     			t3 = space();
     			t4 = text(t4_value);
     			t5 = text(" reviews");
-    			add_location(strong, file$2, 290, 14, 10920);
+    			add_location(strong, file$2, 291, 14, 10934);
     			attr_dev(div0, "class", "emoji text-lg cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mx-1");
-    			add_location(div0, file$2, 292, 14, 10966);
+    			add_location(div0, file$2, 293, 14, 10980);
     			attr_dev(div1, "class", "flex flex-row");
-    			add_location(div1, file$2, 289, 12, 10878);
+    			add_location(div1, file$2, 290, 12, 10892);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -12123,14 +12123,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6.name,
     		type: "if",
-    		source: "(289:10) {#if $selectedMovie.popularity}",
+    		source: "(290:10) {#if $selectedMovie.popularity}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (305:10) {#if $selectedMovie.runtime}
+    // (306:10) {#if $selectedMovie.runtime}
     function create_if_block_5(ctx) {
     	let p;
     	let strong;
@@ -12145,8 +12145,8 @@ var app = (function () {
     			strong.textContent = "Runtime:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$2, 306, 14, 11411);
-    			add_location(p, file$2, 305, 12, 11393);
+    			add_location(strong, file$2, 307, 14, 11425);
+    			add_location(p, file$2, 306, 12, 11407);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -12166,14 +12166,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5.name,
     		type: "if",
-    		source: "(305:10) {#if $selectedMovie.runtime}",
+    		source: "(306:10) {#if $selectedMovie.runtime}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (311:10) {#if $selectedMovie.overview}
+    // (312:10) {#if $selectedMovie.overview}
     function create_if_block_4(ctx) {
     	let p;
     	let strong;
@@ -12188,8 +12188,8 @@ var app = (function () {
     			strong.textContent = "Description:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$2, 312, 14, 11592);
-    			add_location(p, file$2, 311, 12, 11574);
+    			add_location(strong, file$2, 313, 14, 11606);
+    			add_location(p, file$2, 312, 12, 11588);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -12209,14 +12209,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4.name,
     		type: "if",
-    		source: "(311:10) {#if $selectedMovie.overview}",
+    		source: "(312:10) {#if $selectedMovie.overview}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (317:10) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}
+    // (318:10) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}
     function create_if_block_3(ctx) {
     	let p;
     	let strong;
@@ -12242,10 +12242,10 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$2, 318, 14, 11816);
+    			add_location(strong, file$2, 319, 14, 11830);
     			attr_dev(p, "class", "mt-4");
-    			add_location(p, file$2, 317, 12, 11785);
-    			add_location(ul, file$2, 320, 12, 11868);
+    			add_location(p, file$2, 318, 12, 11799);
+    			add_location(ul, file$2, 321, 12, 11882);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -12296,23 +12296,27 @@ var app = (function () {
     		block,
     		id: create_if_block_3.name,
     		type: "if",
-    		source: "(317:10) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}",
+    		source: "(318:10) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (322:14) {#each $selectedMovie.topNcast as cast}
+    // (323:14) {#each $selectedMovie.topNcast as cast}
     function create_each_block_1$1(ctx) {
     	let li;
-    	let span;
-    	let t0_value = /*cast*/ ctx[25].name + "";
+    	let img;
+    	let img_src_value;
+    	let img_alt_value;
     	let t0;
+    	let span;
+    	let t1_value = /*cast*/ ctx[25].name + "";
     	let t1;
-    	let t2_value = /*cast*/ ctx[25].character + "";
     	let t2;
+    	let t3_value = /*cast*/ ctx[25].character + "";
     	let t3;
+    	let t4;
     	let mounted;
     	let dispose;
 
@@ -12323,23 +12327,37 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			li = element("li");
+    			img = element("img");
+    			t0 = space();
     			span = element("span");
-    			t0 = text(t0_value);
-    			t1 = text(" as ");
-    			t2 = text(t2_value);
-    			t3 = space();
-    			attr_dev(span, "class", "text-blue-600");
-    			add_location(span, file$2, 328, 18, 12197);
-    			attr_dev(li, "class", "cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200");
-    			add_location(li, file$2, 322, 16, 11943);
+    			t1 = text(t1_value);
+    			t2 = text("as ");
+    			t3 = text(t3_value);
+    			t4 = space();
+
+    			if (!src_url_equal(img.src, img_src_value = /*cast*/ ctx[25].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*cast*/ ctx[25].profile_path
+    			: "https://via.placeholder.com/48")) attr_dev(img, "src", img_src_value);
+
+    			attr_dev(img, "alt", img_alt_value = /*cast*/ ctx[25].name);
+    			attr_dev(img, "class", "rounded-full object-cover");
+    			set_style(img, "width", "32px");
+    			set_style(img, "height", "32px");
+    			add_location(img, file$2, 329, 18, 12226);
+    			attr_dev(span, "class", "text-blue-600 pr-1");
+    			add_location(span, file$2, 337, 18, 12594);
+    			attr_dev(li, "class", "cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200 flex space-x-2");
+    			add_location(li, file$2, 323, 16, 11957);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
+    			append_dev(li, img);
+    			append_dev(li, t0);
     			append_dev(li, span);
-    			append_dev(span, t0);
-    			append_dev(li, t1);
+    			append_dev(span, t1);
     			append_dev(li, t2);
     			append_dev(li, t3);
+    			append_dev(li, t4);
 
     			if (!mounted) {
     				dispose = listen_dev(li, "click", click_handler_11, false, false, false, false);
@@ -12348,8 +12366,19 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = /*cast*/ ctx[25].name + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*cast*/ ctx[25].character + "")) set_data_dev(t2, t2_value);
+
+    			if (dirty & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*cast*/ ctx[25].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*cast*/ ctx[25].profile_path
+    			: "https://via.placeholder.com/48")) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+
+    			if (dirty & /*$selectedMovie*/ 1 && img_alt_value !== (img_alt_value = /*cast*/ ctx[25].name)) {
+    				attr_dev(img, "alt", img_alt_value);
+    			}
+
+    			if (dirty & /*$selectedMovie*/ 1 && t1_value !== (t1_value = /*cast*/ ctx[25].name + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t3_value !== (t3_value = /*cast*/ ctx[25].character + "")) set_data_dev(t3, t3_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(li);
@@ -12362,14 +12391,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1$1.name,
     		type: "each",
-    		source: "(322:14) {#each $selectedMovie.topNcast as cast}",
+    		source: "(323:14) {#each $selectedMovie.topNcast as cast}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (334:10) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}
+    // (343:10) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}
     function create_if_block_2(ctx) {
     	let p;
     	let strong;
@@ -12395,10 +12424,10 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$2, 335, 14, 12463);
+    			add_location(strong, file$2, 344, 14, 12864);
     			attr_dev(p, "class", "mt-4");
-    			add_location(p, file$2, 334, 12, 12432);
-    			add_location(ul, file$2, 337, 12, 12515);
+    			add_location(p, file$2, 343, 12, 12833);
+    			add_location(ul, file$2, 346, 12, 12916);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -12449,23 +12478,27 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(334:10) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}",
+    		source: "(343:10) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (339:14) {#each $selectedMovie.topNcrew as crew}
+    // (348:14) {#each $selectedMovie.topNcrew as crew}
     function create_each_block$1(ctx) {
     	let li;
-    	let span;
-    	let t0_value = /*crew*/ ctx[22].name + "";
+    	let img;
+    	let img_src_value;
+    	let img_alt_value;
     	let t0;
+    	let span;
+    	let t1_value = /*crew*/ ctx[22].name + "";
     	let t1;
-    	let t2_value = /*crew*/ ctx[22].job + "";
     	let t2;
+    	let t3_value = /*crew*/ ctx[22].job + "";
     	let t3;
+    	let t4;
     	let mounted;
     	let dispose;
 
@@ -12476,23 +12509,37 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			li = element("li");
+    			img = element("img");
+    			t0 = space();
     			span = element("span");
-    			t0 = text(t0_value);
-    			t1 = text(": ");
-    			t2 = text(t2_value);
-    			t3 = space();
+    			t1 = text(t1_value);
+    			t2 = text(": ");
+    			t3 = text(t3_value);
+    			t4 = space();
+
+    			if (!src_url_equal(img.src, img_src_value = /*crew*/ ctx[22].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*crew*/ ctx[22].profile_path
+    			: "https://via.placeholder.com/48")) attr_dev(img, "src", img_src_value);
+
+    			attr_dev(img, "alt", img_alt_value = /*crew*/ ctx[22].name);
+    			attr_dev(img, "class", "rounded-full object-cover");
+    			set_style(img, "width", "32px");
+    			set_style(img, "height", "32px");
+    			add_location(img, file$2, 354, 18, 13260);
     			attr_dev(span, "class", "text-blue-600");
-    			add_location(span, file$2, 345, 18, 12844);
-    			attr_dev(li, "class", "cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200");
-    			add_location(li, file$2, 339, 16, 12590);
+    			add_location(span, file$2, 362, 18, 13628);
+    			attr_dev(li, "class", "cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200 flex space-x-2");
+    			add_location(li, file$2, 348, 16, 12991);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
+    			append_dev(li, img);
+    			append_dev(li, t0);
     			append_dev(li, span);
-    			append_dev(span, t0);
-    			append_dev(li, t1);
+    			append_dev(span, t1);
     			append_dev(li, t2);
     			append_dev(li, t3);
+    			append_dev(li, t4);
 
     			if (!mounted) {
     				dispose = listen_dev(li, "click", click_handler_12, false, false, false, false);
@@ -12501,8 +12548,19 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = /*crew*/ ctx[22].name + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*crew*/ ctx[22].job + "")) set_data_dev(t2, t2_value);
+
+    			if (dirty & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*crew*/ ctx[22].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*crew*/ ctx[22].profile_path
+    			: "https://via.placeholder.com/48")) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+
+    			if (dirty & /*$selectedMovie*/ 1 && img_alt_value !== (img_alt_value = /*crew*/ ctx[22].name)) {
+    				attr_dev(img, "alt", img_alt_value);
+    			}
+
+    			if (dirty & /*$selectedMovie*/ 1 && t1_value !== (t1_value = /*crew*/ ctx[22].name + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*$selectedMovie*/ 1 && t3_value !== (t3_value = /*crew*/ ctx[22].job + "")) set_data_dev(t3, t3_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(li);
@@ -12515,14 +12573,14 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(339:14) {#each $selectedMovie.topNcrew as crew}",
+    		source: "(348:14) {#each $selectedMovie.topNcrew as crew}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (356:2) {#if showModal}
+    // (373:2) {#if showModal}
     function create_if_block$1(ctx) {
     	let div1;
     	let div0;
@@ -12542,15 +12600,15 @@ var app = (function () {
     			t1 = space();
     			img = element("img");
     			attr_dev(span, "class", "absolute top-2 right-6 text-white text-3xl font-bold cursor-pointer");
-    			add_location(span, file$2, 361, 8, 13247);
+    			add_location(span, file$2, 378, 8, 14031);
     			if (!src_url_equal(img.src, img_src_value = /*fullImageUrl*/ ctx[2])) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "Full Image");
     			attr_dev(img, "class", "w-full h-auto");
-    			add_location(img, file$2, 365, 8, 13403);
+    			add_location(img, file$2, 382, 8, 14187);
     			attr_dev(div0, "class", "relative w-4/5 max-w-xl");
-    			add_location(div0, file$2, 360, 6, 13201);
+    			add_location(div0, file$2, 377, 6, 13985);
     			attr_dev(div1, "class", "fixed inset-0 z-50 overflow-hidden bg-black bg-opacity-50 flex items-center justify-center");
-    			add_location(div1, file$2, 356, 4, 13051);
+    			add_location(div1, file$2, 373, 4, 13835);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -12584,7 +12642,7 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(356:2) {#if showModal}",
+    		source: "(373:2) {#if showModal}",
     		ctx
     	});
 
@@ -12605,7 +12663,7 @@ var app = (function () {
     			if (if_block1) if_block1.c();
     			attr_dev(div, "id", "movie-details-div");
     			attr_dev(div, "class", "h-screen overflow-y-auto container mx-auto p-6 custom-scrollbar leading-8 svelte-gr4476");
-    			add_location(div, file$2, 86, 0, 1980);
+    			add_location(div, file$2, 86, 0, 1981);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");

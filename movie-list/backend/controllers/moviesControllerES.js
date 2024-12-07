@@ -6,13 +6,25 @@ const esClient = new Client({ node: "http://elasticsearch:9200" });
 const getMovies = async (req, res) => {
   try {
     const filter = buildESFilter(req.body);
+    const countFilter = buildESFilter(req.body, true);
     const sorting = getSorting(req.body.type);
 
-    console.log("Elasticsearch Query:", JSON.stringify(filter));
 
-    // Query Elasticsearch
-    const searchResponse  = await esClient.search({
+    // First, get the accurate count of matching documents
+    const countResponse = await esClient.count({
       index: "moviedb.movies", // Adjust to match your Elasticsearch index
+      body: {
+        query: {
+          bool: countFilter,
+        },
+      },
+    });
+
+    const count = countResponse.count;
+
+    // Then, fetch the movie data with pagination
+    const searchResponse = await esClient.search({
+      index: "moviedb.movies",
       body: {
         query: {
           bool: filter,
@@ -24,7 +36,6 @@ const getMovies = async (req, res) => {
 
     console.log(JSON.stringify(searchResponse));
     const movies = searchResponse.hits.hits.map((hit) => hit._source);
-    const count = searchResponse.hits.total.value;
 
     res.setHeader("Content-Type", "application/json; charset=utf-8");
     res.json({ movies, count });
@@ -35,10 +46,17 @@ const getMovies = async (req, res) => {
 };
 
 
-const buildESFilter = (params) => {
+const buildESFilter = (params, ignoreDate = false) => {
   const must = [];
   const mustNot = [];
   const filter = [];
+
+  // account filter
+
+  if (params.ids) {
+    // must be in the list of IDs
+    must.push({ terms: { id: params.ids } });
+  }
 
   // Adult filter
   mustNot.push({ term: { adult: true } });
@@ -90,8 +108,10 @@ const buildESFilter = (params) => {
     filter.push({ range: { vote_count: range } });
   }
 
-  // Release date filter
-  buildReleaseDateFilter(filter, params);
+  if (!ignoreDate) {
+    // Release date filter
+    buildReleaseDateFilter(filter, params);
+  }
 
   // Genres filter
   if (params.genres && params.genres.length > 0) {
