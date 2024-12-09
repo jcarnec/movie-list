@@ -1,4 +1,5 @@
 import { get } from "svelte/store";
+
 import { tick } from "svelte";
 import {
   firstVisibleIndex,
@@ -97,8 +98,9 @@ export async function queryDatabase(movies, append = "new", date = null) {
   }
 
   runningQuery.set(true);
-  // get target environment variable
-  let target = 'localhost';
+
+  let target = '13.60.6.138'
+  
   let url = `http://${target}:3000/movies`;
   console.log(url);
 
