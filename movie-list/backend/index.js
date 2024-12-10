@@ -5,6 +5,7 @@ const app = express();
 
 // const connectDB = require('./config/database');
 const movieRoutes = require('./routes/movies');
+const creditsRoutes = require('./routes/credits');
 
 // Middleware
 app.use(cors());
@@ -13,6 +14,7 @@ app.use(express.json());
 
 // Routes
 app.use('/movies', movieRoutes);
+app.use('/credits/', creditsRoutes);
 
 // Server Initialization
 const PORT = process.env.PORT || 3000;

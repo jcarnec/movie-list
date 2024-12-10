@@ -191,4 +191,27 @@ const getSorting = (type) => {
   return [{ release_date: { order: type === "prepend" ? "desc" : "asc" } }];
 };
 
-module.exports = { getMovies };
+// function that gets the credit object for a movie by searching for movie_id field in moviedb.credits index
+const getCredits = async (req, res) => {
+  try {
+    const response = await esClient.search({
+      index: "moviedb.credits",
+      body: {
+        query: {
+          match: { movie_id: req.params.movie_id },
+        },
+      },
+    });
+
+    const credits = response.hits.hits.map((hit) => hit._source);
+
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.json({ credits });
+  } catch (error) {
+    console.error("Elasticsearch Query Error:", error);
+    res.status(500).json({ message: "Error fetching credits from Elasticsearch." });
+  }
+  
+}
+
+module.exports = { getMovies, getCredits };

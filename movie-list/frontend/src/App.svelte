@@ -13,6 +13,7 @@
     prependAfterFailure,
     queryMovies,
     setVoteCountIndexAndColor,
+    getCredits
   } from "./utils";
   import {
     queryCount,
@@ -40,10 +41,14 @@
   } from "./stores.js";
   import asyncStore from "./loadMoviesAsyncStore";
   import CastAndCrewCard from "./components/CastAndCrewCard.svelte";
+  import { get } from "svelte/store";
 
   let movies = [];
 
   // Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
+
+  $: asyncStore.load("get-credits", getCredits, $selectedMovie);
+
   $: asyncStore.load(
     "update-movies",
     updateMovies,
@@ -63,6 +68,7 @@
     $minVoteAverage,
     $maxVoteAverage)
   );
+
 
   async function updateMovies() {
     if ($allowQueryMutex) {

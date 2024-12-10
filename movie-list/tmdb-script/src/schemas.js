@@ -4,6 +4,11 @@ const mongoose  = require('mongoose');
 
 
 module.exports = {
+    CreditsSchema : new mongoose.Schema({
+    movie_id: { type: Number, required: true, unique: true },
+    cast: { type: Array, default: [] },
+    crew: { type: Array, default: [] }
+    }),
     MovieSchema: new mongoose.Schema({
         adult: {type: String},
         backdrop_path: {type: String},

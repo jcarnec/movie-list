@@ -725,6 +725,7 @@ var app = (function () {
 
     const castAndCrew = writable(null);
 
+
     selectedPerson.subscribe(value => currentSelectedPerson.set(value));
     minYear.subscribe(value => currentMinYear.set(value));
     minReviewCount.subscribe(value => currentMinReviewCount.set(value));
@@ -735,7 +736,6 @@ var app = (function () {
     maxVoteAverage.subscribe(value => currentMaxVoteAverage.set(value));
     minRuntime.subscribe(value => currentMinRuntime.set(value));
     maxRuntime.subscribe(value => currentMaxRuntime.set(value));
-    selectedMovie.subscribe(value => castAndCrew.set(getTopCastAndCrew(value)));
 
     selectedTitle.subscribe(value => currentSelectedTitle.set(value) );
 
@@ -752,49 +752,6 @@ var app = (function () {
         currentSelectedTitle.set(value.title);
       }
     });
-
-    function getTopCastAndCrew(movie, numMembers = 5) {
-        const result = {
-            director: null,
-            cast: [],
-            crew: []
-        };
-
-        if (!movie) {
-            return result;
-        }
-
-        // Find the director from the crew
-        const director = movie.crew.find(member => member.job === 'Director');
-        if (director) {
-            result.director = director;
-        }
-
-        // Sort cast and crew by popularity
-        const sortedCast = movie.cast.sort((a, b) => b.popularity - a.popularity);
-        const sortedCrew = movie.crew.sort((a, b) => b.popularity - a.popularity);
-
-        // Get top N cast and crew members (excluding the director if already included)
-        result.cast = sortedCast.slice(0, numMembers);
-        result.crew = sortedCrew
-            .filter(member => member.job !== 'Director' && isInterestingCrewMember(member))
-        // must contain writer, producer, music, cinematographer, editor, production designer, costume designer
-            .slice(0, numMembers);
-
-
-        console.log('cast and crew result', result);
-        return result;
-    }
-
-    function isInterestingCrewMember(member) {
-        const interestingJobs = ['Writer',  'Music', 'Cinematography', 'Editor', 'Production Design', 'Costume Design', 'Novel', 'Photography', 'Screenplay', 'Book', 'Art Direction'];
-        for (let job of interestingJobs) {
-            if (member.job.includes(job)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     const LANGUAGEINFO = {
       en: {
@@ -1692,7 +1649,7 @@ var app = (function () {
     }
 
     // (44:2) {#if genres.length > 0}
-    function create_if_block_1$5(ctx) {
+    function create_if_block_1$6(ctx) {
     	let div1;
     	let h6;
     	let t1;
@@ -1768,7 +1725,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$5.name,
+    		id: create_if_block_1$6.name,
     		type: "if",
     		source: "(44:2) {#if genres.length > 0}",
     		ctx
@@ -2047,7 +2004,7 @@ var app = (function () {
     function create_fragment$b(ctx) {
     	let div;
     	let t;
-    	let if_block0 = /*genres*/ ctx[0].length > 0 && create_if_block_1$5(ctx);
+    	let if_block0 = /*genres*/ ctx[0].length > 0 && create_if_block_1$6(ctx);
     	let if_block1 = /*unselectedGenres*/ ctx[1].length > 0 && create_if_block$a(ctx);
 
     	const block = {
@@ -2073,7 +2030,7 @@ var app = (function () {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_1$5(ctx);
+    					if_block0 = create_if_block_1$6(ctx);
     					if_block0.c();
     					if_block0.m(div, t);
     				}
@@ -2229,7 +2186,7 @@ var app = (function () {
     }
 
     // (23:2) {#if verbs.length > 0}
-    function create_if_block_1$4(ctx) {
+    function create_if_block_1$5(ctx) {
     	let div1;
     	let h6;
     	let t1;
@@ -2305,7 +2262,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$4.name,
+    		id: create_if_block_1$5.name,
     		type: "if",
     		source: "(23:2) {#if verbs.length > 0}",
     		ctx
@@ -2584,7 +2541,7 @@ var app = (function () {
     function create_fragment$a(ctx) {
     	let div;
     	let t;
-    	let if_block0 = /*verbs*/ ctx[0].length > 0 && create_if_block_1$4(ctx);
+    	let if_block0 = /*verbs*/ ctx[0].length > 0 && create_if_block_1$5(ctx);
     	let if_block1 = /*unselectedVerbs*/ ctx[1].length > 0 && create_if_block$9(ctx);
 
     	const block = {
@@ -2610,7 +2567,7 @@ var app = (function () {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_1$4(ctx);
+    					if_block0 = create_if_block_1$5(ctx);
     					if_block0.c();
     					if_block0.m(div, t);
     				}
@@ -2760,7 +2717,7 @@ var app = (function () {
     }
 
     // (39:4) {#if $selectedLanguages.length > 0}
-    function create_if_block_1$3(ctx) {
+    function create_if_block_1$4(ctx) {
     	let div1;
     	let h6;
     	let t1;
@@ -2836,7 +2793,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$3.name,
+    		id: create_if_block_1$4.name,
     		type: "if",
     		source: "(39:4) {#if $selectedLanguages.length > 0}",
     		ctx
@@ -3186,7 +3143,7 @@ var app = (function () {
     	let t2;
     	let mounted;
     	let dispose;
-    	let if_block0 = /*$selectedLanguages*/ ctx[3].length > 0 && create_if_block_1$3(ctx);
+    	let if_block0 = /*$selectedLanguages*/ ctx[3].length > 0 && create_if_block_1$4(ctx);
     	let if_block1 = /*isDropdownOpen*/ ctx[1] && create_if_block$8(ctx);
 
     	const block = {
@@ -3245,7 +3202,7 @@ var app = (function () {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_1$3(ctx);
+    					if_block0 = create_if_block_1$4(ctx);
     					if_block0.c();
     					if_block0.m(div0, null);
     				}
@@ -3408,7 +3365,7 @@ var app = (function () {
     const file$8 = "src/components/RangeInput.svelte";
 
     // (34:4) {#if bindValueStart != defaultValueStart && defaultValueStart != null}
-    function create_if_block_1$2(ctx) {
+    function create_if_block_1$3(ctx) {
     	let button;
     	let svg;
     	let path;
@@ -3460,7 +3417,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$2.name,
+    		id: create_if_block_1$3.name,
     		type: "if",
     		source: "(34:4) {#if bindValueStart != defaultValueStart && defaultValueStart != null}",
     		ctx
@@ -3554,7 +3511,7 @@ var app = (function () {
     	let t8;
     	let mounted;
     	let dispose;
-    	let if_block0 = /*bindValueStart*/ ctx[0] != /*defaultValueStart*/ ctx[5] && /*defaultValueStart*/ ctx[5] != null && create_if_block_1$2(ctx);
+    	let if_block0 = /*bindValueStart*/ ctx[0] != /*defaultValueStart*/ ctx[5] && /*defaultValueStart*/ ctx[5] != null && create_if_block_1$3(ctx);
     	let if_block1 = /*bindValueEnd*/ ctx[1] != /*defaultValueEnd*/ ctx[6] && /*defaultValueEnd*/ ctx[6] != null && create_if_block$7(ctx);
 
     	const block = {
@@ -3702,7 +3659,7 @@ var app = (function () {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_1$2(ctx);
+    					if_block0 = create_if_block_1$3(ctx);
     					if_block0.c();
     					if_block0.m(div0, null);
     				}
@@ -5543,7 +5500,7 @@ var app = (function () {
     }
 
     // (215:29) 
-    function create_if_block_1$1(ctx) {
+    function create_if_block_1$2(ctx) {
     	let div4;
     	let div1;
     	let div0;
@@ -5623,7 +5580,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1$1.name,
+    		id: create_if_block_1$2.name,
     		type: "if",
     		source: "(215:29) ",
     		ctx
@@ -5765,7 +5722,7 @@ var app = (function () {
 
     	function select_block_type_1(ctx, dirty) {
     		if (/*movieViewedType*/ ctx[4] && /*movieViewedType*/ ctx[4] != "ignored") return create_if_block$4;
-    		if (/*isHoveringOver*/ ctx[3]) return create_if_block_1$1;
+    		if (/*isHoveringOver*/ ctx[3]) return create_if_block_1$2;
     	}
 
     	let current_block_type_1 = select_block_type_1(ctx);
@@ -10113,23 +10070,6 @@ var app = (function () {
         //   (keyword) => keyword.name
         // );
         this.keywords = [];
-        this.cast = data?.credits?.cast;
-        this.topNcast = data?.credits?.cast
-          .sort((a, b) => b.popularity - a.popularity)
-          .slice(0, 6);
-
-        this.crew = data?.credits?.crew;
-        this.topNcrew = data?.credits?.crew
-          .sort((a, b) => {
-            if (a.job === 'Director') {
-              return -1;
-            } else if (b.job === 'Director') {
-              return 1;
-            }
-            return b.popularity - a.popularity;
-          })
-          .slice(0, 6);
-        
         this.preloadPosterImage();
       }
 
@@ -10251,7 +10191,8 @@ var app = (function () {
 
       runningQuery.set(true);
 
-      let target = '13.60.6.138';
+      // let target = '13.60.6.138'
+      let target = 'localhost';
       
       let url = `http://${target}:3000/movies`;
       console.log(url);
@@ -10459,6 +10400,73 @@ var app = (function () {
         castOrCrew: person.character ? "cast" : "crew",
         data: person,
       };
+    }
+
+    async function getCredits(movie) {
+      castAndCrew.set(null);
+      if (movie) {
+        let credits = await queryCredits(movie);
+        if (credits) {
+          castAndCrew.set(getTopCastAndCrew(credits.credits[0]));
+        }
+      }
+    }
+
+    async function queryCredits(movie) {
+      let target = 'localhost';
+      let url = `http://${target}:3000/credits/${movie.id}`;
+      let res = await axios$1({
+        method: "get",
+        url: url,
+        headers: {
+          "Content-Type": "application/json",
+        }
+      });
+
+      return res.data;
+    }
+
+    function getTopCastAndCrew(credits, numMembers = 5) {
+        const result = {
+            director: null,
+            cast: [],
+            crew: []
+        };
+
+        if (!credits) {
+            return result;
+        }
+
+        // Find the director from the crew
+        const director = credits.crew.find(member => member.job === 'Director');
+        if (director) {
+            result.director = director;
+        }
+
+        // Sort cast and crew by popularity
+        const sortedCast = credits.cast.sort((a, b) => b.popularity - a.popularity);
+        const sortedCrew = credits.crew.sort((a, b) => b.popularity - a.popularity);
+
+        // Get top N cast and crew members (excluding the director if already included)
+        result.cast = sortedCast.slice(0, numMembers);
+        result.crew = sortedCrew
+            .filter(member => member.job !== 'Director' && isInterestingCrewMember(member))
+        // must contain writer, producer, music, cinematographer, editor, production designer, costume designer
+            .slice(0, numMembers);
+
+
+        console.log('cast and crew result', result);
+        return result;
+    }
+
+    function isInterestingCrewMember(member) {
+        const interestingJobs = ['Writer',  'Music', 'Cinematography', 'Editor', 'Production Design', 'Costume Design', 'Novel', 'Photography', 'Screenplay', 'Book', 'Art Direction'];
+        for (let job of interestingJobs) {
+            if (member.job.includes(job)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /* src/components/MovieList.svelte generated by Svelte v3.59.2 */
@@ -11064,24 +11072,24 @@ var app = (function () {
 
     function get_each_context$1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[22] = list[i];
+    	child_ctx[23] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_1$1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[25] = list[i];
+    	child_ctx[26] = list[i];
     	return child_ctx;
     }
 
     function get_each_context_2(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[28] = list[i];
+    	child_ctx[29] = list[i];
     	return child_ctx;
     }
 
-    // (91:2) {#if $selectedMovie}
-    function create_if_block_1(ctx) {
+    // (92:2) {#if $selectedMovie}
+    function create_if_block_1$1(ctx) {
     	let div3;
     	let div0;
     	let button0;
@@ -11109,19 +11117,17 @@ var app = (function () {
     	let t20;
     	let t21;
     	let t22;
-    	let t23;
     	let mounted;
     	let dispose;
-    	let if_block0 = show_if && create_if_block_11(ctx);
-    	let if_block1 = /*$selectedMovie*/ ctx[0].originalLanguage !== "en" && /*$selectedMovie*/ ctx[0].originalTitle && create_if_block_10(ctx);
-    	let if_block2 = /*$selectedMovie*/ ctx[0].genres && /*$selectedMovie*/ ctx[0].genres.length > 0 && create_if_block_9(ctx);
-    	let if_block3 = /*$selectedMovie*/ ctx[0].releaseDate && create_if_block_8(ctx);
-    	let if_block4 = /*$selectedMovie*/ ctx[0].voteAverage && /*$selectedMovie*/ ctx[0].voteCount && create_if_block_7(ctx);
-    	let if_block5 = /*$selectedMovie*/ ctx[0].popularity && create_if_block_6(ctx);
-    	let if_block6 = /*$selectedMovie*/ ctx[0].runtime && create_if_block_5(ctx);
-    	let if_block7 = /*$selectedMovie*/ ctx[0].overview && create_if_block_4(ctx);
-    	let if_block8 = /*$selectedMovie*/ ctx[0].topNcast && /*$selectedMovie*/ ctx[0].topNcast.length > 0 && create_if_block_3(ctx);
-    	let if_block9 = /*$selectedMovie*/ ctx[0].topNcrew && /*$selectedMovie*/ ctx[0].topNcrew.length > 0 && create_if_block_2(ctx);
+    	let if_block0 = show_if && create_if_block_12(ctx);
+    	let if_block1 = /*$selectedMovie*/ ctx[0].originalLanguage !== "en" && /*$selectedMovie*/ ctx[0].originalTitle && create_if_block_11(ctx);
+    	let if_block2 = /*$selectedMovie*/ ctx[0].genres && /*$selectedMovie*/ ctx[0].genres.length > 0 && create_if_block_10(ctx);
+    	let if_block3 = /*$selectedMovie*/ ctx[0].releaseDate && create_if_block_9(ctx);
+    	let if_block4 = /*$selectedMovie*/ ctx[0].voteAverage && /*$selectedMovie*/ ctx[0].voteCount && create_if_block_8(ctx);
+    	let if_block5 = /*$selectedMovie*/ ctx[0].popularity && create_if_block_7(ctx);
+    	let if_block6 = /*$selectedMovie*/ ctx[0].runtime && create_if_block_6(ctx);
+    	let if_block7 = /*$selectedMovie*/ ctx[0].overview && create_if_block_5(ctx);
+    	let if_block8 = /*$castAndCrew*/ ctx[5] && create_if_block_2(ctx);
 
     	const block = {
     		c: function create() {
@@ -11163,8 +11169,6 @@ var app = (function () {
     			if (if_block7) if_block7.c();
     			t22 = space();
     			if (if_block8) if_block8.c();
-    			t23 = space();
-    			if (if_block9) if_block9.c();
     			attr_dev(button0, "type", "button");
     			attr_dev(button0, "class", "py-2.5 px-5 text-sm font-medium focus:outline-none border rounded-l-lg");
     			toggle_class(button0, "border-gray-200", /*selectedButton*/ ctx[3] !== "viewed");
@@ -11180,7 +11184,7 @@ var app = (function () {
     			toggle_class(button0, "hover:bg-gray-600", /*selectedButton*/ ctx[3] === "viewed");
     			toggle_class(button0, "focus:ring-gray-300", /*selectedButton*/ ctx[3] === "viewed");
     			toggle_class(button0, "shadow-md", /*selectedButton*/ ctx[3] === "viewed");
-    			add_location(button0, file$2, 99, 8, 2360);
+    			add_location(button0, file$2, 100, 8, 2376);
     			attr_dev(button1, "type", "button");
     			attr_dev(button1, "class", "py-2.5 px-5 text-sm font-medium focus:outline-none border border-l-0 rounded-none");
     			toggle_class(button1, "border-gray-200", /*selectedButton*/ ctx[3] !== "interested");
@@ -11196,7 +11200,7 @@ var app = (function () {
     			toggle_class(button1, "hover:bg-green-600", /*selectedButton*/ ctx[3] === "interested");
     			toggle_class(button1, "focus:ring-green-300", /*selectedButton*/ ctx[3] === "interested");
     			toggle_class(button1, "shadow-md", /*selectedButton*/ ctx[3] === "interested");
-    			add_location(button1, file$2, 121, 8, 3446);
+    			add_location(button1, file$2, 122, 8, 3462);
     			attr_dev(button2, "type", "button");
     			attr_dev(button2, "class", "py-2.5 px-5 text-sm font-medium focus:outline-none border border-l-0 rounded-none");
     			toggle_class(button2, "border-gray-200", /*selectedButton*/ ctx[3] !== "seen");
@@ -11212,7 +11216,7 @@ var app = (function () {
     			toggle_class(button2, "hover:bg-blue-600", /*selectedButton*/ ctx[3] === "seen");
     			toggle_class(button2, "focus:ring-blue-300", /*selectedButton*/ ctx[3] === "seen");
     			toggle_class(button2, "shadow-md", /*selectedButton*/ ctx[3] === "seen");
-    			add_location(button2, file$2, 143, 8, 4608);
+    			add_location(button2, file$2, 144, 8, 4624);
     			attr_dev(button3, "type", "button");
     			attr_dev(button3, "class", "py-2.5 px-5 text-sm font-medium focus:outline-none border border-l-0 rounded-r-lg");
     			toggle_class(button3, "border-gray-200", /*selectedButton*/ ctx[3] !== "loved");
@@ -11228,21 +11232,21 @@ var app = (function () {
     			toggle_class(button3, "hover:bg-red-600", /*selectedButton*/ ctx[3] === "loved");
     			toggle_class(button3, "focus:ring-red-300", /*selectedButton*/ ctx[3] === "loved");
     			toggle_class(button3, "shadow-md", /*selectedButton*/ ctx[3] === "loved");
-    			add_location(button3, file$2, 165, 8, 5674);
+    			add_location(button3, file$2, 166, 8, 5690);
     			attr_dev(div0, "class", "flex justify-center p-4");
     			attr_dev(div0, "role", "group");
     			attr_dev(div0, "aria-label", "Status buttons");
-    			add_location(div0, file$2, 93, 6, 2211);
+    			add_location(div0, file$2, 94, 6, 2227);
     			attr_dev(i, "class", "fab fa-youtube youtube-icon transition-colors duration-300 group-hover:text-red-500");
-    			add_location(i, file$2, 215, 12, 7816);
+    			add_location(i, file$2, 216, 12, 7832);
     			attr_dev(h2, "class", "text-2xl font-bold text-blue-600 cursor-pointer group");
-    			add_location(h2, file$2, 206, 10, 7512);
+    			add_location(h2, file$2, 207, 10, 7528);
     			attr_dev(div1, "class", "p-6");
-    			add_location(div1, file$2, 205, 8, 7484);
+    			add_location(div1, file$2, 206, 8, 7500);
     			attr_dev(div2, "class", "flex flex-col items-center");
-    			add_location(div2, file$2, 187, 6, 6731);
+    			add_location(div2, file$2, 188, 6, 6747);
     			attr_dev(div3, "class", "bg-base-200 card shadow-lg mb-4");
-    			add_location(div3, file$2, 91, 4, 2124);
+    			add_location(div3, file$2, 92, 4, 2140);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div3, anchor);
@@ -11279,237 +11283,235 @@ var app = (function () {
     			if (if_block7) if_block7.m(div1, null);
     			append_dev(div1, t22);
     			if (if_block8) if_block8.m(div1, null);
-    			append_dev(div1, t23);
-    			if (if_block9) if_block9.m(div1, null);
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(button0, "click", /*click_handler*/ ctx[8], false, false, false, false),
-    					listen_dev(button1, "click", /*click_handler_1*/ ctx[9], false, false, false, false),
-    					listen_dev(button2, "click", /*click_handler_2*/ ctx[10], false, false, false, false),
-    					listen_dev(button3, "click", /*click_handler_3*/ ctx[11], false, false, false, false),
-    					listen_dev(h2, "click", /*click_handler_5*/ ctx[13], false, false, false, false)
+    					listen_dev(button0, "click", /*click_handler*/ ctx[9], false, false, false, false),
+    					listen_dev(button1, "click", /*click_handler_1*/ ctx[10], false, false, false, false),
+    					listen_dev(button2, "click", /*click_handler_2*/ ctx[11], false, false, false, false),
+    					listen_dev(button3, "click", /*click_handler_3*/ ctx[12], false, false, false, false),
+    					listen_dev(h2, "click", /*click_handler_5*/ ctx[14], false, false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "border-gray-200", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "text-gray-900", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "bg-white", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "hover:bg-gray-100", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "hover:text-blue-700", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "focus:ring-4", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "focus:ring-gray-100", /*selectedButton*/ ctx[3] !== "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "bg-gray-500", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "text-white", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "border-gray-500", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "hover:bg-gray-600", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "focus:ring-gray-300", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button0, "shadow-md", /*selectedButton*/ ctx[3] === "viewed");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "border-gray-200", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "text-gray-900", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "bg-white", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "hover:bg-gray-100", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "hover:text-blue-700", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "focus:ring-4", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "focus:ring-gray-100", /*selectedButton*/ ctx[3] !== "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "bg-green-500", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "text-white", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "border-green-500", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "hover:bg-green-600", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "focus:ring-green-300", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button1, "shadow-md", /*selectedButton*/ ctx[3] === "interested");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "border-gray-200", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "text-gray-900", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "bg-white", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "hover:bg-gray-100", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "hover:text-blue-700", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "focus:ring-4", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "focus:ring-gray-100", /*selectedButton*/ ctx[3] !== "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "bg-blue-500", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "text-white", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "border-blue-500", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "hover:bg-blue-600", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "focus:ring-blue-300", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button2, "shadow-md", /*selectedButton*/ ctx[3] === "seen");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "border-gray-200", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "text-gray-900", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "bg-white", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "hover:bg-gray-100", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "hover:text-blue-700", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "focus:ring-4", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "focus:ring-gray-100", /*selectedButton*/ ctx[3] !== "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "bg-red-500", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "text-white", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "border-red-500", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "hover:bg-red-600", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "focus:ring-red-300", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*selectedButton*/ 8) {
+    			if (dirty[0] & /*selectedButton*/ 8) {
     				toggle_class(button3, "shadow-md", /*selectedButton*/ ctx[3] === "loved");
     			}
 
-    			if (dirty & /*$selectedMovie*/ 1) show_if = /*$selectedMovie*/ ctx[0].posterImage || /*$selectedMovie*/ ctx[0].getPosterUrl();
+    			if (dirty[0] & /*$selectedMovie*/ 1) show_if = /*$selectedMovie*/ ctx[0].posterImage || /*$selectedMovie*/ ctx[0].getPosterUrl();
 
     			if (show_if) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_11(ctx);
+    					if_block0 = create_if_block_12(ctx);
     					if_block0.c();
     					if_block0.m(div2, t12);
     				}
@@ -11518,13 +11520,13 @@ var app = (function () {
     				if_block0 = null;
     			}
 
-    			if (dirty & /*$selectedMovie*/ 1 && t13_value !== (t13_value = /*$selectedMovie*/ ctx[0].title + "")) set_data_dev(t13, t13_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t13_value !== (t13_value = /*$selectedMovie*/ ctx[0].title + "")) set_data_dev(t13, t13_value);
 
     			if (/*$selectedMovie*/ ctx[0].originalLanguage !== "en" && /*$selectedMovie*/ ctx[0].originalTitle) {
     				if (if_block1) {
     					if_block1.p(ctx, dirty);
     				} else {
-    					if_block1 = create_if_block_10(ctx);
+    					if_block1 = create_if_block_11(ctx);
     					if_block1.c();
     					if_block1.m(div1, t16);
     				}
@@ -11537,7 +11539,7 @@ var app = (function () {
     				if (if_block2) {
     					if_block2.p(ctx, dirty);
     				} else {
-    					if_block2 = create_if_block_9(ctx);
+    					if_block2 = create_if_block_10(ctx);
     					if_block2.c();
     					if_block2.m(div1, t17);
     				}
@@ -11550,7 +11552,7 @@ var app = (function () {
     				if (if_block3) {
     					if_block3.p(ctx, dirty);
     				} else {
-    					if_block3 = create_if_block_8(ctx);
+    					if_block3 = create_if_block_9(ctx);
     					if_block3.c();
     					if_block3.m(div1, t18);
     				}
@@ -11563,7 +11565,7 @@ var app = (function () {
     				if (if_block4) {
     					if_block4.p(ctx, dirty);
     				} else {
-    					if_block4 = create_if_block_7(ctx);
+    					if_block4 = create_if_block_8(ctx);
     					if_block4.c();
     					if_block4.m(div1, t19);
     				}
@@ -11576,7 +11578,7 @@ var app = (function () {
     				if (if_block5) {
     					if_block5.p(ctx, dirty);
     				} else {
-    					if_block5 = create_if_block_6(ctx);
+    					if_block5 = create_if_block_7(ctx);
     					if_block5.c();
     					if_block5.m(div1, t20);
     				}
@@ -11589,7 +11591,7 @@ var app = (function () {
     				if (if_block6) {
     					if_block6.p(ctx, dirty);
     				} else {
-    					if_block6 = create_if_block_5(ctx);
+    					if_block6 = create_if_block_6(ctx);
     					if_block6.c();
     					if_block6.m(div1, t21);
     				}
@@ -11602,7 +11604,7 @@ var app = (function () {
     				if (if_block7) {
     					if_block7.p(ctx, dirty);
     				} else {
-    					if_block7 = create_if_block_4(ctx);
+    					if_block7 = create_if_block_5(ctx);
     					if_block7.c();
     					if_block7.m(div1, t22);
     				}
@@ -11611,30 +11613,17 @@ var app = (function () {
     				if_block7 = null;
     			}
 
-    			if (/*$selectedMovie*/ ctx[0].topNcast && /*$selectedMovie*/ ctx[0].topNcast.length > 0) {
+    			if (/*$castAndCrew*/ ctx[5]) {
     				if (if_block8) {
     					if_block8.p(ctx, dirty);
     				} else {
-    					if_block8 = create_if_block_3(ctx);
+    					if_block8 = create_if_block_2(ctx);
     					if_block8.c();
-    					if_block8.m(div1, t23);
+    					if_block8.m(div1, null);
     				}
     			} else if (if_block8) {
     				if_block8.d(1);
     				if_block8 = null;
-    			}
-
-    			if (/*$selectedMovie*/ ctx[0].topNcrew && /*$selectedMovie*/ ctx[0].topNcrew.length > 0) {
-    				if (if_block9) {
-    					if_block9.p(ctx, dirty);
-    				} else {
-    					if_block9 = create_if_block_2(ctx);
-    					if_block9.c();
-    					if_block9.m(div1, null);
-    				}
-    			} else if (if_block9) {
-    				if_block9.d(1);
-    				if_block9 = null;
     			}
     		},
     		d: function destroy(detaching) {
@@ -11648,7 +11637,6 @@ var app = (function () {
     			if (if_block6) if_block6.d();
     			if (if_block7) if_block7.d();
     			if (if_block8) if_block8.d();
-    			if (if_block9) if_block9.d();
     			mounted = false;
     			run_all(dispose);
     		}
@@ -11656,17 +11644,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1.name,
+    		id: create_if_block_1$1.name,
     		type: "if",
-    		source: "(91:2) {#if $selectedMovie}",
+    		source: "(92:2) {#if $selectedMovie}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (189:8) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}
-    function create_if_block_11(ctx) {
+    // (190:8) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}
+    function create_if_block_12(ctx) {
     	let div;
     	let img;
     	let img_src_value;
@@ -11685,27 +11673,27 @@ var app = (function () {
 
     			attr_dev(img, "class", "w-[350px] transition-shadow duration-200 ease-in-out cursor-pointer blue-glow");
     			attr_dev(img, "alt", img_alt_value = /*$selectedMovie*/ ctx[0].title);
-    			add_location(img, file$2, 190, 12, 6909);
+    			add_location(img, file$2, 191, 12, 6925);
     			attr_dev(div, "class", "flex-shrink-0 poster m-2.5 svelte-gr4476");
-    			add_location(div, file$2, 189, 10, 6856);
+    			add_location(div, file$2, 190, 10, 6872);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
     			append_dev(div, img);
 
     			if (!mounted) {
-    				dispose = listen_dev(img, "click", /*click_handler_4*/ ctx[12], false, false, false, false);
+    				dispose = listen_dev(img, "click", /*click_handler_4*/ ctx[13], false, false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].posterImage
+    			if (dirty[0] & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*$selectedMovie*/ ctx[0].posterImage
     			? /*$selectedMovie*/ ctx[0].posterImage.src
     			: /*$selectedMovie*/ ctx[0].getPosterUrl())) {
     				attr_dev(img, "src", img_src_value);
     			}
 
-    			if (dirty & /*$selectedMovie*/ 1 && img_alt_value !== (img_alt_value = /*$selectedMovie*/ ctx[0].title)) {
+    			if (dirty[0] & /*$selectedMovie*/ 1 && img_alt_value !== (img_alt_value = /*$selectedMovie*/ ctx[0].title)) {
     				attr_dev(img, "alt", img_alt_value);
     			}
     		},
@@ -11718,17 +11706,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_11.name,
+    		id: create_if_block_12.name,
     		type: "if",
-    		source: "(189:8) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}",
+    		source: "(190:8) {#if $selectedMovie.posterImage || $selectedMovie.getPosterUrl()}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (220:10) {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
-    function create_if_block_10(ctx) {
+    // (221:10) {#if $selectedMovie.originalLanguage !== "en" && $selectedMovie.originalTitle}
+    function create_if_block_11(ctx) {
     	let div;
     	let span;
     	let t0_value = getLanguageFlag(/*$selectedMovie*/ ctx[0].originalLanguage) + "";
@@ -11753,13 +11741,13 @@ var app = (function () {
     			t3 = space();
     			i = element("i");
     			attr_dev(span, "class", "mx-2 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-2xl");
-    			add_location(span, file$2, 221, 14, 8111);
+    			add_location(span, file$2, 222, 14, 8127);
     			attr_dev(i, "class", "fab fa-youtube youtube-icon transition-colors duration-300 group-hover:text-red-500");
-    			add_location(i, file$2, 237, 16, 8797);
+    			add_location(i, file$2, 238, 16, 8813);
     			attr_dev(h4, "class", "text-lg text-gray-500 cursor-pointer group");
-    			add_location(h4, file$2, 228, 14, 8452);
+    			add_location(h4, file$2, 229, 14, 8468);
     			attr_dev(div, "class", "flex items-center mb-2");
-    			add_location(div, file$2, 220, 12, 8060);
+    			add_location(div, file$2, 221, 12, 8076);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -11773,16 +11761,16 @@ var app = (function () {
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(span, "click", /*click_handler_6*/ ctx[14], false, false, false, false),
-    					listen_dev(h4, "click", /*click_handler_7*/ ctx[15], false, false, false, false)
+    					listen_dev(span, "click", /*click_handler_6*/ ctx[15], false, false, false, false),
+    					listen_dev(h4, "click", /*click_handler_7*/ ctx[16], false, false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = getLanguageFlag(/*$selectedMovie*/ ctx[0].originalLanguage) + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].originalTitle + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t0_value !== (t0_value = getLanguageFlag(/*$selectedMovie*/ ctx[0].originalLanguage) + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].originalTitle + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
@@ -11793,17 +11781,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_10.name,
+    		id: create_if_block_11.name,
     		type: "if",
-    		source: "(220:10) {#if $selectedMovie.originalLanguage !== \\\"en\\\" && $selectedMovie.originalTitle}",
+    		source: "(221:10) {#if $selectedMovie.originalLanguage !== \\\"en\\\" && $selectedMovie.originalTitle}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (244:10) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}
-    function create_if_block_9(ctx) {
+    // (245:10) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}
+    function create_if_block_10(ctx) {
     	let p;
     	let strong;
     	let t1;
@@ -11828,10 +11816,10 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$2, 245, 14, 9091);
+    			add_location(strong, file$2, 246, 14, 9107);
     			attr_dev(span, "class", "flex items-center flex-wrap");
-    			add_location(span, file$2, 246, 14, 9129);
-    			add_location(p, file$2, 244, 12, 9073);
+    			add_location(span, file$2, 247, 14, 9145);
+    			add_location(p, file$2, 245, 12, 9089);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -11846,7 +11834,7 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie, $selectedGenres, selectedGenres, genreEmojiDict*/ 17) {
+    			if (dirty[0] & /*$selectedMovie, $selectedGenres*/ 17) {
     				each_value_2 = /*$selectedMovie*/ ctx[0].genres;
     				validate_each_argument(each_value_2);
     				let i;
@@ -11878,31 +11866,31 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_9.name,
+    		id: create_if_block_10.name,
     		type: "if",
-    		source: "(244:10) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}",
+    		source: "(245:10) {#if $selectedMovie.genres && $selectedMovie.genres.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (248:16) {#each $selectedMovie.genres as genre}
+    // (249:16) {#each $selectedMovie.genres as genre}
     function create_each_block_2(ctx) {
     	let span;
     	let p0;
-    	let t0_value = genreEmojiDict[/*genre*/ ctx[28]] + "";
+    	let t0_value = genreEmojiDict[/*genre*/ ctx[29]] + "";
     	let t0;
     	let t1;
     	let p1;
-    	let t2_value = /*genre*/ ctx[28] + "";
+    	let t2_value = /*genre*/ ctx[29] + "";
     	let t2;
     	let t3;
     	let mounted;
     	let dispose;
 
     	function click_handler_8() {
-    		return /*click_handler_8*/ ctx[16](/*genre*/ ctx[28]);
+    		return /*click_handler_8*/ ctx[17](/*genre*/ ctx[29]);
     	}
 
     	const block = {
@@ -11915,11 +11903,11 @@ var app = (function () {
     			t2 = text(t2_value);
     			t3 = space();
     			attr_dev(p0, "class", "text-xl cursor-pointer transition-transform duration-200 mr-1 hover:scale-150 z-10");
-    			add_location(p0, file$2, 249, 20, 9303);
+    			add_location(p0, file$2, 250, 20, 9319);
     			attr_dev(p1, "class", "m-0");
-    			add_location(p1, file$2, 263, 20, 9951);
+    			add_location(p1, file$2, 264, 20, 9967);
     			attr_dev(span, "class", "flex items-center mr-4");
-    			add_location(span, file$2, 248, 18, 9245);
+    			add_location(span, file$2, 249, 18, 9261);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -11937,8 +11925,8 @@ var app = (function () {
     		},
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
-    			if (dirty & /*$selectedMovie*/ 1 && t0_value !== (t0_value = genreEmojiDict[/*genre*/ ctx[28]] + "")) set_data_dev(t0, t0_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*genre*/ ctx[28] + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t0_value !== (t0_value = genreEmojiDict[/*genre*/ ctx[29]] + "")) set_data_dev(t0, t0_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*genre*/ ctx[29] + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
@@ -11951,15 +11939,15 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(248:16) {#each $selectedMovie.genres as genre}",
+    		source: "(249:16) {#each $selectedMovie.genres as genre}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (270:10) {#if $selectedMovie.releaseDate}
-    function create_if_block_8(ctx) {
+    // (271:10) {#if $selectedMovie.releaseDate}
+    function create_if_block_9(ctx) {
     	let p;
     	let strong;
     	let t1;
@@ -11973,8 +11961,8 @@ var app = (function () {
     			strong.textContent = "Release Date:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$2, 271, 14, 10156);
-    			add_location(p, file$2, 270, 12, 10138);
+    			add_location(strong, file$2, 272, 14, 10172);
+    			add_location(p, file$2, 271, 12, 10154);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -11983,7 +11971,7 @@ var app = (function () {
     			append_dev(p, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].getFormattedReleaseDate() + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].getFormattedReleaseDate() + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(p);
@@ -11992,17 +11980,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_8.name,
+    		id: create_if_block_9.name,
     		type: "if",
-    		source: "(270:10) {#if $selectedMovie.releaseDate}",
+    		source: "(271:10) {#if $selectedMovie.releaseDate}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (276:10) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}
-    function create_if_block_7(ctx) {
+    // (277:10) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}
+    function create_if_block_8(ctx) {
     	let div1;
     	let strong;
     	let t1;
@@ -12025,11 +12013,11 @@ var app = (function () {
     			t3 = space();
     			t4 = text(t4_value);
     			t5 = text(" / 10");
-    			add_location(strong, file$2, 277, 14, 10402);
+    			add_location(strong, file$2, 278, 14, 10418);
     			attr_dev(div0, "class", "emoji text-lg cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mx-1");
-    			add_location(div0, file$2, 278, 14, 10441);
+    			add_location(div0, file$2, 279, 14, 10457);
     			attr_dev(div1, "class", "flex flex-row");
-    			add_location(div1, file$2, 276, 12, 10360);
+    			add_location(div1, file$2, 277, 12, 10376);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -12041,12 +12029,12 @@ var app = (function () {
     			append_dev(div1, t5);
 
     			if (!mounted) {
-    				dispose = listen_dev(div0, "click", /*click_handler_9*/ ctx[17], false, false, false, false);
+    				dispose = listen_dev(div0, "click", /*click_handler_9*/ ctx[18], false, false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t4_value !== (t4_value = /*$selectedMovie*/ ctx[0].voteAverage.toFixed(1) + "")) set_data_dev(t4, t4_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t4_value !== (t4_value = /*$selectedMovie*/ ctx[0].voteAverage.toFixed(1) + "")) set_data_dev(t4, t4_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div1);
@@ -12057,17 +12045,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_7.name,
+    		id: create_if_block_8.name,
     		type: "if",
-    		source: "(276:10) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}",
+    		source: "(277:10) {#if $selectedMovie.voteAverage && $selectedMovie.voteCount}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (290:10) {#if $selectedMovie.popularity}
-    function create_if_block_6(ctx) {
+    // (291:10) {#if $selectedMovie.popularity}
+    function create_if_block_7(ctx) {
     	let div1;
     	let strong;
     	let t1;
@@ -12090,11 +12078,11 @@ var app = (function () {
     			t3 = space();
     			t4 = text(t4_value);
     			t5 = text(" reviews");
-    			add_location(strong, file$2, 291, 14, 10934);
+    			add_location(strong, file$2, 292, 14, 10950);
     			attr_dev(div0, "class", "emoji text-lg cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mx-1");
-    			add_location(div0, file$2, 293, 14, 10980);
+    			add_location(div0, file$2, 294, 14, 10996);
     			attr_dev(div1, "class", "flex flex-row");
-    			add_location(div1, file$2, 290, 12, 10892);
+    			add_location(div1, file$2, 291, 12, 10908);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -12106,12 +12094,12 @@ var app = (function () {
     			append_dev(div1, t5);
 
     			if (!mounted) {
-    				dispose = listen_dev(div0, "click", /*click_handler_10*/ ctx[18], false, false, false, false);
+    				dispose = listen_dev(div0, "click", /*click_handler_10*/ ctx[19], false, false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t4_value !== (t4_value = /*$selectedMovie*/ ctx[0].voteCount + "")) set_data_dev(t4, t4_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t4_value !== (t4_value = /*$selectedMovie*/ ctx[0].voteCount + "")) set_data_dev(t4, t4_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div1);
@@ -12122,17 +12110,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_6.name,
+    		id: create_if_block_7.name,
     		type: "if",
-    		source: "(290:10) {#if $selectedMovie.popularity}",
+    		source: "(291:10) {#if $selectedMovie.popularity}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (306:10) {#if $selectedMovie.runtime}
-    function create_if_block_5(ctx) {
+    // (307:10) {#if $selectedMovie.runtime}
+    function create_if_block_6(ctx) {
     	let p;
     	let strong;
     	let t1;
@@ -12146,8 +12134,8 @@ var app = (function () {
     			strong.textContent = "Runtime:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$2, 307, 14, 11425);
-    			add_location(p, file$2, 306, 12, 11407);
+    			add_location(strong, file$2, 308, 14, 11441);
+    			add_location(p, file$2, 307, 12, 11423);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -12156,7 +12144,7 @@ var app = (function () {
     			append_dev(p, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].generateHourString() + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].generateHourString() + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(p);
@@ -12165,17 +12153,17 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_5.name,
+    		id: create_if_block_6.name,
     		type: "if",
-    		source: "(306:10) {#if $selectedMovie.runtime}",
+    		source: "(307:10) {#if $selectedMovie.runtime}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (312:10) {#if $selectedMovie.overview}
-    function create_if_block_4(ctx) {
+    // (313:10) {#if $selectedMovie.overview}
+    function create_if_block_5(ctx) {
     	let p;
     	let strong;
     	let t1;
@@ -12189,8 +12177,8 @@ var app = (function () {
     			strong.textContent = "Description:";
     			t1 = space();
     			t2 = text(t2_value);
-    			add_location(strong, file$2, 313, 14, 11606);
-    			add_location(p, file$2, 312, 12, 11588);
+    			add_location(strong, file$2, 314, 14, 11622);
+    			add_location(p, file$2, 313, 12, 11604);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -12199,7 +12187,7 @@ var app = (function () {
     			append_dev(p, t2);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].overview + "")) set_data_dev(t2, t2_value);
+    			if (dirty[0] & /*$selectedMovie*/ 1 && t2_value !== (t2_value = /*$selectedMovie*/ ctx[0].overview + "")) set_data_dev(t2, t2_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(p);
@@ -12208,22 +12196,88 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_4.name,
+    		id: create_if_block_5.name,
     		type: "if",
-    		source: "(312:10) {#if $selectedMovie.overview}",
+    		source: "(313:10) {#if $selectedMovie.overview}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (318:10) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}
-    function create_if_block_3(ctx) {
+    // (319:10) {#if $castAndCrew}
+    function create_if_block_2(ctx) {
+    	let t;
+    	let if_block1_anchor;
+    	let if_block0 = /*$castAndCrew*/ ctx[5].cast && /*$castAndCrew*/ ctx[5].cast.length > 0 && create_if_block_4(ctx);
+    	let if_block1 = /*$castAndCrew*/ ctx[5].crew && /*$castAndCrew*/ ctx[5].crew.length > 0 && create_if_block_3(ctx);
+
+    	const block = {
+    		c: function create() {
+    			if (if_block0) if_block0.c();
+    			t = space();
+    			if (if_block1) if_block1.c();
+    			if_block1_anchor = empty();
+    		},
+    		m: function mount(target, anchor) {
+    			if (if_block0) if_block0.m(target, anchor);
+    			insert_dev(target, t, anchor);
+    			if (if_block1) if_block1.m(target, anchor);
+    			insert_dev(target, if_block1_anchor, anchor);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (/*$castAndCrew*/ ctx[5].cast && /*$castAndCrew*/ ctx[5].cast.length > 0) {
+    				if (if_block0) {
+    					if_block0.p(ctx, dirty);
+    				} else {
+    					if_block0 = create_if_block_4(ctx);
+    					if_block0.c();
+    					if_block0.m(t.parentNode, t);
+    				}
+    			} else if (if_block0) {
+    				if_block0.d(1);
+    				if_block0 = null;
+    			}
+
+    			if (/*$castAndCrew*/ ctx[5].crew && /*$castAndCrew*/ ctx[5].crew.length > 0) {
+    				if (if_block1) {
+    					if_block1.p(ctx, dirty);
+    				} else {
+    					if_block1 = create_if_block_3(ctx);
+    					if_block1.c();
+    					if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
+    				}
+    			} else if (if_block1) {
+    				if_block1.d(1);
+    				if_block1 = null;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (if_block0) if_block0.d(detaching);
+    			if (detaching) detach_dev(t);
+    			if (if_block1) if_block1.d(detaching);
+    			if (detaching) detach_dev(if_block1_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_2.name,
+    		type: "if",
+    		source: "(319:10) {#if $castAndCrew}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (320:12) {#if $castAndCrew.cast && $castAndCrew.cast.length > 0}
+    function create_if_block_4(ctx) {
     	let p;
     	let strong;
     	let t1;
     	let ul;
-    	let each_value_1 = /*$selectedMovie*/ ctx[0].topNcast;
+    	let each_value_1 = /*$castAndCrew*/ ctx[5].cast;
     	validate_each_argument(each_value_1);
     	let each_blocks = [];
 
@@ -12243,10 +12297,10 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$2, 319, 14, 11830);
+    			add_location(strong, file$2, 321, 16, 11869);
     			attr_dev(p, "class", "mt-4");
-    			add_location(p, file$2, 318, 12, 11799);
-    			add_location(ul, file$2, 321, 12, 11882);
+    			add_location(p, file$2, 320, 14, 11836);
+    			add_location(ul, file$2, 323, 14, 11925);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -12261,8 +12315,8 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*personSelected, personToPersonQuery, $selectedMovie*/ 1) {
-    				each_value_1 = /*$selectedMovie*/ ctx[0].topNcast;
+    			if (dirty[0] & /*$castAndCrew*/ 32) {
+    				each_value_1 = /*$castAndCrew*/ ctx[5].cast;
     				validate_each_argument(each_value_1);
     				let i;
 
@@ -12295,16 +12349,16 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_3.name,
+    		id: create_if_block_4.name,
     		type: "if",
-    		source: "(318:10) {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}",
+    		source: "(320:12) {#if $castAndCrew.cast && $castAndCrew.cast.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (323:14) {#each $selectedMovie.topNcast as cast}
+    // (325:16) {#each $castAndCrew.cast as cast}
     function create_each_block_1$1(ctx) {
     	let li;
     	let img;
@@ -12312,17 +12366,17 @@ var app = (function () {
     	let img_alt_value;
     	let t0;
     	let span;
-    	let t1_value = /*cast*/ ctx[25].name + "";
+    	let t1_value = /*cast*/ ctx[26].name + "";
     	let t1;
     	let t2;
-    	let t3_value = /*cast*/ ctx[25].character + "";
+    	let t3_value = /*cast*/ ctx[26].character + "";
     	let t3;
     	let t4;
     	let mounted;
     	let dispose;
 
     	function click_handler_11() {
-    		return /*click_handler_11*/ ctx[19](/*cast*/ ctx[25]);
+    		return /*click_handler_11*/ ctx[20](/*cast*/ ctx[26]);
     	}
 
     	const block = {
@@ -12336,19 +12390,19 @@ var app = (function () {
     			t3 = text(t3_value);
     			t4 = space();
 
-    			if (!src_url_equal(img.src, img_src_value = /*cast*/ ctx[25].profile_path
-    			? "https://image.tmdb.org/t/p/w185" + /*cast*/ ctx[25].profile_path
+    			if (!src_url_equal(img.src, img_src_value = /*cast*/ ctx[26].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*cast*/ ctx[26].profile_path
     			: "https://via.placeholder.com/48")) attr_dev(img, "src", img_src_value);
 
-    			attr_dev(img, "alt", img_alt_value = /*cast*/ ctx[25].name);
+    			attr_dev(img, "alt", img_alt_value = /*cast*/ ctx[26].name);
     			attr_dev(img, "class", "rounded-full object-cover");
     			set_style(img, "width", "32px");
     			set_style(img, "height", "32px");
-    			add_location(img, file$2, 329, 18, 12226);
+    			add_location(img, file$2, 331, 20, 12279);
     			attr_dev(span, "class", "text-blue-600 pr-1");
-    			add_location(span, file$2, 337, 18, 12594);
+    			add_location(span, file$2, 339, 20, 12663);
     			attr_dev(li, "class", "cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200 flex space-x-2");
-    			add_location(li, file$2, 323, 16, 11957);
+    			add_location(li, file$2, 325, 18, 11998);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -12368,18 +12422,18 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*cast*/ ctx[25].profile_path
-    			? "https://image.tmdb.org/t/p/w185" + /*cast*/ ctx[25].profile_path
+    			if (dirty[0] & /*$castAndCrew*/ 32 && !src_url_equal(img.src, img_src_value = /*cast*/ ctx[26].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*cast*/ ctx[26].profile_path
     			: "https://via.placeholder.com/48")) {
     				attr_dev(img, "src", img_src_value);
     			}
 
-    			if (dirty & /*$selectedMovie*/ 1 && img_alt_value !== (img_alt_value = /*cast*/ ctx[25].name)) {
+    			if (dirty[0] & /*$castAndCrew*/ 32 && img_alt_value !== (img_alt_value = /*cast*/ ctx[26].name)) {
     				attr_dev(img, "alt", img_alt_value);
     			}
 
-    			if (dirty & /*$selectedMovie*/ 1 && t1_value !== (t1_value = /*cast*/ ctx[25].name + "")) set_data_dev(t1, t1_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t3_value !== (t3_value = /*cast*/ ctx[25].character + "")) set_data_dev(t3, t3_value);
+    			if (dirty[0] & /*$castAndCrew*/ 32 && t1_value !== (t1_value = /*cast*/ ctx[26].name + "")) set_data_dev(t1, t1_value);
+    			if (dirty[0] & /*$castAndCrew*/ 32 && t3_value !== (t3_value = /*cast*/ ctx[26].character + "")) set_data_dev(t3, t3_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(li);
@@ -12392,20 +12446,20 @@ var app = (function () {
     		block,
     		id: create_each_block_1$1.name,
     		type: "each",
-    		source: "(323:14) {#each $selectedMovie.topNcast as cast}",
+    		source: "(325:16) {#each $castAndCrew.cast as cast}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (343:10) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}
-    function create_if_block_2(ctx) {
+    // (345:12) {#if $castAndCrew.crew && $castAndCrew.crew.length > 0}
+    function create_if_block_3(ctx) {
     	let p;
     	let strong;
     	let t1;
     	let ul;
-    	let each_value = /*$selectedMovie*/ ctx[0].topNcrew;
+    	let each_value = /*$castAndCrew*/ ctx[5].crew;
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -12425,10 +12479,10 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			add_location(strong, file$2, 344, 14, 12864);
+    			add_location(strong, file$2, 346, 16, 12935);
     			attr_dev(p, "class", "mt-4");
-    			add_location(p, file$2, 343, 12, 12833);
-    			add_location(ul, file$2, 346, 12, 12916);
+    			add_location(p, file$2, 345, 14, 12902);
+    			add_location(ul, file$2, 348, 14, 12991);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -12443,8 +12497,8 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*personSelected, personToPersonQuery, $selectedMovie*/ 1) {
-    				each_value = /*$selectedMovie*/ ctx[0].topNcrew;
+    			if (dirty[0] & /*$castAndCrew*/ 32) {
+    				each_value = /*$castAndCrew*/ ctx[5].crew;
     				validate_each_argument(each_value);
     				let i;
 
@@ -12477,16 +12531,16 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_2.name,
+    		id: create_if_block_3.name,
     		type: "if",
-    		source: "(343:10) {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}",
+    		source: "(345:12) {#if $castAndCrew.crew && $castAndCrew.crew.length > 0}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (348:14) {#each $selectedMovie.topNcrew as crew}
+    // (350:16) {#each $castAndCrew.crew as crew}
     function create_each_block$1(ctx) {
     	let li;
     	let img;
@@ -12494,17 +12548,17 @@ var app = (function () {
     	let img_alt_value;
     	let t0;
     	let span;
-    	let t1_value = /*crew*/ ctx[22].name + "";
+    	let t1_value = /*crew*/ ctx[23].name + "";
     	let t1;
     	let t2;
-    	let t3_value = /*crew*/ ctx[22].job + "";
+    	let t3_value = /*crew*/ ctx[23].job + "";
     	let t3;
     	let t4;
     	let mounted;
     	let dispose;
 
     	function click_handler_12() {
-    		return /*click_handler_12*/ ctx[20](/*crew*/ ctx[22]);
+    		return /*click_handler_12*/ ctx[21](/*crew*/ ctx[23]);
     	}
 
     	const block = {
@@ -12518,19 +12572,19 @@ var app = (function () {
     			t3 = text(t3_value);
     			t4 = space();
 
-    			if (!src_url_equal(img.src, img_src_value = /*crew*/ ctx[22].profile_path
-    			? "https://image.tmdb.org/t/p/w185" + /*crew*/ ctx[22].profile_path
+    			if (!src_url_equal(img.src, img_src_value = /*crew*/ ctx[23].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*crew*/ ctx[23].profile_path
     			: "https://via.placeholder.com/48")) attr_dev(img, "src", img_src_value);
 
-    			attr_dev(img, "alt", img_alt_value = /*crew*/ ctx[22].name);
+    			attr_dev(img, "alt", img_alt_value = /*crew*/ ctx[23].name);
     			attr_dev(img, "class", "rounded-full object-cover");
     			set_style(img, "width", "32px");
     			set_style(img, "height", "32px");
-    			add_location(img, file$2, 354, 18, 13260);
+    			add_location(img, file$2, 356, 20, 13345);
     			attr_dev(span, "class", "text-blue-600");
-    			add_location(span, file$2, 362, 18, 13628);
+    			add_location(span, file$2, 364, 20, 13729);
     			attr_dev(li, "class", "cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200 flex space-x-2");
-    			add_location(li, file$2, 348, 16, 12991);
+    			add_location(li, file$2, 350, 18, 13064);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -12550,18 +12604,18 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty & /*$selectedMovie*/ 1 && !src_url_equal(img.src, img_src_value = /*crew*/ ctx[22].profile_path
-    			? "https://image.tmdb.org/t/p/w185" + /*crew*/ ctx[22].profile_path
+    			if (dirty[0] & /*$castAndCrew*/ 32 && !src_url_equal(img.src, img_src_value = /*crew*/ ctx[23].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*crew*/ ctx[23].profile_path
     			: "https://via.placeholder.com/48")) {
     				attr_dev(img, "src", img_src_value);
     			}
 
-    			if (dirty & /*$selectedMovie*/ 1 && img_alt_value !== (img_alt_value = /*crew*/ ctx[22].name)) {
+    			if (dirty[0] & /*$castAndCrew*/ 32 && img_alt_value !== (img_alt_value = /*crew*/ ctx[23].name)) {
     				attr_dev(img, "alt", img_alt_value);
     			}
 
-    			if (dirty & /*$selectedMovie*/ 1 && t1_value !== (t1_value = /*crew*/ ctx[22].name + "")) set_data_dev(t1, t1_value);
-    			if (dirty & /*$selectedMovie*/ 1 && t3_value !== (t3_value = /*crew*/ ctx[22].job + "")) set_data_dev(t3, t3_value);
+    			if (dirty[0] & /*$castAndCrew*/ 32 && t1_value !== (t1_value = /*crew*/ ctx[23].name + "")) set_data_dev(t1, t1_value);
+    			if (dirty[0] & /*$castAndCrew*/ 32 && t3_value !== (t3_value = /*crew*/ ctx[23].job + "")) set_data_dev(t3, t3_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(li);
@@ -12574,14 +12628,14 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(348:14) {#each $selectedMovie.topNcrew as crew}",
+    		source: "(350:16) {#each $castAndCrew.crew as crew}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (373:2) {#if showModal}
+    // (376:2) {#if showModal}
     function create_if_block$1(ctx) {
     	let div1;
     	let div0;
@@ -12601,15 +12655,15 @@ var app = (function () {
     			t1 = space();
     			img = element("img");
     			attr_dev(span, "class", "absolute top-2 right-6 text-white text-3xl font-bold cursor-pointer");
-    			add_location(span, file$2, 378, 8, 14031);
+    			add_location(span, file$2, 381, 8, 14156);
     			if (!src_url_equal(img.src, img_src_value = /*fullImageUrl*/ ctx[2])) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "Full Image");
     			attr_dev(img, "class", "w-full h-auto");
-    			add_location(img, file$2, 382, 8, 14187);
+    			add_location(img, file$2, 385, 8, 14312);
     			attr_dev(div0, "class", "relative w-4/5 max-w-xl");
-    			add_location(div0, file$2, 377, 6, 13985);
+    			add_location(div0, file$2, 380, 6, 14110);
     			attr_dev(div1, "class", "fixed inset-0 z-50 overflow-hidden bg-black bg-opacity-50 flex items-center justify-center");
-    			add_location(div1, file$2, 373, 4, 13835);
+    			add_location(div1, file$2, 376, 4, 13960);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -12620,15 +12674,15 @@ var app = (function () {
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(span, "click", /*closeModal*/ ctx[6], false, false, false, false),
-    					listen_dev(div1, "click", /*closeModal*/ ctx[6], false, false, false, false)
+    					listen_dev(span, "click", /*closeModal*/ ctx[7], false, false, false, false),
+    					listen_dev(div1, "click", /*closeModal*/ ctx[7], false, false, false, false)
     				];
 
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*fullImageUrl*/ 4 && !src_url_equal(img.src, img_src_value = /*fullImageUrl*/ ctx[2])) {
+    			if (dirty[0] & /*fullImageUrl*/ 4 && !src_url_equal(img.src, img_src_value = /*fullImageUrl*/ ctx[2])) {
     				attr_dev(img, "src", img_src_value);
     			}
     		},
@@ -12643,7 +12697,7 @@ var app = (function () {
     		block,
     		id: create_if_block$1.name,
     		type: "if",
-    		source: "(373:2) {#if showModal}",
+    		source: "(376:2) {#if showModal}",
     		ctx
     	});
 
@@ -12653,7 +12707,7 @@ var app = (function () {
     function create_fragment$2(ctx) {
     	let div;
     	let t;
-    	let if_block0 = /*$selectedMovie*/ ctx[0] && create_if_block_1(ctx);
+    	let if_block0 = /*$selectedMovie*/ ctx[0] && create_if_block_1$1(ctx);
     	let if_block1 = /*showModal*/ ctx[1] && create_if_block$1(ctx);
 
     	const block = {
@@ -12664,7 +12718,7 @@ var app = (function () {
     			if (if_block1) if_block1.c();
     			attr_dev(div, "id", "movie-details-div");
     			attr_dev(div, "class", "h-screen overflow-y-auto container mx-auto p-6 custom-scrollbar leading-8 svelte-gr4476");
-    			add_location(div, file$2, 86, 0, 1981);
+    			add_location(div, file$2, 87, 0, 1997);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -12675,12 +12729,12 @@ var app = (function () {
     			append_dev(div, t);
     			if (if_block1) if_block1.m(div, null);
     		},
-    		p: function update(ctx, [dirty]) {
+    		p: function update(ctx, dirty) {
     			if (/*$selectedMovie*/ ctx[0]) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
     				} else {
-    					if_block0 = create_if_block_1(ctx);
+    					if_block0 = create_if_block_1$1(ctx);
     					if_block0.c();
     					if_block0.m(div, t);
     				}
@@ -12730,10 +12784,13 @@ var app = (function () {
     	let selectedButton;
     	let $selectedMovie;
     	let $selectedGenres;
+    	let $castAndCrew;
     	validate_store(selectedMovie, 'selectedMovie');
     	component_subscribe($$self, selectedMovie, $$value => $$invalidate(0, $selectedMovie = $$value));
     	validate_store(selectedGenres, 'selectedGenres');
     	component_subscribe($$self, selectedGenres, $$value => $$invalidate(4, $selectedGenres = $$value));
+    	validate_store(castAndCrew, 'castAndCrew');
+    	component_subscribe($$self, castAndCrew, $$value => $$invalidate(5, $castAndCrew = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('MovieDetails', slots, []);
     	let showModal = false;
@@ -12845,6 +12902,7 @@ var app = (function () {
     		selectedLanguages,
     		minPopularity,
     		minVoteAverage,
+    		castAndCrew,
     		genreEmojiDict,
     		getLanguageFlag,
     		verbEmojiDict,
@@ -12864,7 +12922,8 @@ var app = (function () {
     		handleButtonClick,
     		selectedButton,
     		$selectedMovie,
-    		$selectedGenres
+    		$selectedGenres,
+    		$castAndCrew
     	});
 
     	$$self.$inject_state = $$props => {
@@ -12878,7 +12937,7 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$selectedMovie*/ 1) {
+    		if ($$self.$$.dirty[0] & /*$selectedMovie*/ 1) {
     			$$invalidate(3, selectedButton = getOrSetMovieViewedType($selectedMovie));
     		}
     	};
@@ -12889,6 +12948,7 @@ var app = (function () {
     		fullImageUrl,
     		selectedButton,
     		$selectedGenres,
+    		$castAndCrew,
     		openImageModal,
     		closeModal,
     		handleButtonClick,
@@ -12911,7 +12971,7 @@ var app = (function () {
     class MovieDetails extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$2, create_fragment$2, safe_not_equal, {});
+    		init(this, options, instance$2, create_fragment$2, safe_not_equal, {}, null, [-1, -1]);
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -12937,8 +12997,167 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (14:4) {#if director}
+    // (12:2) {#if $castAndCrew}
     function create_if_block(ctx) {
+    	let div0;
+    	let h2;
+    	let t1;
+    	let t2;
+    	let div1;
+    	let t3;
+    	let if_block = /*director*/ ctx[1] && create_if_block_1(ctx);
+    	let each_value_1 = /*castList*/ ctx[3];
+    	validate_each_argument(each_value_1);
+    	let each_blocks_1 = [];
+
+    	for (let i = 0; i < each_value_1.length; i += 1) {
+    		each_blocks_1[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+    	}
+
+    	let each_value = /*crewList*/ ctx[2];
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			div0 = element("div");
+    			h2 = element("h2");
+    			h2.textContent = "Cast & Crew";
+    			t1 = space();
+    			if (if_block) if_block.c();
+    			t2 = space();
+    			div1 = element("div");
+
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				each_blocks_1[i].c();
+    			}
+
+    			t3 = space();
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			attr_dev(h2, "class", "text-lg font-semibold");
+    			add_location(h2, file$1, 13, 6, 415);
+    			set_style(div0, "flex", "1");
+    			set_style(div0, "align-content", "center");
+    			add_location(div0, file$1, 12, 4, 365);
+    			attr_dev(div1, "class", "grid grid-cols-5 gap-2");
+    			set_style(div1, "flex", "4");
+    			add_location(div1, file$1, 39, 4, 1273);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div0, anchor);
+    			append_dev(div0, h2);
+    			append_dev(div0, t1);
+    			if (if_block) if_block.m(div0, null);
+    			insert_dev(target, t2, anchor);
+    			insert_dev(target, div1, anchor);
+
+    			for (let i = 0; i < each_blocks_1.length; i += 1) {
+    				if (each_blocks_1[i]) {
+    					each_blocks_1[i].m(div1, null);
+    				}
+    			}
+
+    			append_dev(div1, t3);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				if (each_blocks[i]) {
+    					each_blocks[i].m(div1, null);
+    				}
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (/*director*/ ctx[1]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+    				} else {
+    					if_block = create_if_block_1(ctx);
+    					if_block.c();
+    					if_block.m(div0, null);
+    				}
+    			} else if (if_block) {
+    				if_block.d(1);
+    				if_block = null;
+    			}
+
+    			if (dirty & /*personSelected, personToPersonQuery, castList*/ 8) {
+    				each_value_1 = /*castList*/ ctx[3];
+    				validate_each_argument(each_value_1);
+    				let i;
+
+    				for (i = 0; i < each_value_1.length; i += 1) {
+    					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+    					if (each_blocks_1[i]) {
+    						each_blocks_1[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks_1[i] = create_each_block_1(child_ctx);
+    						each_blocks_1[i].c();
+    						each_blocks_1[i].m(div1, t3);
+    					}
+    				}
+
+    				for (; i < each_blocks_1.length; i += 1) {
+    					each_blocks_1[i].d(1);
+    				}
+
+    				each_blocks_1.length = each_value_1.length;
+    			}
+
+    			if (dirty & /*personSelected, personToPersonQuery, crewList*/ 4) {
+    				each_value = /*crewList*/ ctx[2];
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(div1, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div0);
+    			if (if_block) if_block.d();
+    			if (detaching) detach_dev(t2);
+    			if (detaching) detach_dev(div1);
+    			destroy_each(each_blocks_1, detaching);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block.name,
+    		type: "if",
+    		source: "(12:2) {#if $castAndCrew}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (16:6) {#if director}
+    function create_if_block_1(ctx) {
     	let div1;
     	let img;
     	let img_src_value;
@@ -12946,7 +13165,7 @@ var app = (function () {
     	let t0;
     	let div0;
     	let p0;
-    	let t1_value = /*director*/ ctx[0].name + "";
+    	let t1_value = /*director*/ ctx[1].name + "";
     	let t1;
     	let t2;
     	let p1;
@@ -12965,23 +13184,23 @@ var app = (function () {
     			p1 = element("p");
     			p1.textContent = "Director";
 
-    			if (!src_url_equal(img.src, img_src_value = /*director*/ ctx[0].profile_path
-    			? "https://image.tmdb.org/t/p/w185" + /*director*/ ctx[0].profile_path
+    			if (!src_url_equal(img.src, img_src_value = /*director*/ ctx[1].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*director*/ ctx[1].profile_path
     			: "https://via.placeholder.com/48")) attr_dev(img, "src", img_src_value);
 
-    			attr_dev(img, "alt", img_alt_value = /*director*/ ctx[0].name);
+    			attr_dev(img, "alt", img_alt_value = /*director*/ ctx[1].name);
     			attr_dev(img, "class", "rounded-full object-cover");
     			set_style(img, "width", "96px");
     			set_style(img, "height", "96px");
-    			add_location(img, file$1, 20, 8, 626);
+    			add_location(img, file$1, 22, 10, 728);
     			attr_dev(p0, "class", "text-sm font-semibold");
-    			add_location(p0, file$1, 29, 10, 955);
+    			add_location(p0, file$1, 31, 12, 1075);
     			attr_dev(p1, "class", "text-xs text-gray-500");
-    			add_location(p1, file$1, 32, 10, 1042);
+    			add_location(p1, file$1, 34, 12, 1168);
     			attr_dev(div0, "class", "ml-2");
-    			add_location(div0, file$1, 28, 8, 926);
+    			add_location(div0, file$1, 30, 10, 1044);
     			attr_dev(div1, "class", "flex items-center p-2 items-center profile-container svelte-otglj");
-    			add_location(div1, file$1, 14, 6, 442);
+    			add_location(div1, file$1, 16, 8, 532);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div1, anchor);
@@ -12999,17 +13218,17 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*director*/ 1 && !src_url_equal(img.src, img_src_value = /*director*/ ctx[0].profile_path
-    			? "https://image.tmdb.org/t/p/w185" + /*director*/ ctx[0].profile_path
+    			if (dirty & /*director*/ 2 && !src_url_equal(img.src, img_src_value = /*director*/ ctx[1].profile_path
+    			? "https://image.tmdb.org/t/p/w185" + /*director*/ ctx[1].profile_path
     			: "https://via.placeholder.com/48")) {
     				attr_dev(img, "src", img_src_value);
     			}
 
-    			if (dirty & /*director*/ 1 && img_alt_value !== (img_alt_value = /*director*/ ctx[0].name)) {
+    			if (dirty & /*director*/ 2 && img_alt_value !== (img_alt_value = /*director*/ ctx[1].name)) {
     				attr_dev(img, "alt", img_alt_value);
     			}
 
-    			if (dirty & /*director*/ 1 && t1_value !== (t1_value = /*director*/ ctx[0].name + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*director*/ 2 && t1_value !== (t1_value = /*director*/ ctx[1].name + "")) set_data_dev(t1, t1_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div1);
@@ -13020,16 +13239,16 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block.name,
+    		id: create_if_block_1.name,
     		type: "if",
-    		source: "(14:4) {#if director}",
+    		source: "(16:6) {#if director}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (39:4) {#each castList as person}
+    // (41:6) {#each castList as person}
     function create_each_block_1(ctx) {
     	let div2;
     	let div1;
@@ -13073,17 +13292,17 @@ var app = (function () {
     			attr_dev(img, "class", "rounded-full object-cover");
     			set_style(img, "width", "48px");
     			set_style(img, "height", "48px");
-    			add_location(img, file$1, 46, 10, 1434);
+    			add_location(img, file$1, 48, 12, 1588);
     			attr_dev(p0, "class", "text-sm font-semibold truncate");
-    			add_location(p0, file$1, 55, 12, 1795);
+    			add_location(p0, file$1, 57, 14, 1967);
     			attr_dev(p1, "class", "text-xs text-gray-500 truncate");
-    			add_location(p1, file$1, 56, 12, 1867);
+    			add_location(p1, file$1, 58, 14, 2041);
     			attr_dev(div0, "class", "ml-2");
     			set_style(div0, "width", "50%");
-    			add_location(div0, file$1, 54, 10, 1744);
+    			add_location(div0, file$1, 56, 12, 1914);
     			attr_dev(div1, "class", "flex items-center p-2 profile-container svelte-otglj");
-    			add_location(div1, file$1, 45, 8, 1370);
-    			add_location(div2, file$1, 39, 6, 1227);
+    			add_location(div1, file$1, 47, 10, 1522);
+    			add_location(div2, file$1, 41, 8, 1367);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div2, anchor);
@@ -13105,18 +13324,18 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty & /*castList*/ 4 && !src_url_equal(img.src, img_src_value = /*person*/ ctx[7].profile_path
+    			if (dirty & /*castList*/ 8 && !src_url_equal(img.src, img_src_value = /*person*/ ctx[7].profile_path
     			? "https://image.tmdb.org/t/p/w185" + /*person*/ ctx[7].profile_path
     			: "https://via.placeholder.com/48")) {
     				attr_dev(img, "src", img_src_value);
     			}
 
-    			if (dirty & /*castList*/ 4 && img_alt_value !== (img_alt_value = /*person*/ ctx[7].name)) {
+    			if (dirty & /*castList*/ 8 && img_alt_value !== (img_alt_value = /*person*/ ctx[7].name)) {
     				attr_dev(img, "alt", img_alt_value);
     			}
 
-    			if (dirty & /*castList*/ 4 && t1_value !== (t1_value = /*person*/ ctx[7].name + "")) set_data_dev(t1, t1_value);
-    			if (dirty & /*castList*/ 4 && t3_value !== (t3_value = /*person*/ ctx[7].character + "")) set_data_dev(t3, t3_value);
+    			if (dirty & /*castList*/ 8 && t1_value !== (t1_value = /*person*/ ctx[7].name + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*castList*/ 8 && t3_value !== (t3_value = /*person*/ ctx[7].character + "")) set_data_dev(t3, t3_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div2);
@@ -13129,14 +13348,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(39:4) {#each castList as person}",
+    		source: "(41:6) {#each castList as person}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (63:4) {#each crewList as person}
+    // (65:6) {#each crewList as person}
     function create_each_block(ctx) {
     	let div2;
     	let div1;
@@ -13182,17 +13401,17 @@ var app = (function () {
     			attr_dev(img, "class", "rounded-full object-cover");
     			set_style(img, "width", "48px");
     			set_style(img, "height", "48px");
-    			add_location(img, file$1, 70, 10, 2234);
+    			add_location(img, file$1, 72, 12, 2434);
     			attr_dev(p0, "class", "text-sm font-semibold truncate");
-    			add_location(p0, file$1, 79, 12, 2595);
+    			add_location(p0, file$1, 81, 14, 2813);
     			attr_dev(p1, "class", "text-xs text-gray-500 truncate");
-    			add_location(p1, file$1, 80, 12, 2667);
+    			add_location(p1, file$1, 82, 14, 2887);
     			attr_dev(div0, "class", "ml-2");
     			set_style(div0, "width", "50%");
-    			add_location(div0, file$1, 78, 10, 2544);
+    			add_location(div0, file$1, 80, 12, 2760);
     			attr_dev(div1, "class", "flex items-center p-2 profile-container svelte-otglj");
-    			add_location(div1, file$1, 69, 8, 2170);
-    			add_location(div2, file$1, 63, 6, 2027);
+    			add_location(div1, file$1, 71, 10, 2368);
+    			add_location(div2, file$1, 65, 8, 2213);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div2, anchor);
@@ -13215,18 +13434,18 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty & /*crewList*/ 2 && !src_url_equal(img.src, img_src_value = /*person*/ ctx[7].profile_path
+    			if (dirty & /*crewList*/ 4 && !src_url_equal(img.src, img_src_value = /*person*/ ctx[7].profile_path
     			? "https://image.tmdb.org/t/p/w185" + /*person*/ ctx[7].profile_path
     			: "https://via.placeholder.com/48")) {
     				attr_dev(img, "src", img_src_value);
     			}
 
-    			if (dirty & /*crewList*/ 2 && img_alt_value !== (img_alt_value = /*person*/ ctx[7].name)) {
+    			if (dirty & /*crewList*/ 4 && img_alt_value !== (img_alt_value = /*person*/ ctx[7].name)) {
     				attr_dev(img, "alt", img_alt_value);
     			}
 
-    			if (dirty & /*crewList*/ 2 && t1_value !== (t1_value = /*person*/ ctx[7].name + "")) set_data_dev(t1, t1_value);
-    			if (dirty & /*crewList*/ 2 && t3_value !== (t3_value = /*person*/ ctx[7].job + "")) set_data_dev(t3, t3_value);
+    			if (dirty & /*crewList*/ 4 && t1_value !== (t1_value = /*person*/ ctx[7].name + "")) set_data_dev(t1, t1_value);
+    			if (dirty & /*crewList*/ 4 && t3_value !== (t3_value = /*person*/ ctx[7].job + "")) set_data_dev(t3, t3_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div2);
@@ -13239,7 +13458,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(63:4) {#each crewList as person}",
+    		source: "(65:6) {#each crewList as person}",
     		ctx
     	});
 
@@ -13247,148 +13466,42 @@ var app = (function () {
     }
 
     function create_fragment$1(ctx) {
-    	let div2;
-    	let div0;
-    	let t0;
-    	let div1;
-    	let t1;
-    	let if_block = /*director*/ ctx[0] && create_if_block(ctx);
-    	let each_value_1 = /*castList*/ ctx[2];
-    	validate_each_argument(each_value_1);
-    	let each_blocks_1 = [];
-
-    	for (let i = 0; i < each_value_1.length; i += 1) {
-    		each_blocks_1[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
-    	}
-
-    	let each_value = /*crewList*/ ctx[1];
-    	validate_each_argument(each_value);
-    	let each_blocks = [];
-
-    	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
-    	}
+    	let div;
+    	let if_block = /*$castAndCrew*/ ctx[0] && create_if_block(ctx);
 
     	const block = {
     		c: function create() {
-    			div2 = element("div");
-    			div0 = element("div");
+    			div = element("div");
     			if (if_block) if_block.c();
-    			t0 = space();
-    			div1 = element("div");
-
-    			for (let i = 0; i < each_blocks_1.length; i += 1) {
-    				each_blocks_1[i].c();
-    			}
-
-    			t1 = space();
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].c();
-    			}
-
-    			set_style(div0, "flex", "1");
-    			set_style(div0, "align-content", "center");
-    			add_location(div0, file$1, 11, 2, 338);
-    			attr_dev(div1, "class", "grid grid-cols-5 gap-2");
-    			set_style(div1, "flex", "4");
-    			add_location(div1, file$1, 37, 2, 1137);
-    			attr_dev(div2, "class", "flex flex-row justify-evenly w-full p-3");
-    			add_location(div2, file$1, 10, 0, 282);
+    			attr_dev(div, "class", "flex flex-row justify-evenly w-full p-3");
+    			add_location(div, file$1, 10, 0, 286);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div2, anchor);
-    			append_dev(div2, div0);
-    			if (if_block) if_block.m(div0, null);
-    			append_dev(div2, t0);
-    			append_dev(div2, div1);
-
-    			for (let i = 0; i < each_blocks_1.length; i += 1) {
-    				if (each_blocks_1[i]) {
-    					each_blocks_1[i].m(div1, null);
-    				}
-    			}
-
-    			append_dev(div1, t1);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				if (each_blocks[i]) {
-    					each_blocks[i].m(div1, null);
-    				}
-    			}
+    			insert_dev(target, div, anchor);
+    			if (if_block) if_block.m(div, null);
     		},
     		p: function update(ctx, [dirty]) {
-    			if (/*director*/ ctx[0]) {
+    			if (/*$castAndCrew*/ ctx[0]) {
     				if (if_block) {
     					if_block.p(ctx, dirty);
     				} else {
     					if_block = create_if_block(ctx);
     					if_block.c();
-    					if_block.m(div0, null);
+    					if_block.m(div, null);
     				}
     			} else if (if_block) {
     				if_block.d(1);
     				if_block = null;
     			}
-
-    			if (dirty & /*personSelected, personToPersonQuery, castList*/ 4) {
-    				each_value_1 = /*castList*/ ctx[2];
-    				validate_each_argument(each_value_1);
-    				let i;
-
-    				for (i = 0; i < each_value_1.length; i += 1) {
-    					const child_ctx = get_each_context_1(ctx, each_value_1, i);
-
-    					if (each_blocks_1[i]) {
-    						each_blocks_1[i].p(child_ctx, dirty);
-    					} else {
-    						each_blocks_1[i] = create_each_block_1(child_ctx);
-    						each_blocks_1[i].c();
-    						each_blocks_1[i].m(div1, t1);
-    					}
-    				}
-
-    				for (; i < each_blocks_1.length; i += 1) {
-    					each_blocks_1[i].d(1);
-    				}
-
-    				each_blocks_1.length = each_value_1.length;
-    			}
-
-    			if (dirty & /*personSelected, personToPersonQuery, crewList*/ 2) {
-    				each_value = /*crewList*/ ctx[1];
-    				validate_each_argument(each_value);
-    				let i;
-
-    				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context(ctx, each_value, i);
-
-    					if (each_blocks[i]) {
-    						each_blocks[i].p(child_ctx, dirty);
-    					} else {
-    						each_blocks[i] = create_each_block(child_ctx);
-    						each_blocks[i].c();
-    						each_blocks[i].m(div1, null);
-    					}
-    				}
-
-    				for (; i < each_blocks.length; i += 1) {
-    					each_blocks[i].d(1);
-    				}
-
-    				each_blocks.length = each_value.length;
-    			}
     		},
     		i: noop$1,
     		o: noop$1,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div2);
+    			if (detaching) detach_dev(div);
     			if (if_block) if_block.d();
-    			destroy_each(each_blocks_1, detaching);
-    			destroy_each(each_blocks, detaching);
     		}
     	};
 
@@ -13409,7 +13522,7 @@ var app = (function () {
     	let director;
     	let $castAndCrew;
     	validate_store(castAndCrew, 'castAndCrew');
-    	component_subscribe($$self, castAndCrew, $$value => $$invalidate(3, $castAndCrew = $$value));
+    	component_subscribe($$self, castAndCrew, $$value => $$invalidate(0, $castAndCrew = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('CastAndCrewCard', slots, []);
     	const writable_props = [];
@@ -13442,9 +13555,9 @@ var app = (function () {
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('director' in $$props) $$invalidate(0, director = $$props.director);
-    		if ('crewList' in $$props) $$invalidate(1, crewList = $$props.crewList);
-    		if ('castList' in $$props) $$invalidate(2, castList = $$props.castList);
+    		if ('director' in $$props) $$invalidate(1, director = $$props.director);
+    		if ('crewList' in $$props) $$invalidate(2, crewList = $$props.crewList);
+    		if ('castList' in $$props) $$invalidate(3, castList = $$props.castList);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -13452,24 +13565,24 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$castAndCrew*/ 8) {
-    			$$invalidate(2, castList = $castAndCrew.cast);
+    		if ($$self.$$.dirty & /*$castAndCrew*/ 1) {
+    			$$invalidate(3, castList = $castAndCrew?.cast);
     		}
 
-    		if ($$self.$$.dirty & /*$castAndCrew*/ 8) {
-    			$$invalidate(1, crewList = $castAndCrew.crew);
+    		if ($$self.$$.dirty & /*$castAndCrew*/ 1) {
+    			$$invalidate(2, crewList = $castAndCrew?.crew);
     		}
 
-    		if ($$self.$$.dirty & /*$castAndCrew*/ 8) {
-    			$$invalidate(0, director = $castAndCrew.director);
+    		if ($$self.$$.dirty & /*$castAndCrew*/ 1) {
+    			$$invalidate(1, director = $castAndCrew?.director);
     		}
     	};
 
     	return [
+    		$castAndCrew,
     		director,
     		crewList,
     		castList,
-    		$castAndCrew,
     		click_handler,
     		click_handler_1,
     		click_handler_2
@@ -13538,16 +13651,16 @@ var app = (function () {
     			div3 = element("div");
     			create_component(moviedetails.$$.fragment);
     			attr_dev(div0, "class", "flex-shrink-0 basis-[10%]");
-    			add_location(div0, file, 134, 2, 3700);
+    			add_location(div0, file, 140, 2, 3821);
     			attr_dev(div1, "class", "sliding-div bg-base-200 rounded-b-lg svelte-vvrpn7");
     			toggle_class(div1, "slide-in", /*showSlidingDiv*/ ctx[1]);
-    			add_location(div1, file, 138, 4, 3851);
+    			add_location(div1, file, 144, 4, 3972);
     			attr_dev(div2, "class", "movie-list flex-grow basis-[80%] h-screen relative overflow-hidden");
-    			add_location(div2, file, 137, 2, 3766);
+    			add_location(div2, file, 143, 2, 3887);
     			attr_dev(div3, "class", "flex-shrink-0 basis-[10%]");
-    			add_location(div3, file, 144, 2, 4108);
+    			add_location(div3, file, 150, 2, 4229);
     			attr_dev(main, "class", "flex");
-    			add_location(main, file, 133, 0, 3678);
+    			add_location(main, file, 139, 0, 3799);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -13627,6 +13740,7 @@ var app = (function () {
     	let $maxReviewCount;
     	let $minReviewCount;
     	let $minYear;
+    	let $selectedMovie;
     	validate_store(allowQueryMutex, 'allowQueryMutex');
     	component_subscribe($$self, allowQueryMutex, $$value => $$invalidate(2, $allowQueryMutex = $$value));
     	validate_store(maxVoteAverage, 'maxVoteAverage');
@@ -13657,6 +13771,8 @@ var app = (function () {
     	component_subscribe($$self, minReviewCount, $$value => $$invalidate(15, $minReviewCount = $$value));
     	validate_store(minYear, 'minYear');
     	component_subscribe($$self, minYear, $$value => $$invalidate(16, $minYear = $$value));
+    	validate_store(selectedMovie, 'selectedMovie');
+    	component_subscribe($$self, selectedMovie, $$value => $$invalidate(17, $selectedMovie = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('App', slots, []);
     	let movies = [];
@@ -13752,6 +13868,7 @@ var app = (function () {
     		prependAfterFailure,
     		queryMovies,
     		setVoteCountIndexAndColor,
+    		getCredits,
     		queryCount,
     		scrollY,
     		selectedMovie,
@@ -13776,6 +13893,7 @@ var app = (function () {
     		transitionCount,
     		asyncStore,
     		CastAndCrewCard,
+    		get: get_store_value,
     		movies,
     		updateMovies,
     		showLeftSidebar,
@@ -13797,7 +13915,8 @@ var app = (function () {
     		$selectedPerson,
     		$maxReviewCount,
     		$minReviewCount,
-    		$minYear
+    		$minYear,
+    		$selectedMovie
     	});
 
     	$$self.$inject_state = $$props => {
@@ -13813,8 +13932,12 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguages, $selectedGenres, $selectedTitle, $allowQueryMutex, $selectedViewTypeVerbs, $minRuntime, $maxRuntime, $minPopularity, $maxPopularity, $minVoteAverage, $maxVoteAverage*/ 131068) {
+    		if ($$self.$$.dirty & /*$selectedMovie*/ 131072) {
     			// Reactive statement to update movies when selectedPerson, minYear, or castOrCrewQuery changes
+    			asyncStore.load("get-credits", getCredits, $selectedMovie);
+    		}
+
+    		if ($$self.$$.dirty & /*$minYear, $minReviewCount, $maxReviewCount, $selectedPerson, $selectedLanguages, $selectedGenres, $selectedTitle, $allowQueryMutex, $selectedViewTypeVerbs, $minRuntime, $maxRuntime, $minPopularity, $maxPopularity, $minVoteAverage, $maxVoteAverage*/ 131068) {
     			asyncStore.load("update-movies", updateMovies, ($maxVoteAverage));
     		}
     	};
@@ -13836,7 +13959,8 @@ var app = (function () {
     		$selectedPerson,
     		$maxReviewCount,
     		$minReviewCount,
-    		$minYear
+    		$minYear,
+    		$selectedMovie
     	];
     }
 

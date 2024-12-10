@@ -28,6 +28,8 @@ import {
   maxPopularity,
   minVoteAverage,
   maxVoteAverage,
+  castAndCrew,
+  
 } from "./stores.js";
 import { allowQueryMutex, DEFAULT_MIN_REVIEWS, DEFAULT_MAX_REVIEWS, DEFAULT_YEAR, DEFAULT_TITLE, DEFAULT_SELECTED_GENRES, DEFAULT_LANGUAGES } from "./stores.js";
 import { getAllRelevantIDs, history } from "./historyStore.js";
@@ -99,7 +101,8 @@ export async function queryDatabase(movies, append = "new", date = null) {
 
   runningQuery.set(true);
 
-  let target = '13.60.6.138'
+  // let target = '13.60.6.138'
+  let target = 'localhost'
   
   let url = `http://${target}:3000/movies`;
   console.log(url);
@@ -307,4 +310,71 @@ export function personToPersonQuery(person) {
     castOrCrew: person.character ? "cast" : "crew",
     data: person,
   };
+}
+
+export async function getCredits(movie) {
+  castAndCrew.set(null);
+  if (movie) {
+    let credits = await queryCredits(movie);
+    if (credits) {
+      castAndCrew.set(getTopCastAndCrew(credits.credits[0]));
+    }
+  }
+}
+
+export async function queryCredits(movie) {
+  let target = 'localhost'
+  let url = `http://${target}:3000/credits/${movie.id}`;
+  let res = await axios({
+    method: "get",
+    url: url,
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+
+  return res.data;
+}
+
+function getTopCastAndCrew(credits, numMembers = 5) {
+    const result = {
+        director: null,
+        cast: [],
+        crew: []
+    };
+
+    if (!credits) {
+        return result;
+    }
+
+    // Find the director from the crew
+    const director = credits.crew.find(member => member.job === 'Director');
+    if (director) {
+        result.director = director;
+    }
+
+    // Sort cast and crew by popularity
+    const sortedCast = credits.cast.sort((a, b) => b.popularity - a.popularity);
+    const sortedCrew = credits.crew.sort((a, b) => b.popularity - a.popularity);
+
+    // Get top N cast and crew members (excluding the director if already included)
+    result.cast = sortedCast.slice(0, numMembers)
+    result.crew = sortedCrew
+        .filter(member => member.job !== 'Director' && isInterestingCrewMember(member))
+    // must contain writer, producer, music, cinematographer, editor, production designer, costume designer
+        .slice(0, numMembers)
+
+
+    console.log('cast and crew result', result)
+    return result;
+}
+
+function isInterestingCrewMember(member) {
+    const interestingJobs = ['Writer',  'Music', 'Cinematography', 'Editor', 'Production Design', 'Costume Design', 'Novel', 'Photography', 'Screenplay', 'Book', 'Art Direction']
+    for (let job of interestingJobs) {
+        if (member.job.includes(job)) {
+            return true;
+        }
+    }
+    return false;
 }

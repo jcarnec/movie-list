@@ -38,23 +38,6 @@ export default class Movie {
     //   (keyword) => keyword.name
     // );
     this.keywords = []
-    this.cast = data?.credits?.cast;
-    this.topNcast = data?.credits?.cast
-      .sort((a, b) => b.popularity - a.popularity)
-      .slice(0, 6);
-
-    this.crew = data?.credits?.crew;
-    this.topNcrew = data?.credits?.crew
-      .sort((a, b) => {
-        if (a.job === 'Director') {
-          return -1;
-        } else if (b.job === 'Director') {
-          return 1;
-        }
-        return b.popularity - a.popularity;
-      })
-      .slice(0, 6);
-    
     this.preloadPosterImage()
   }
 

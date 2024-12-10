@@ -22,19 +22,3 @@ verbose = true
 # Prevent exit after syncing existing data
 exit-after-direct-reads = false
 
-[[script]]
-script = """
-module.exports = function(doc) {
-  console.log("running script.");
-  if (doc.similar && doc.similar.results) {
-    for (var i = 0; i < doc.similar.results.length; i++) {
-      var result = doc.similar.results[i];
-      if (result.release_date === "") {
-        doc.similar.results[i].release_date = null;
-        console.log("Found empty release_date. Setting to null.", doc);
-      }
-    }
-  }
-  return doc;
-}
-"""

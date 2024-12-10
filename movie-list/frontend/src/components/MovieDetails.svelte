@@ -18,6 +18,7 @@
     selectedLanguages,
     minPopularity,
     minVoteAverage,
+    castAndCrew
   } from "../stores.js";
   import {
     genreEmojiDict,
@@ -315,55 +316,57 @@
               {$selectedMovie.overview}
             </p>
           {/if}
-          {#if $selectedMovie.topNcast && $selectedMovie.topNcast.length > 0}
-            <p class="mt-4">
-              <strong>Cast:</strong>
-            </p>
-            <ul>
-              {#each $selectedMovie.topNcast as cast}
-                <li
-                  class="cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200 flex space-x-2"
-                  on:click={() => {
-                    personSelected(personToPersonQuery(cast));
-                  }}
-                >
-                  <img
-                    src={cast.profile_path
-                      ? "https://image.tmdb.org/t/p/w185" + cast.profile_path
-                      : "https://via.placeholder.com/48"}
-                    alt={cast.name}
-                    class="rounded-full object-cover"
-                    style="width: 32px; height: 32px;"
-                  />
-                  <span class="text-blue-600 pr-1">{cast.name}</span>as {cast.character}
-                </li>
-              {/each}
-            </ul>
-          {/if}
-          {#if $selectedMovie.topNcrew && $selectedMovie.topNcrew.length > 0}
-            <p class="mt-4">
-              <strong>Crew:</strong>
-            </p>
-            <ul>
-              {#each $selectedMovie.topNcrew as crew}
-                <li
-                  class="cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200 flex space-x-2"
-                  on:click={() => {
-                    personSelected(personToPersonQuery(crew));
-                  }}
-                >
-                  <img
-                    src={crew.profile_path
-                      ? "https://image.tmdb.org/t/p/w185" + crew.profile_path
-                      : "https://via.placeholder.com/48"}
-                    alt={crew.name}
-                    class="rounded-full object-cover"
-                    style="width: 32px; height: 32px;"
-                  />
-                  <span class="text-blue-600">{crew.name}</span>: {crew.job}
-                </li>
-              {/each}
-            </ul>
+          {#if $castAndCrew}
+            {#if $castAndCrew.cast && $castAndCrew.cast.length > 0}
+              <p class="mt-4">
+                <strong>Cast:</strong>
+              </p>
+              <ul>
+                {#each $castAndCrew.cast as cast}
+                  <li
+                    class="cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200 flex space-x-2"
+                    on:click={() => {
+                      personSelected(personToPersonQuery(cast));
+                    }}
+                  >
+                    <img
+                      src={cast.profile_path
+                        ? "https://image.tmdb.org/t/p/w185" + cast.profile_path
+                        : "https://via.placeholder.com/48"}
+                      alt={cast.name}
+                      class="rounded-full object-cover"
+                      style="width: 32px; height: 32px;"
+                    />
+                    <span class="text-blue-600 pr-1">{cast.name}</span>as {cast.character}
+                  </li>
+                {/each}
+              </ul>
+            {/if}
+            {#if $castAndCrew.crew && $castAndCrew.crew.length > 0}
+              <p class="mt-4">
+                <strong>Crew:</strong>
+              </p>
+              <ul>
+                {#each $castAndCrew.crew as crew}
+                  <li
+                    class="cursor-pointer hover:bg-gray-100 p-2 transition-colors duration-200 flex space-x-2"
+                    on:click={() => {
+                      personSelected(personToPersonQuery(crew));
+                    }}
+                  >
+                    <img
+                      src={crew.profile_path
+                        ? "https://image.tmdb.org/t/p/w185" + crew.profile_path
+                        : "https://via.placeholder.com/48"}
+                      alt={crew.name}
+                      class="rounded-full object-cover"
+                      style="width: 32px; height: 32px;"
+                    />
+                    <span class="text-blue-600">{crew.name}</span>: {crew.job}
+                  </li>
+                {/each}
+              </ul>
+            {/if}
           {/if}
         </div>
       </div>

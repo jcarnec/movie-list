@@ -3,7 +3,7 @@ const readline = require("readline");
 const EOL = require("os").EOL;
 const Logger = require("./Logger");
 const TmdbApi = require("./TmdbApi");
-const { MovieSchema, PersonSchema } = require("./schemas");
+const { MovieSchema, PersonSchema, CreditsSchema } = require("./schemas");
 const {
   QUERY_TIMEOUT,
   POOL_SIZE,
@@ -14,9 +14,10 @@ const {
 const config = {
   tmdbApiKey: "e316601ca43413563469752bc6096a5b",
   dbServer:
-    "mongodb://admin:mypass@localhost:27018/moviedb?authSource=admin",
+    "mongodb://admin:mypass@mongodb_new:27017/moviedb?authSource=admin&replicaSet=rs0",
   mainMoviesCollection: "movies",
-  mainPeopleCollection: "people",
+  mainPeoplesCollection: "peoples",
+  mainCreditsCollection: "credits",
 };
 
 const opts = {
@@ -30,7 +31,8 @@ mongoose.connect(config.dbServer, opts);
 
 // Initialize models
 const Movie = mongoose.model(config.mainMoviesCollection, MovieSchema);
-const Person = mongoose.model(config.mainPeopleCollection, PersonSchema);
+const Person = mongoose.model(config.mainPeoplesCollection, PersonSchema);
+const Credit = mongoose.model(config.mainCreditsCollection, CreditsSchema);
 
 const tmdbApi = new TmdbApi(config.tmdbApiKey);
 const rl = readline.createInterface({
@@ -118,18 +120,34 @@ async function downloadMovieData(movieId) {
       try {
         await checkRateLimit(); // Check rate limit before making an API call
         const data = await func(movieId);
-        if (data && (data.id || data.results || data.cast || data.crew)) {
-          await Movie.updateOne(
-            { id: movie.id },
-            { $set: { [key]: data } }
-          );
-          Logger.info(
-            `Inserted/Updated ${key} for movie ID ${movieId} into DB.`
-          );
+        if (key === "credits") {
+          if (data && (data.cast || data.crew)) {
+            await Credit.updateOne(
+              { movie_id: movie.id },
+              { $set: { movie_id: movie.id, cast: data.cast, crew: data.crew } },
+              { upsert: true }
+            );
+            Logger.info(
+              `Inserted/Updated credits for movie ID ${movieId} into DB.`
+            );
 
-          // If we fetched credits, also download people details
-          if (key === "credits") {
+            // Download people data from credits
             // await downloadPeopleFromCredits(data);
+          }
+        } else {
+          if (data && (data.id || data.results || data.cast || data.crew)) {
+            await Movie.updateOne(
+              { id: movie.id },
+              { $set: { [key]: data } }
+            );
+            Logger.info(
+              `Inserted/Updated ${key} for movie ID ${movieId} into DB.`
+            );
+
+            // If we fetched credits, also download people details
+            if (key === "credits") {
+              // await downloadPeopleFromCredits(data);
+            }
           }
         }
       } catch (error) {
