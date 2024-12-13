@@ -10126,6 +10126,9 @@ var app = (function () {
       }
     }
 
+    let target = '13.60.6.138';
+    // let target = 'localhost'
+
     function setVoteCountIndexAndColor(movies) {
       movies.sort((a, b) => b.voteCount - a.voteCount);
 
@@ -10191,8 +10194,6 @@ var app = (function () {
 
       runningQuery.set(true);
 
-      // let target = '13.60.6.138'
-      let target = 'localhost';
       
       let url = `http://${target}:3000/movies`;
       console.log(url);
@@ -10413,7 +10414,6 @@ var app = (function () {
     }
 
     async function queryCredits(movie) {
-      let target = 'localhost';
       let url = `http://${target}:3000/credits/${movie.id}`;
       let res = await axios$1({
         method: "get",

@@ -36,6 +36,9 @@ import { getAllRelevantIDs, history } from "./historyStore.js";
 import axios from "axios";
 import Movie from "./Movie.js";
 
+let target = '13.60.6.138'
+// let target = 'localhost'
+
 export function setVoteCountIndexAndColor(movies) {
   movies.sort((a, b) => b.voteCount - a.voteCount);
 
@@ -101,8 +104,6 @@ export async function queryDatabase(movies, append = "new", date = null) {
 
   runningQuery.set(true);
 
-  // let target = '13.60.6.138'
-  let target = 'localhost'
   
   let url = `http://${target}:3000/movies`;
   console.log(url);
@@ -323,7 +324,6 @@ export async function getCredits(movie) {
 }
 
 export async function queryCredits(movie) {
-  let target = 'localhost'
   let url = `http://${target}:3000/credits/${movie.id}`;
   let res = await axios({
     method: "get",
