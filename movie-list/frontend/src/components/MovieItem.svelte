@@ -114,8 +114,19 @@
     {movie.getReleaseDateString()}
   </div>
 
+  <!-- Poster Container should fit -->
+  <div class="flex h-full w-1/12 items-center justify-center py-1">
+            <img
+              src={movie.posterImage
+                ? movie.posterImage.src
+                : movie.getPosterUrl()}
+              class="h-full "
+              alt={movie.title}
+              />
+  </div>
+
   <!-- Custom Bar Container -->
-  <div class="flex-grow w-4/12 px-2">
+  <div class="flex-grow w-3/12 px-2">
     <div
       class="custom-bar-container relative w-full h-8 bg-gray-200 overflow-hidden rounded-full"
       class:bg-gray-300={movieViewedType && movieViewedType != "ignored"}

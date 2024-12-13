@@ -36,8 +36,8 @@ import { getAllRelevantIDs, history } from "./historyStore.js";
 import axios from "axios";
 import Movie from "./Movie.js";
 
-let target = '13.60.6.138'
-// let target = 'localhost'
+// let target = '13.60.6.138'
+let target = 'localhost'
 
 export function setVoteCountIndexAndColor(movies) {
   movies.sort((a, b) => b.voteCount - a.voteCount);

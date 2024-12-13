@@ -5340,7 +5340,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (151:4) {:else}
+    // (162:4) {:else}
     function create_else_block$1(ctx) {
     	let div;
     	let span;
@@ -5354,9 +5354,9 @@ var app = (function () {
     			span = element("span");
     			t = text(/*languageFlag*/ ctx[6]);
     			attr_dev(span, "class", "flag mx-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-l");
-    			add_location(span, file$5, 152, 8, 4311);
+    			add_location(span, file$5, 163, 8, 4641);
     			attr_dev(div, "class", "flex items-center");
-    			add_location(div, file$5, 151, 6, 4271);
+    			add_location(div, file$5, 162, 6, 4601);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -5382,14 +5382,14 @@ var app = (function () {
     		block,
     		id: create_else_block$1.name,
     		type: "else",
-    		source: "(151:4) {:else}",
+    		source: "(162:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (136:4) {#if !isEnglish}
+    // (147:4) {#if !isEnglish}
     function create_if_block_2$1(ctx) {
     	let div;
     	let span;
@@ -5408,9 +5408,9 @@ var app = (function () {
     			t1 = space();
     			t2 = text(t2_value);
     			attr_dev(span, "class", "flag mx-1 cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-l");
-    			add_location(span, file$5, 139, 8, 3912);
+    			add_location(span, file$5, 150, 8, 4242);
     			attr_dev(div, "class", "flex items-center text-gray-500 whitespace-nowrap overflow-hidden overflow-ellipsis");
-    			add_location(div, file$5, 136, 6, 3791);
+    			add_location(div, file$5, 147, 6, 4121);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -5439,14 +5439,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2$1.name,
     		type: "if",
-    		source: "(136:4) {#if !isEnglish}",
+    		source: "(147:4) {#if !isEnglish}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (173:6) {#each movie.genres as genre}
+    // (184:6) {#each movie.genres as genre}
     function create_each_block$3(ctx) {
     	let div;
     	let t0_value = genreEmojiDict[/*genre*/ ctx[31]] + "";
@@ -5465,7 +5465,7 @@ var app = (function () {
     			t0 = text(t0_value);
     			t1 = space();
     			attr_dev(div, "class", "emoji cursor-pointer transition-transform duration-200 hover:scale-150 z-10 text-xl");
-    			add_location(div, file$5, 173, 8, 4896);
+    			add_location(div, file$5, 184, 8, 5226);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -5492,14 +5492,14 @@ var app = (function () {
     		block,
     		id: create_each_block$3.name,
     		type: "each",
-    		source: "(173:6) {#each movie.genres as genre}",
+    		source: "(184:6) {#each movie.genres as genre}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (215:29) 
+    // (226:29) 
     function create_if_block_1$2(ctx) {
     	let div4;
     	let div1;
@@ -5531,16 +5531,16 @@ var app = (function () {
     			t5 = space();
     			t6 = text(t6_value);
     			attr_dev(div0, "class", "emoji text-md cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mr-1 text-lg");
-    			add_location(div0, file$5, 217, 10, 6558);
+    			add_location(div0, file$5, 228, 10, 6888);
     			attr_dev(div1, "class", "font-bold mb-1 flex flex-row justify-center items-center");
-    			add_location(div1, file$5, 216, 8, 6477);
+    			add_location(div1, file$5, 227, 8, 6807);
     			attr_dev(div2, "class", "text-md cursor-pointer transition-transform duration-200 hover:scale-150 z-10 mr-1 text-lg");
-    			add_location(div2, file$5, 236, 10, 7199);
+    			add_location(div2, file$5, 247, 10, 7529);
     			attr_dev(div3, "class", "emoji font-bold mr-1 flex flex-row justify-center items-center");
     			set_style(div3, "color", /*barColor*/ ctx[2]);
-    			add_location(div3, file$5, 228, 8, 6932);
+    			add_location(div3, file$5, 239, 8, 7262);
     			attr_dev(div4, "class", "text-xs text-center");
-    			add_location(div4, file$5, 215, 6, 6435);
+    			add_location(div4, file$5, 226, 6, 6765);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div4, anchor);
@@ -5582,14 +5582,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$2.name,
     		type: "if",
-    		source: "(215:29) ",
+    		source: "(226:29) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (196:4) {#if movieViewedType && movieViewedType != "ignored"}
+    // (207:4) {#if movieViewedType && movieViewedType != "ignored"}
     function create_if_block$4(ctx) {
     	let div;
     	let t_value = verbEmojiDict[/*movieViewedType*/ ctx[4]] + "";
@@ -5610,7 +5610,7 @@ var app = (function () {
     			toggle_class(div, "hover:bg-blue-700", /*movieViewedType*/ ctx[4] === "seen");
     			toggle_class(div, "bg-red-500", /*movieViewedType*/ ctx[4] === "loved");
     			toggle_class(div, "hover:bg-red-700", /*movieViewedType*/ ctx[4] === "loved");
-    			add_location(div, file$5, 196, 6, 5611);
+    			add_location(div, file$5, 207, 6, 5941);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -5667,7 +5667,7 @@ var app = (function () {
     		block,
     		id: create_if_block$4.name,
     		type: "if",
-    		source: "(196:4) {#if movieViewedType && movieViewedType != \\\"ignored\\\"}",
+    		source: "(207:4) {#if movieViewedType && movieViewedType != \\\"ignored\\\"}",
     		ctx
     	});
 
@@ -5675,33 +5675,38 @@ var app = (function () {
     }
 
     function create_fragment$5(ctx) {
-    	let div10;
+    	let div11;
     	let div0;
     	let t0_value = /*movie*/ ctx[0].getReleaseDateString() + "";
     	let t0;
     	let div0_class_value;
     	let t1;
+    	let div1;
+    	let img;
+    	let img_src_value;
+    	let img_alt_value;
+    	let t2;
+    	let div4;
     	let div3;
     	let div2;
-    	let div1;
-    	let div1_style_value;
-    	let t2;
-    	let div5;
+    	let div2_style_value;
     	let t3;
-    	let div4;
-    	let t4_value = /*movie*/ ctx[0].title + "";
-    	let t4;
-    	let t5;
-    	let div7;
     	let div6;
+    	let t4;
+    	let div5;
+    	let t5_value = /*movie*/ ctx[0].title + "";
+    	let t5;
     	let t6;
     	let div8;
+    	let div7;
     	let t7;
     	let div9;
-    	let t8_value = /*movie*/ ctx[0].generateHourString() + "";
     	let t8;
-    	let div10_id_value;
-    	let div10_class_value;
+    	let div10;
+    	let t9_value = /*movie*/ ctx[0].generateHourString() + "";
+    	let t9;
+    	let div11_id_value;
+    	let div11_class_value;
     	let mounted;
     	let dispose;
 
@@ -5730,112 +5735,128 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
-    			div10 = element("div");
+    			div11 = element("div");
     			div0 = element("div");
     			t0 = text(t0_value);
     			t1 = space();
+    			div1 = element("div");
+    			img = element("img");
+    			t2 = space();
+    			div4 = element("div");
     			div3 = element("div");
     			div2 = element("div");
-    			div1 = element("div");
-    			t2 = space();
-    			div5 = element("div");
-    			if_block0.c();
     			t3 = space();
-    			div4 = element("div");
-    			t4 = text(t4_value);
-    			t5 = space();
-    			div7 = element("div");
     			div6 = element("div");
+    			if_block0.c();
+    			t4 = space();
+    			div5 = element("div");
+    			t5 = text(t5_value);
+    			t6 = space();
+    			div8 = element("div");
+    			div7 = element("div");
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
 
-    			t6 = space();
-    			div8 = element("div");
-    			if (if_block1) if_block1.c();
     			t7 = space();
     			div9 = element("div");
-    			t8 = text(t8_value);
+    			if (if_block1) if_block1.c();
+    			t8 = space();
+    			div10 = element("div");
+    			t9 = text(t9_value);
     			attr_dev(div0, "class", div0_class_value = "flex-none mx-3 text-center text-sm " + /*fontWeightDate*/ ctx[5] + " svelte-1r3vfvx");
     			add_location(div0, file$5, 112, 2, 3015);
-    			attr_dev(div1, "class", "custom-bar h-full rounded-full");
 
-    			attr_dev(div1, "style", div1_style_value = "width: " + /*movie*/ ctx[0].voteAverage * 10 * /*$barSize*/ ctx[12] + "%; background-color: " + /*barColor*/ ctx[2] + "; " + (/*$transitioning*/ ctx[13]
+    			if (!src_url_equal(img.src, img_src_value = /*movie*/ ctx[0].posterImage
+    			? /*movie*/ ctx[0].posterImage.src
+    			: /*movie*/ ctx[0].getPosterUrl())) attr_dev(img, "src", img_src_value);
+
+    			attr_dev(img, "class", "h-full ");
+    			attr_dev(img, "alt", img_alt_value = /*movie*/ ctx[0].title);
+    			add_location(img, file$5, 118, 12, 3245);
+    			attr_dev(div1, "class", "flex h-full w-1/12 items-center justify-center py-1");
+    			add_location(div1, file$5, 117, 2, 3167);
+    			attr_dev(div2, "class", "custom-bar h-full rounded-full");
+
+    			attr_dev(div2, "style", div2_style_value = "width: " + /*movie*/ ctx[0].voteAverage * 10 * /*$barSize*/ ctx[12] + "%; background-color: " + /*barColor*/ ctx[2] + "; " + (/*$transitioning*/ ctx[13]
     			? 'transition: width 1s;'
     			: ''));
 
-    			add_location(div1, file$5, 122, 6, 3387);
-    			attr_dev(div2, "class", "custom-bar-container relative w-full h-8 bg-gray-200 overflow-hidden rounded-full");
-    			toggle_class(div2, "bg-gray-300", /*movieViewedType*/ ctx[4] && /*movieViewedType*/ ctx[4] != "ignored");
-    			add_location(div2, file$5, 118, 4, 3200);
-    			attr_dev(div3, "class", "flex-grow w-4/12 px-2");
-    			add_location(div3, file$5, 117, 2, 3160);
-    			attr_dev(div4, "class", "flex items-center text-base");
-    			add_location(div4, file$5, 164, 4, 4663);
-    			attr_dev(div5, "class", "flex flex-col flex-grow w-4/12 py-2 pl-2");
-    			add_location(div5, file$5, 133, 2, 3681);
-    			attr_dev(div6, "class", "grid grid-cols-3 gap-x-1");
-    			add_location(div6, file$5, 171, 4, 4813);
-    			attr_dev(div7, "class", "flex-none w-16");
-    			add_location(div7, file$5, 170, 2, 4780);
-    			attr_dev(div8, "class", "flex-none w-1/12 text-center flex items-center justify-center");
-    			add_location(div8, file$5, 194, 2, 5471);
-    			attr_dev(div9, "class", "flex-none w-1/12 text-center text-sm");
-    			add_location(div9, file$5, 248, 2, 7463);
-    			attr_dev(div10, "id", div10_id_value = /*movie*/ ctx[0].id);
+    			add_location(div2, file$5, 133, 6, 3717);
+    			attr_dev(div3, "class", "custom-bar-container relative w-full h-8 bg-gray-200 overflow-hidden rounded-full");
+    			toggle_class(div3, "bg-gray-300", /*movieViewedType*/ ctx[4] && /*movieViewedType*/ ctx[4] != "ignored");
+    			add_location(div3, file$5, 129, 4, 3530);
+    			attr_dev(div4, "class", "flex-grow w-3/12 px-2");
+    			add_location(div4, file$5, 128, 2, 3490);
+    			attr_dev(div5, "class", "flex items-center text-base");
+    			add_location(div5, file$5, 175, 4, 4993);
+    			attr_dev(div6, "class", "flex flex-col flex-grow w-4/12 py-2 pl-2");
+    			add_location(div6, file$5, 144, 2, 4011);
+    			attr_dev(div7, "class", "grid grid-cols-3 gap-x-1");
+    			add_location(div7, file$5, 182, 4, 5143);
+    			attr_dev(div8, "class", "flex-none w-16");
+    			add_location(div8, file$5, 181, 2, 5110);
+    			attr_dev(div9, "class", "flex-none w-1/12 text-center flex items-center justify-center");
+    			add_location(div9, file$5, 205, 2, 5801);
+    			attr_dev(div10, "class", "flex-none w-1/12 text-center text-sm");
+    			add_location(div10, file$5, 259, 2, 7793);
+    			attr_dev(div11, "id", div11_id_value = /*movie*/ ctx[0].id);
 
-    			attr_dev(div10, "class", div10_class_value = "movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md " + (/*$updateMoviesAsyncRequest*/ ctx[9].status == 'loading'
+    			attr_dev(div11, "class", div11_class_value = "movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md " + (/*$updateMoviesAsyncRequest*/ ctx[9].status == 'loading'
     			? 'animate-pulse'
     			: '') + " svelte-1r3vfvx");
 
-    			set_style(div10, "transform", "translateX(-50%) translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[10] - /*$scrollY*/ ctx[11] % /*$itemHeight*/ ctx[10]) + "px)");
-    			set_style(div10, "height", /*$itemHeight*/ ctx[10] + "px");
-    			set_style(div10, "position", "absolute");
-    			set_style(div10, "left", "50%");
-    			set_style(div10, "width", "calc(100% - 2rem)");
-    			toggle_class(div10, "selected", /*$selectedMovie*/ ctx[8] && /*$selectedMovie*/ ctx[8].id == /*movie*/ ctx[0].id);
-    			add_location(div10, file$5, 97, 0, 2386);
+    			set_style(div11, "transform", "translateX(-50%) translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[10] - /*$scrollY*/ ctx[11] % /*$itemHeight*/ ctx[10]) + "px)");
+    			set_style(div11, "height", /*$itemHeight*/ ctx[10] + "px");
+    			set_style(div11, "position", "absolute");
+    			set_style(div11, "left", "50%");
+    			set_style(div11, "width", "calc(100% - 2rem)");
+    			toggle_class(div11, "selected", /*$selectedMovie*/ ctx[8] && /*$selectedMovie*/ ctx[8].id == /*movie*/ ctx[0].id);
+    			add_location(div11, file$5, 97, 0, 2386);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div10, anchor);
-    			append_dev(div10, div0);
+    			insert_dev(target, div11, anchor);
+    			append_dev(div11, div0);
     			append_dev(div0, t0);
-    			append_dev(div10, t1);
-    			append_dev(div10, div3);
+    			append_dev(div11, t1);
+    			append_dev(div11, div1);
+    			append_dev(div1, img);
+    			append_dev(div11, t2);
+    			append_dev(div11, div4);
+    			append_dev(div4, div3);
     			append_dev(div3, div2);
-    			append_dev(div2, div1);
-    			append_dev(div10, t2);
-    			append_dev(div10, div5);
-    			if_block0.m(div5, null);
-    			append_dev(div5, t3);
-    			append_dev(div5, div4);
-    			append_dev(div4, t4);
-    			append_dev(div10, t5);
-    			append_dev(div10, div7);
-    			append_dev(div7, div6);
+    			append_dev(div11, t3);
+    			append_dev(div11, div6);
+    			if_block0.m(div6, null);
+    			append_dev(div6, t4);
+    			append_dev(div6, div5);
+    			append_dev(div5, t5);
+    			append_dev(div11, t6);
+    			append_dev(div11, div8);
+    			append_dev(div8, div7);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				if (each_blocks[i]) {
-    					each_blocks[i].m(div6, null);
+    					each_blocks[i].m(div7, null);
     				}
     			}
 
-    			append_dev(div10, t6);
-    			append_dev(div10, div8);
-    			if (if_block1) if_block1.m(div8, null);
-    			append_dev(div10, t7);
-    			append_dev(div10, div9);
-    			append_dev(div9, t8);
+    			append_dev(div11, t7);
+    			append_dev(div11, div9);
+    			if (if_block1) if_block1.m(div9, null);
+    			append_dev(div11, t8);
+    			append_dev(div11, div10);
+    			append_dev(div10, t9);
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(div10, "click", /*handleBarClick*/ ctx[18], false, false, false, false),
-    					listen_dev(div10, "mouseenter", /*handleMouseEnter*/ ctx[15], false, false, false, false),
-    					listen_dev(div10, "mouseleave", /*handleMouseLeave*/ ctx[16], false, false, false, false)
+    					listen_dev(div11, "click", /*handleBarClick*/ ctx[18], false, false, false, false),
+    					listen_dev(div11, "mouseenter", /*handleMouseEnter*/ ctx[15], false, false, false, false),
+    					listen_dev(div11, "mouseleave", /*handleMouseLeave*/ ctx[16], false, false, false, false)
     				];
 
     				mounted = true;
@@ -5848,14 +5869,24 @@ var app = (function () {
     				attr_dev(div0, "class", div0_class_value);
     			}
 
-    			if (dirty[0] & /*movie, $barSize, barColor, $transitioning*/ 12293 && div1_style_value !== (div1_style_value = "width: " + /*movie*/ ctx[0].voteAverage * 10 * /*$barSize*/ ctx[12] + "%; background-color: " + /*barColor*/ ctx[2] + "; " + (/*$transitioning*/ ctx[13]
+    			if (dirty[0] & /*movie*/ 1 && !src_url_equal(img.src, img_src_value = /*movie*/ ctx[0].posterImage
+    			? /*movie*/ ctx[0].posterImage.src
+    			: /*movie*/ ctx[0].getPosterUrl())) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+
+    			if (dirty[0] & /*movie*/ 1 && img_alt_value !== (img_alt_value = /*movie*/ ctx[0].title)) {
+    				attr_dev(img, "alt", img_alt_value);
+    			}
+
+    			if (dirty[0] & /*movie, $barSize, barColor, $transitioning*/ 12293 && div2_style_value !== (div2_style_value = "width: " + /*movie*/ ctx[0].voteAverage * 10 * /*$barSize*/ ctx[12] + "%; background-color: " + /*barColor*/ ctx[2] + "; " + (/*$transitioning*/ ctx[13]
     			? 'transition: width 1s;'
     			: ''))) {
-    				attr_dev(div1, "style", div1_style_value);
+    				attr_dev(div2, "style", div2_style_value);
     			}
 
     			if (dirty[0] & /*movieViewedType*/ 16) {
-    				toggle_class(div2, "bg-gray-300", /*movieViewedType*/ ctx[4] && /*movieViewedType*/ ctx[4] != "ignored");
+    				toggle_class(div3, "bg-gray-300", /*movieViewedType*/ ctx[4] && /*movieViewedType*/ ctx[4] != "ignored");
     			}
 
     			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block0) {
@@ -5866,11 +5897,11 @@ var app = (function () {
 
     				if (if_block0) {
     					if_block0.c();
-    					if_block0.m(div5, t3);
+    					if_block0.m(div6, t4);
     				}
     			}
 
-    			if (dirty[0] & /*movie*/ 1 && t4_value !== (t4_value = /*movie*/ ctx[0].title + "")) set_data_dev(t4, t4_value);
+    			if (dirty[0] & /*movie*/ 1 && t5_value !== (t5_value = /*movie*/ ctx[0].title + "")) set_data_dev(t5, t5_value);
 
     			if (dirty[0] & /*$selectedGenres, movie*/ 16385) {
     				each_value = /*movie*/ ctx[0].genres;
@@ -5885,7 +5916,7 @@ var app = (function () {
     					} else {
     						each_blocks[i] = create_each_block$3(child_ctx);
     						each_blocks[i].c();
-    						each_blocks[i].m(div6, null);
+    						each_blocks[i].m(div7, null);
     					}
     				}
 
@@ -5904,38 +5935,38 @@ var app = (function () {
 
     				if (if_block1) {
     					if_block1.c();
-    					if_block1.m(div8, null);
+    					if_block1.m(div9, null);
     				}
     			}
 
-    			if (dirty[0] & /*movie*/ 1 && t8_value !== (t8_value = /*movie*/ ctx[0].generateHourString() + "")) set_data_dev(t8, t8_value);
+    			if (dirty[0] & /*movie*/ 1 && t9_value !== (t9_value = /*movie*/ ctx[0].generateHourString() + "")) set_data_dev(t9, t9_value);
 
-    			if (dirty[0] & /*movie*/ 1 && div10_id_value !== (div10_id_value = /*movie*/ ctx[0].id)) {
-    				attr_dev(div10, "id", div10_id_value);
+    			if (dirty[0] & /*movie*/ 1 && div11_id_value !== (div11_id_value = /*movie*/ ctx[0].id)) {
+    				attr_dev(div11, "id", div11_id_value);
     			}
 
-    			if (dirty[0] & /*$updateMoviesAsyncRequest*/ 512 && div10_class_value !== (div10_class_value = "movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md " + (/*$updateMoviesAsyncRequest*/ ctx[9].status == 'loading'
+    			if (dirty[0] & /*$updateMoviesAsyncRequest*/ 512 && div11_class_value !== (div11_class_value = "movie-item flex items-center border-t border-gray-300 overflow-hidden cursor-pointer transition-shadow duration-1000 rounded-md " + (/*$updateMoviesAsyncRequest*/ ctx[9].status == 'loading'
     			? 'animate-pulse'
     			: '') + " svelte-1r3vfvx")) {
-    				attr_dev(div10, "class", div10_class_value);
+    				attr_dev(div11, "class", div11_class_value);
     			}
 
     			if (dirty[0] & /*index, $itemHeight, $scrollY*/ 3074) {
-    				set_style(div10, "transform", "translateX(-50%) translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[10] - /*$scrollY*/ ctx[11] % /*$itemHeight*/ ctx[10]) + "px)");
+    				set_style(div11, "transform", "translateX(-50%) translateY(" + (/*index*/ ctx[1] * /*$itemHeight*/ ctx[10] - /*$scrollY*/ ctx[11] % /*$itemHeight*/ ctx[10]) + "px)");
     			}
 
     			if (dirty[0] & /*$itemHeight*/ 1024) {
-    				set_style(div10, "height", /*$itemHeight*/ ctx[10] + "px");
+    				set_style(div11, "height", /*$itemHeight*/ ctx[10] + "px");
     			}
 
     			if (dirty[0] & /*$updateMoviesAsyncRequest, $selectedMovie, movie*/ 769) {
-    				toggle_class(div10, "selected", /*$selectedMovie*/ ctx[8] && /*$selectedMovie*/ ctx[8].id == /*movie*/ ctx[0].id);
+    				toggle_class(div11, "selected", /*$selectedMovie*/ ctx[8] && /*$selectedMovie*/ ctx[8].id == /*movie*/ ctx[0].id);
     			}
     		},
     		i: noop$1,
     		o: noop$1,
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div10);
+    			if (detaching) detach_dev(div11);
     			if_block0.d();
     			destroy_each(each_blocks, detaching);
 
@@ -10126,8 +10157,8 @@ var app = (function () {
       }
     }
 
-    let target = '13.60.6.138';
-    // let target = 'localhost'
+    // let target = '13.60.6.138'
+    let target = 'localhost';
 
     function setVoteCountIndexAndColor(movies) {
       movies.sort((a, b) => b.voteCount - a.voteCount);
